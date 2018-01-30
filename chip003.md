@@ -1,11 +1,4 @@
-```
-CHIP: 003
-Layer: Consensus
-Title: Transaction Format Revision
-Author: Bram Cohen
-Status: Draft
-Type: Standard
-```
+# Transaction Format Revision
 
 ## Abstract
 
