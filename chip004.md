@@ -1,24 +1,20 @@
-# UTXO set delta commitments
+# Revised Block Heaers
 
 ## Abstract
-Blocks are required to commit to the sets of UTXOs created and destroyed in the block. Commitments are placed in the block header and nodes on the network verify commitments.
+Blocks are required to commit to a tree of state changes. This replaces Bitcoin's transaction root in the block header. An additional blockheader field is created. The new field commits to all information validating those state changes. Block height must also be committed to in the header.
 
 ## Motivation
 
-Bitcoin was initially intended to support simplified payment verification via proofs of set inclusion. This is a harder problem than it initially seems. Commitments to the changes in the UTXO set enable limited SPV proofs, as well as a variety of future transaction-level improvements.
+Adding additional information to the block header simplifies verification, and allows new SPV applications as well as future TXO-set optimizations. When re-examining these, we chose to logically separate them into state changes, and state change validations. Validation information can be safely discarded by most nodes after a period of time.
 
 ## Specification
 
-Each block header MUST include two new 32 byte fields: `hashTXOsCreated` and `hashTXOsDestroyed`. These fields represent the merkle root of the tx outputs created and destroyed. The block header is as follows:
+Each block header MUST include two 32 byte fields: `hashStateChanges` and `hashValidations`. These fields represent the merkle root of trees committing to TXOs created and consumed, and the witnesses and ancillary information. The block header is constructed as follows:
 
 ```
-[version][hashPrevBlock][blockHeight][hashTxnMerkleRoot][hashTXOsCreated][hashTXOsDestroyed][time][difficultyBits]
+[version][hashPrevBlock][hashStateChanges][hashValidations][time][blockHeight][difficultyBits]
 ```
 
-The leaves of these trees MUST be ordered lexically. When creating these trees, the leaf nodes commit to the UTXO via the single SHA256 hash of the following serialization:
+The `hashStateChanges` tree is constructed by creating a Patricia Trie from the list of all inputs consumed by the block, and the list of transactions in the block. Each node includes additional information describing how many TXOs are created in transactions summarized by that node. As such, a proof in this tree can establish the index in the block of any TXO. Transactions are sorted lexically. Inputs are sorted to match transactions. As such there is a canonical structure for the tree.
 
-```
-[txid][index][value]
-```
-
-`txid` is the 32 byte hash of the transaction. `index` is the index of the output within that transaction. `value` is the value of the output.
+The `hashValidations` tree is constructed by creating tuples of `(witnessInfo, witness)` for each input, in the same order they appear in the `hashStateChanges` tree. After the tuples corresponding to the inputs of a single transaction the aggregate signature for that transaction is included. This gives the tree a canonical order that intuitively matches the `hashStateChanges` tree.
