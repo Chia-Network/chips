@@ -10,10 +10,12 @@ Signatures take up a large portion of each block. Most Bitcoin transactions cont
 
 ECDSA signatures are disabled. This includes `OP_CHECKSIG`, `OP_CHECKSIGVERIFY`, `OP_CHECKMULTISIG`, and `OP_CHECKMULTISIGVERIFY`.
 
-Signatures in witnesses/witness infos are aggregate across the transaction into a single signature. A new opcode to support this is introduced: `OP_AGGREGATEBLS`.
+Signatures in witnesses/witness infos are aggregate across the transaction into a single signature. A new opcode to support this is introduced: `OP_BLSAGGREGATE`. This opcode adds pubkeys and messages to an aggregate signature verification staging area. This area enforces that messages cannot repeat.
 
-When executing scripts, `OP_AGGREGATEBLS` pops two arguments from the stack. These MUST be the BLS pubkey and BLS signature, as in `OP_CHECKSIG`. `OP_AGGREGATEBLS` can never cause script execution to fail. The BLS pairing of the signed message (the SHA256 hash of the witness info mapped onto an element of g_1) and the pubkey is computed immediately and cached. The signature is cached separately. Each time `OP_AGGREGATEBLS` is called by a script, it adds its arguments to their respective caches, and computes the new aggregate signature and aggregate pairing of messages and pubkeys.
+When executing scripts, `OP_BLSAGGREGATE` pops one argument from the stack. These MUST be the BLS pubkey. `OP_BLSAGGREGATE` causes script execution to fail if the pubkey is malformed. The B12-381 pairing of the signed message (the SHA256 hash of the witness info mapped onto an element of g_1) and the pubkey is computed immediately and cached in the transaction aggregator.
 
-After all scripts have been executed, the cached aggregate signature is paired with the generator point of g_2, and the result is compared to the cached aggregate message/pubkey pairing. If they are not equal, transaction validation fails.
+The computational cost of `OP_BLSAGGREGATE` is one pairing for the first pubkey, plus one pairing and one g_t multiplication for each additional pubkey.
 
-The computational cost of `OP_AGGREGATEBLS` is two pairings for the first signature, plus one pairing, one g_t multiplication, and one g_1 multiplication for each signature beyond the first. As such it should be linear with the number of inputs.
+`OP_BLSAGGREGATEFROMSTACK` works similarly. It takes two arguments: a message hash mapped to an eliptic curve point and a pubkey.
+
+The aggregator keeps a set of messages, to ensure uniqueness. After all scripts have been executed, the aggregate signature is paired with the generator point of g_2, and the result is compared to the cached aggregate message/pubkey pairing. If they are not equal, transaction validation fails.

@@ -28,7 +28,7 @@ A new data structure, the witness info is created. Its ID, the `wiid`, is define
 [nVersion][witnessedin][inputFlag][txins][outputFlag][txouts][nLockTime][primaryinidx]
 ```
 
-The witness info includes a version number `nVersion`, the index of the input this witnessinfo is associated with `witnessedin`, a bit specifying whether additional inputs may be added `input flag`, a list of inputs `txins`, equivalent info for outputs (specifying their scriptpubkeys and sizes) `outputFlag` and `txouts`, a timelock `nLockTime` and optionally the primary input of the transaction, specified by its index `primaryinidx` in the `txins`.
+The witness info includes a version number `nVersion`, the index of the input this witnessinfo is associated with `witnessedin`, a bit specifying whether additional inputs may be added `input flag`, a list of inputs `txins`, equivalent info for outputs (specifying their scriptpubkeys and sizes) `outputFlag` and `txouts`, a timelock `nLockTime` and optionally the primary input of the transaction, specified by its index `primaryinidx` in the `txins`. `txins` and `txouts` are merklized lists with fixed-size entries.
 
 The witness info specifies a list of inputs and a list of outputs for the transaction. The witness info and its associated witness are valid if and only if those inputs and outputs are present in the final transaction. If the `inputFlag` is not set, additional inputs may be present (committed to by other witness info structures). If the `outputFlag` is not set, additional outputs may be present (committed to by other witness info structures).
 
