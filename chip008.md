@@ -18,4 +18,7 @@ pubkeygen: v <- g_1^x
 hashing: h <- H(M) ∈ G_2
 signing: σ <- h^x
 verification: e(v, h) =? e(g_1, σ)
+
+aggregation: σ <- Π (σ_i)
+aggregation verification: e(g_1, σ) =? Π e(v_i, m_i)
 ```
