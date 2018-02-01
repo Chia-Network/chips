@@ -13,8 +13,9 @@ One of the main advantages of the BLS signature scheme is space saving via aggre
 As in [BLS](https://cseweb.ucsd.edu/~hovav/dist/sigs.pdf) with the following exceptions:
 
 ```
-keygen: v <- g_1^x
+privkeygen: x <-R- Z_p
+pubkeygen: v <- g_1^x
 hashing: h <- H(M) ∈ G_2
 signing: σ <- h^x
-e(v, h) =? e(g_1, σ)
+verification: e(v, h) =? e(g_1, σ)
 ```
