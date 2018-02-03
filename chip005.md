@@ -2,6 +2,10 @@
 
 ## Scaffolding and notation
 
+When Chia scripts are hashed it's with a Merkle root to support only revealing the parts of the script which get executed. This is enabled by the removal of OP_IF, OP_ELSE and OP_ENDIF in favor of OP_IFJUMP, OP_IFNJUMP and OP_JUMP which don't requiring parsing the entire script to execute.
+
+When full nodes validate scripts they do some level of canonicalization by removing items from the stack which were unnecessary, changing elements to zero length which are unreferenced, and canonicalizing elements to their minimum length representation as bools or ints if that's their only use.
+
 Bigendian `n` is specified by the bytes after the opcode as follows
 -- length encoding: 0 - 127 verbatim
 -- leading 10 is a two byte encoding
