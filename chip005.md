@@ -36,14 +36,14 @@ Chia does not use scriptSigs. Your signature is a stack. There's no opcodes in t
     Reserved non-changing.
     other opcodes will implement this feature, for soft-fork compatibility.
 
-#### CLTVDROP
+#### OP_CLTVDROP
     As CLTV, but consumes
 
-#### CSVDROP
+#### OP_CSVDROP
     AS CSV, but consumes argument.
 
-#### BLSAGGREGATE
+#### OP_BLSAGGREGATE
     see chip006
 
-#### BLSAGGREGATEFROMSTACK
+#### OP_BLSAGGREGATEFROMSTACK
     see chip006
