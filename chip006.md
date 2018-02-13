@@ -16,6 +16,6 @@ When executing scripts, `OP_BLSAGGREGATE` pops one argument from the stack. Thes
 
 The computational cost of `OP_BLSAGGREGATE` is one pairing for the first pubkey, plus one pairing and one g_t multiplication for each additional pubkey.
 
-`OP_BLSAGGREGATEFROMSTACK` works similarly. It takes two arguments: a message hash mapped to an eliptic curve point and a pubkey.
+`OP_BLSAGGREGATEFROMSTACK` works similarly. It takes two arguments: a message hash mapped to an elliptic curve point and a pubkey.
 
 The aggregator keeps a set of messages, to ensure uniqueness. After all scripts have been executed, the aggregate signature is paired with the generator point of g_2, and the result is compared to the cached aggregate message/pubkey pairing. If they are not equal, transaction validation fails.
