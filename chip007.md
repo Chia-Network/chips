@@ -2,7 +2,7 @@ chip007 -- Precursors (Adoptive parents) and OP_CHECKPRECURSORVERIFY
 
 ## Abstract
 
-Witness infos may specify one or more precursor TXOs. The witness info and its associated witness are not valid unless these TXOs have been created in some block (including the current block). In essence, signers may make the validity of a spend conditional on the state of another UTXO. A new Script opcode, `OP_CHECKPRECURSORVERIFY` may be used to enforce precursor inclusion. This is conceptually related to chip010 -- OP_CHECKINPUTVERIFY & OP_CHECKOUTPUTVERIFY.
+Witness infos may specify one or more precursor TXOs. The witness info and its associated witness are not valid unless these TXOs have been created in some block (including the current block). In essence, signers may make the validity of a spend conditional on the state of another UTXO. A new Script opcode, `OP_CHECKPRECURSORVERIFY` may be used to enforce precursor inclusion. This is conceptually related to chip010 -- `OP_CHECKINPUTVERIFY` & `OP_CHECKOUTPUTVERIFY`.
 
 ## Motivation
 

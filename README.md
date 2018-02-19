@@ -2,10 +2,10 @@
 
 ## Chip list
 
-chip003 -- Transaction Format Revision
-chip004 -- Revised Block Headers
+chip003 -- Transaction Format Revision      -- NEEDS REWRITE
+chip004 -- Revised Block Headers            -- NEEDS DISCUSSION
 chip005 -- New Script opcodes
-chip006 -- Cross-input BLS Aggregation
+chip006 -- Cross-input BLS Aggregation      -- NEEDS REWRITE
 chip007 -- Precursors (Adoptive parents)
 chip008 -- Reverse BLS
 chip009 -- UTXO bitfield
@@ -32,3 +32,6 @@ get rid of transactions entirely?
 ## NOTES
 
 Chip011 would modify the function and structure of chips 005, 007, 010. Update these?
+chip003 needs to be rewritten, probably chip004 too
+
+Need Terminology CHIP

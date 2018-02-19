@@ -53,10 +53,10 @@ New opcodes are taken out of the set of disabled Bitcoin opcodes. Later ones wil
     other opcodes will implement this feature, for soft-fork compatibility.
 
 #### OP_CLTVDROP
-    As CLTV, but consumes
+    As CLTV, but consumes argument. (MAY BE REPLACED BY CHIP011)
 
 #### OP_CSVDROP
-    AS CSV, but consumes argument.
+    AS CSV, but consumes argument. (MAY BE REPLACED BY CHIP011)
 
 #### OP_BLSAGGREGATE
     see chip006
@@ -175,3 +175,11 @@ Normal math
 #### OP_SHA256
 
 It's tempting to switch some things to a different hash function but better to stick with a single one for simplicity. The double version is removed with much prejudice.
+
+#### OP_TOALTSTACK
+
+As Bitcoin
+
+#### OP_FROMALTSTACK
+
+As Bitcoin
