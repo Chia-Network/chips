@@ -1,5 +1,6 @@
 ## How to verify Bitcoin transactions:
 
+https://bitcoin.stackexchange.com/questions/52528/how-is-a-standard-bitcoin-transaction-defined
 https://www.cryptocompare.com/coins/guides/how-does-a-bitcoin-node-verify-a-transaction/
 https://www.cryptocompare.com/coins/guides/what-are-the-bitcoin-transaction-types/
 
