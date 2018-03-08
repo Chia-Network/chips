@@ -12,6 +12,7 @@ chip009 -- UTXO bitfield
 chip010 -- OP_CHECKINPUTVERIFY & OP_CHECKOUTPUTVERIFY
 chip011 -- Opcodes to push witness info properties to stack
 chip012 -- nSequence and relative time lock semantics changes
+chip012 -- Taproot and Graftroot
 
 ## Future chips?
 
