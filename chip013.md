@@ -38,9 +38,9 @@ Taproot is not limited to two participants. `C` may be the public key for an msi
 
 https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015700.html
 
-Graftroot is a system for delegating the ability to spend an output.
+Graftroot is an extension to taproot, that allows users to delegate the ability to spend an output to a new script.
 
-First a taproot pubkey `P` is created. Should the parties wish to delegate the UTXO, they create a new script `S_1` and sign the script such that the signature is valid under `P` (as described above). The holder of the delegate script may at any time publish it and its arguments, along with the signature under `P` to spend the UTXO.
+First a new pubkey is created. This may be a taproot pubkey, `P`, or a normal msig or threshold pubkey `C`. Should the parties wish to delegate the UTXO, they create a new script `S_1` and sign the script such that the signature is valid under `P` or `C` (as described above). The holder of the delegate script may at any time publish it and its arguments, along with the signature under the pubkey to spend the UTXO.
 
 Note: This delegation is not exclusive. The original participants may still spend by signing a transaction, or by revealing the Taproot script (if any).
 
