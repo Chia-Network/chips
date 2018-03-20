@@ -34,5 +34,6 @@ get rid of transactions entirely?
 
 Chip011 would modify the function and structure of chips 005, 007, 010. Update these?
 chip003 needs to be rewritten, probably chip004 too
+Maybe cut IFJUMP in favor of enumerated scripts with MAST
 
 Need Terminology CHIP

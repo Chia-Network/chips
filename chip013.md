@@ -2,7 +2,7 @@ chip012 -- Taproot and Graftroot via BLS Aggregates
 
 ## Abstract
 
-Chia will support Taproot and Graftroot for enhanced script privacy.
+Chia will support Taproot for enhanced script privacy and Graftroot for script delegation.
 
 ## Motivation
 
@@ -43,6 +43,3 @@ Graftroot is an extension to taproot, that allows users to delegate the ability 
 First a new pubkey is created. This may be a taproot pubkey, `P`, or a normal msig or threshold pubkey `C`. Should the parties wish to delegate the UTXO, they create a new script `S_1` and sign the script such that the signature is valid under `P` or `C` (as described above). The holder of the delegate script may at any time publish it and its arguments, along with the signature under the pubkey to spend the UTXO.
 
 Note: This delegation is not exclusive. The original participants may still spend by signing a transaction, or by revealing the Taproot script (if any).
-
-
-1

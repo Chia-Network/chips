@@ -5,8 +5,8 @@
 This CHIP describes a new standard format for transactions, witnesses, and a new data structure: the witness info. The transaction contains information relating to the creation of new UTXOs, the witness commits to the transaction and contains information related to user intent and the consumption of existing UTXOs (e.g. scriptPubkeys and timelock information), and the witness contains the information necessary to validate those spends (e.g. the initial stack). Signatures in the witness sign the hash of the witness info.
 
 ## Motivation
-
 Transactions in Bitcoin initially contained all information in one data structure. Segregated Witness split information related to validating out of the transaction data structure and placed it into the witness. This has a number of advantages. Moving additional information out of the transaction and into a new object allows us to make new incremental improvements:
+
 
 1. SIGHASH flags may be replaced with precise lists of inputs and outputs in the witness info.
 
