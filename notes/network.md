@@ -124,3 +124,31 @@ Broadcasting New Transactions
 * Full nodes generally keep track of unconfirmed transactions
 * Transaction mined into blocks that become stale are added back to the memory pool
 * If those transactions appear in a new block, they are removed from the memory pool
+
+---
+
+Questions
+---------
+
+* Why duplicate services information in version message?
+  * Compatibility with older clients?
+* Why custom binary message encoding?
+  * Satoshi grumpy old bastard?
+  * Makes protocol updates more difficult
+  * Lots of nasty parsing code
+  * Bencode? Msgpack? Literally anything?
+* Why extraneous parameters in version message?
+  * Like echoing perceived services - we don't do anything with that info if it's wrong
+  * Why 3 different block broadcasting methods?
+    * Standard relay seems fine
+    * Header announcements make sense for SPV
+    * Unsolicited doesn't seem useful - remnant of old protocol?
+* What do we do if we receive a version message that has incorrect perceived address/port information?
+  * There is no "correction" message
+  * Send another version message?
+  * Why does this matter, why would the perceived ip/port be anything other than what we sent?
+* Why include best block height in version message?
+  * Does not appear to be used to select a sync node
+  * Is it thrown away?
+* Why do we send all the the block headers from 0 - latest in the getheaders message?
+  * Don't we only need to send our tip?
