@@ -1,4 +1,4 @@
-chip012 -- Taproot and Graftroot via BLS Aggregates
+chip013 -- Taproot and Graftroot via BLS Aggregates
 
 ## Abstract
 
