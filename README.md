@@ -2,17 +2,17 @@
 
 ## Chip list
 
-chip003 -- Transaction Format Revision      -- NEEDS REWRITE
-chip004 -- Revised Block Headers            -- NEEDS DISCUSSION
-chip005 -- New Script opcodes
-chip006 -- Cross-input BLS Aggregation      -- NEEDS REWRITE
-chip007 -- Precursors (Adoptive parents)
-chip008 -- Reverse BLS
-chip009 -- UTXO bitfield
-chip010 -- OP_CHECKINPUTVERIFY & OP_CHECKOUTPUTVERIFY
-chip011 -- Opcodes to push witness info properties to stack
-chip012 -- nSequence and relative time lock semantics changes
-chip012 -- Taproot and Graftroot
+* chip003 -- Transaction Format Revision      -- NEEDS REWRITE
+* chip004 -- Revised Block Headers            -- NEEDS DISCUSSION
+* chip005 -- New Script opcodes
+* chip006 -- Cross-input BLS Aggregation      -- NEEDS REWRITE
+* chip007 -- Precursors (Adoptive parents)
+* chip008 -- Reverse BLS
+* chip009 -- UTXO bitfield
+* chip010 -- OP_CHECKINPUTVERIFY & OP_CHECKOUTPUTVERIFY
+* chip011 -- Opcodes to push witness info properties to stack
+* chip012 -- nSequence and relative time lock semantics changes
+* chip013 -- Taproot and Graftroot
 
 ## Future chips?
 
