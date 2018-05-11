@@ -2,36 +2,83 @@
 
 ## Abstract
 
-This CHIP describes a new standard format for transactions, witnesses, and a new data structure: the witness info. The transaction contains information relating to the creation of new UTXOs, the witness commits to the transaction and contains information related to user intent and the consumption of existing UTXOs (e.g. scriptPubkeys and timelock information), and the witness contains the information necessary to validate those spends (e.g. the initial stack). Signatures in the witness sign the hash of the witness info.
+This CHIP describes a new standard format for transactional information. In contrast to Bitcoin, Chia transactions are split into
 
-## Motivation
-Transactions in Bitcoin initially contained all information in one data structure. Segregated Witness split information related to validating out of the transaction data structure and placed it into the witness. This has a number of advantages. Moving additional information out of the transaction and into a new object allows us to make new incremental improvements:
+# NOTES
+
+sort of getting rid of the WI
+replace it with a list of conditions
+
+## Condition Formats
+
+the thing that you sign is (not 100% sure) the concatenation of hashes of all conditions
+H(C0 || C1 || C2 ... || Ci)
+
+It is normal for the set of conditions to be the same across an entire logical transaction, however, it is not mandatory. Users may vary conditions on a per-input basis.
 
 
-1. SIGHASH flags may be replaced with precise lists of inputs and outputs in the witness info.
+## Witness
 
-2. TODO
+Every witness indirectly references an input, and directly references a list of conditions
+Signatures in a witness sign the condition list as above.
+It is often the case that all witnesses for a logical tx reference the same list of conditions
+AggSig for tx as a whole.
 
-## Specification
 
-Transaction ids (`txid`) in Chia are defined as the *single* SHA256 of the serialization format:
+Witnesses have a single byte that gives the witness version.
+Initially the pubkeys types listed in outputs are all of the same type:
+Reverse BLS 381 pubkey w/ taproot + graftroot
+We will allow other types to be softforked in.
 
-```
-[nVersion][primaryin][txouts]
-```
+If taproot it's a MAST script. Script has a single byte giving the type.
+There is no OP_IF or OP_IFJUMP.
 
-The formats of `nVersion` and `txouts` are as Bitcoin. `primaryin` is a single input of the transaction.
+Maybe make OP_ASSERT style opcodes
+Maybe make OP_PUSHLOCKTIME or similar
 
-A new data structure, the witness info is created. Its ID, the `wiid`, is defined as the *single* SHA256 of its serialization format:
 
-```
-[nVersion][witnessedin][inputFlag][txins][outputFlag][txouts][nLockTime][primaryinidx]
-```
+### Types of conditions:
 
-The witness info includes a version number `nVersion`, the index of the input this witnessinfo is associated with `witnessedin`, a bit specifying whether additional inputs may be added `input flag`, a list of inputs `txins`, equivalent info for outputs (specifying their scriptpubkeys and sizes) `outputFlag` and `txouts`, a timelock `nLockTime` and optionally the primary input of the transaction, specified by its index `primaryinidx` in the `txins`. `txins` and `txouts` are merklized lists with fixed-size entries.
+Multiple types of coniditions
+first byte is type
+after that is required values for the condition (fixed length)
+optional values (variable length)
 
-The witness info specifies a list of inputs and a list of outputs for the transaction. The witness info and its associated witness are valid if and only if those inputs and outputs are present in the final transaction. If the `inputFlag` is not set, additional inputs may be present (committed to by other witness info structures). If the `outputFlag` is not set, additional outputs may be present (committed to by other witness info structures).
+If you come across an optional value you don't understand, then abort success on that condition
 
-The witness contains the initial stack. For script evaluation, the witness is pushed onto the stack, then the scriptPubkey found in the witnessed input is pushed onto the stack. Script eval occurs as in Bitcoin. Signatures in the witness sign the `wiid`. As such, witnesses commit to the witness info as well as the transaction.
+*Specific input* -- chip must be consumed this block
+    req: ID
+    opt: amount
+    opt: relative locktime
 
-## Commitment Structure
+*Specific output* -- chip must be created this block
+    req: parent
+    req: pubkey
+    opt: amount
+
+*Lock time* -- witness is not valid before a specific time
+    req: absolute locktime
+
+*Precursor input* -- chip must be consumed this block
+    req: ID
+    opt: amount
+    opt: relative locktime
+
+*Fee*
+    req: amount
+    opt: salt
+
+Extensible for new conditions
+
+
+### Locktime possible formats:
+wallclock (timestamp)
+block height
+VDF iterations
+
+
+### Block
+
+A block is a set of foliage. It has a direct linkage to the current trunk PoSpace. It has a link to the previous foliage block. It has a list of inputs by ID, which are inputs to any transaction, which are spent in this block. It has a list of outputs that are created in this block, which contain a parent, a pubkey, and an amount.
+
+Some parts of the block are prunable: a list of witnesses (which may or may not still have individual IDs), and an aggsig for the whole block

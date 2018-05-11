@@ -15,21 +15,10 @@ With strong non outsourceable puzzles, farmers can claim their block rewards if 
 ## Specification
 
 The trunk of the Chia blockchain contains only the hashes of the proofs of space, the proofs of elapsed time, and the occasional work difficulty reset. The canonical hash of the proof of space does not commit to any information in the block, therefore allowing the farmer to form her own valid block after finding a solution to the proof of space puzzle, and making it impossible for the farmer to identify herself in the trunk.
-```
-                  height 1                  height 2
-PoT0 <----- H(PoSpace1) <- PoT1 <----- H(PoSpace2) <- PoT2
-                 ^                          ^   
-                 |                          |              
-                ZKP1                       ZKP  
-               Block1                     Block2      
 
-```
+Since the trunk does not commit to any block data, and is not an actual proof of space, the foliage must contain a proof that the proof of space is valid, a proof which also 'signs' the block. When a new block is finalized, the farmer will check their storage for a solution, and then create a zero knowledge proof signing their desired block. (More info in CHIP17).
 
-Sidenote: The proof of time will not actually commit to the H(PoSpace) at the same height, it will commit to the    H(PoSpace) and PoT, at the previous height, but it will run for the number of iterations corresponding to the H(PoSpace) at the current height. This, combined with the minimum number of iterations parameter, means farmers have some time to get their solutions submitted to the PoT servers.
-
-Since the trunk does not commit to any block data, and is not an actual proof of space, the foliage must contain a proof that the proof of space is valid, a proof which also 'signs' the block. 
-
-In the diagram, ZKP denotes a zero knowledge proof of knowledge of the following items:
+The block signature is a zero knowledge proof of knowledge of the following items:
 
 
 `{(C, S, B ∈ Zn, H: {0,1}* -> Zn, Tm: {0,1}* -> Z2^m ; x1, x2, x3, x4 ∈ Z2^m, s ∈ Zn) : S = H(s, x1, x2, x3, x4) ^ `
@@ -37,9 +26,9 @@ In the diagram, ZKP denotes a zero knowledge proof of knowledge of the following
 
 `Tm(H(s, x1, x2, x3, x4)) = Tm(C)                    ^`       
 
-` Tm(H(s, x1, x2)) = Tm(H(s, x3, x4)) + 1  ^` 
+`Tm(H(s, x1, x2)) = Tm(H(s, x3, x4)) + 1  ^` 
 
-`  Tm(H(s, x1)) = Tm(H(s, x2)) + 1 ^ Tm(H(s, x3)) = Tm(H(s, x4)) + 1}`  
+`Tm(H(s, x1)) = Tm(H(s, x2)) + 1 ^ Tm(H(s, x3)) = Tm(H(s, x4)) + 1}`  
 
 Where:
 - `C` is the challenge from the previous proof of time
@@ -66,28 +55,26 @@ The hash function is truncated to a smaller size for smaller plots, so the circu
 This means we will need to create multiple circuits for each valid bit length `m`, or the relation will need to additionally prove that length `m` is used.
 
 ## Non Outsourceability Proof
-(Here we must include a proof that the the proof of space puzzle is strongly non-outsourceable. The puzzle itself should be described in detail in another CHIP or paper).
+(Here we must include a proof that the the proof of space puzzle is strongly non-outsourceable. The puzzle itself should be described in detail in another CHIP or paper). It might be impossible to prove, due to the encryption attacks, but maybe we can prove it with some assumptions.
 
 - Prove that the puzzle is weakly non outsourceable:
 
-    - First prove that for every pooling protocol, there exists a strategy A for the farmer, where the farmer can take the rewards with significant probability.
-    - Then prove that an operation of the pooling protocol in an honest way, is indistinguishable from an operation of the pooling protocol in the adversarial (stealing) way. This means that the pool operator will allow the farmer to
-    farm (until rewards are stolen at least).
+    - First prove that for every pooling protocol, there exists a strategy A for the farmer, where the farmer can take the rewards with significant probability. Perhaps we can do this by making assumptions on the bandwith of the farmer, or latency.
+    - Then prove that an operation of the pooling protocol in an honest way, is indistinguishable from an operation of the pooling protocol in the adversarial (stealing) way. This means that the pool operator will allow the farmer to farm (until rewards are stolen at least).
 
 - Prove that the puzzle has an indistingushability property:
     - Assuming that the zero knowledge proof system used is computationally zero knowledge, the adversary will not be able to obtain any info from the proof. For the foliage, the farmer can just create a block with a brand new public key in the coinbase transaction, and no other differentiating factors that would identify the farmer. For the trunk, since the H(PoSpace) is completely canonical, the adversary cannot differentiate the farmer's H(PoSpace) with any other proofs of space, without knowing `s`  and every ` x_1 ... x_2^k` .
 
-
-
-## Questions
-- Q1: Which hash functions do we use?
+##  Questions / Notes
+- Q1: Which hash functions do we use? Could use pedersen hash function with jub jub like zcash, maybe MiMC:w
 - Q2: Do we need a different hash function for the final function?
 - Q3: Which ZKP technique to use? Bulletproofs require no trusted setup, are fast to prove, but are relatively large and slow to verify. zkSnarks are small and fast to verify, but require a trusted setup and take a long time to prove. Starks have no trusted setup but are very large. Also need to decide on curves..
 - Q4: Should we have different levels of rewards, in order to minimize the variance in rewards?
 - Q5: Can we reveal the output of the individual hash functions in the levels of the pyramid?
 - Q6: How fast does the hash function need to be? Pedersen hash with jub jub is quite slow.
 - Q7: Collision resistance necessary? 
-- Q8: Upper limit for verification time and size of proof? 1kb and 100 ms. If we can batch proofs between multiple blocks that would be great.
+- Q8: Upper limit for verification time and size of proof? 1kb and 100 ms? If we can batch proofs between multiple blocks that would be great. SPV needs to download and verify every header.
 - Q9: Attack where all values are encrypted with pool operator's keys. Need to address.
 - Q10: Attack where only some values are encrypted with pool operator's keys.
 - Q11: Attack where encryption is done client side with pool operator's public keys, encryption function is hard to compute on the fly for one value, forcing the farmer to actually store all values encrypteds.. (but encryption function is easy to do for the whole table.. Not sure if such an encryption scheme exists)
+- Q12: Maybe something that requires many reads/writes, to make encrypted outsourcing more difficult, if we assume a minimum latency between farmer and pool. For example if round trip is 100ms, and there are 10000 round trips, then it will take 1000 seconds for the pool operator to check get their proof of space.
