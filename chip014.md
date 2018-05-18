@@ -18,26 +18,33 @@ The trunk of the Chia blockchain contains only the hashes of the proofs of space
 
 Since the trunk does not commit to any block data, and is not an actual proof of space, the foliage must contain a proof that the proof of space is valid, a proof which also 'signs' the block. When a new block is finalized, the farmer will check their storage for a solution, and then create a zero knowledge proof signing their desired block. (More info in CHIP17).
 
-The block signature is a zero knowledge proof of knowledge of the following items:
+The block signature is a zero knowledge proof of knowledge of the following witnesses, such that the relations hold:
 
+Committed values (message to sign)
+- `B ∈ Zn,`
 
-`{(C, S, B ∈ Zn, H: {0,1}* -> Zn, Tm: {0,1}* -> Z2^m ; x1, x2, x3, x4 ∈ Z2^m, s ∈ Zn) : S = H(s, x1, x2, x3, x4) ^ `
+Public inputs
+- `C ∈ Zn,`
+- `S ∈ Zn,`
 
+Private inputs (witnesses)
+- `x1, x2, x3, x4 ∈ Z2^m`
+- `s ∈ Zn`
 
-`Tm(H(s, x1, x2, x3, x4)) = Tm(C)                    ^`       
-
-`Tm(H(s, x1, x2)) = Tm(H(s, x3, x4)) + 1  ^` 
-
-`Tm(H(s, x1)) = Tm(H(s, x2)) + 1 ^ Tm(H(s, x3)) = Tm(H(s, x4)) + 1}`  
+Relations
+- `S = H(s, x1, x2, x3, x4)`
+- `Tm(H(s, x1, x2, x3, x4)) = C`
+- `Tm(H(s, x1, x2)) = Tm(H(s, x3, x4)) + 1`
+- `Tm(H(s, x1)) = Tm(H(s, x2)) + 1  AND Tm(H(s, x3)) = Tm(H(s, x4)) + 1}`
 
 Where:
-- `C` is the challenge from the previous proof of time
-- `S` is the solution to the puzzle, the hash of the proof of space
 - `B` is the block data that the farmer commits to in the proof, it can be the `tx_root` or the hash of the rest of the block header
+- `C` is the truncated challenge from the previous proof of time
+- `S` is the solution to the puzzle, the hash of the proof of space
 - `n` is a large number like 2^128
 - `k` is the number of levels deep of the proof of space, here it is set to 3 for clarity. In the paper these levels correspond to `f`, `g`, `h`, etc.
 - `m` is the number of bits in the output of `Tm(H)`, plot size is proportional to `2^m`
-- `H` is a hash function with a large output
+- `H` is a hash function with a large output, `H: {0,1}* -> Zn`
 - `Tm: {0,1}* -> Z2^m` is a truncation function that outputs the first `m` bits of the input.
 - `s` is a salt witness used as input in hash functions, generated randomly to ensure different proofs of space for each farmer.
 - `x_1 ... x_2^k` are `2^k` witnesses that are stored by the farmer, that are used to prove space.

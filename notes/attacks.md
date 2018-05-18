@@ -15,6 +15,7 @@ Then they ask for the data on every block, making it impossible for the farmer t
     - Another variant is where a reseller or HDD manufacturer ships the HDD with the encrypted data already on there, or user send it by snail mail and gets it back. 
     It might be a practical business model to resell hard drives with plots on them, and get the fees. Luckily thats a low barrier to entry market.
 6. Proof of space efficiency innovations: an attacker can figure out a more efficient way to store the tables and get an advantage this way.
+7. Selfish farming attack: similar to selfish mining on Bitcoin. A farmer can choose to withhold his solution, and gain some advantage. Not clear if it's exactly the same, needs more analysis.
 
 ## Other attacks
-7. Eclipse attack: Node surrounds another node and gives them false information, censors transactions, etc.
+1. Eclipse attack: Node surrounds another node and gives them false information, censors transactions, etc.
