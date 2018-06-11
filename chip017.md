@@ -15,7 +15,7 @@ In the diagram above, the arrows signify a dependency on (or a commitment to) wh
 
 The trunk section includes a proof of time and proof of space.
 Both take in a challenge from the trunk of the previous block. The challenge can be `H(PoT output || H(PoSpace) || difficultyReset)`
-This commits to both the proof of space and proof of time of the previous block. 
+This commits to both the proof of space and proof of time of the previous block.
 The Proof of time itself, is two values: the output of the VDF, and the proof that the VDF was correctly computed.
 The proof of time uses the challenge as an input to the verifiable delay function.
 The proof of space uses the challenge as the target value when looking up the proof of space in the storage. The actual proof of space is not revealed in the trunk: only the hash is.
@@ -25,6 +25,8 @@ The trunk will also include an occasional work difficulty reset.
 The foliage includes the rest of the block header, and the block data. The signature in the block, is a proof of knowledge of the preimage of `H(PoSpace)`, signing the rest of the fields in the block header.
 
 During operation of the protocol, farmers build blocks with the PoSpace and signature, and broadcast these. Proof of time servers then add the Proof of Time on top of these blocks, to finalize them.
+
+Furthermore, Chia will also have a number of parallel rewards chains, which are identical, but do not contain `hashStateChanges`, `hashValidations`, and `rewardInclusion`.
 
 ## Rationale
 
@@ -38,4 +40,4 @@ A notable exception is where a work difficulty reset has to happen. In this case
 
 ## Questions / Notes
 - Q1: Krzysztof made the point that the VDF does not really have to commit to the previous block's PoSpace, since it already kind of does, from the number of iterations. However, it allows for more flexibility to commit to it. for example, we can allow different number of iterations in the future...
-I think the same thing can be said about including the proof of space in the challenge for the next proof of space. 
+I think the same thing can be said about including the proof of space in the challenge for the next proof of space.

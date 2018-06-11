@@ -55,10 +55,10 @@ The relation above implies:
 - Every level of the proof of space must validate, making it computationally unfeasible to find a proof of space without storing tables for all of these levels.
 
 
-When looking at a new proof, a node must check that the ZKP validates correctly, that the block that is being validated corresponds to the value B, and 
+When looking at a new proof, a node must check that the ZKP validates correctly, that the block that is being validated corresponds to the value B, and
 that the proof of time performs `(d (C - S) / m) + t0 ` iterations. `d` and `t0` are constants that ensure that it takes 5 minutes on average, and 1 minute even with a perfect PoSpace.
 
-The hash function is truncated to a smaller size for smaller plots, so the circuit to satisfy the above relation depends of the size of the plot, and thus on `m`. 
+The hash function is truncated to a smaller size for smaller plots, so the circuit to satisfy the above relation depends of the size of the plot, and thus on `m`.
 This means we will need to create multiple circuits for each valid bit length `m`, or the relation will need to additionally prove that length `m` is used.
 
 ## Non Outsourceability Proof
@@ -73,13 +73,13 @@ This means we will need to create multiple circuits for each valid bit length `m
     - Assuming that the zero knowledge proof system used is computationally zero knowledge, the adversary will not be able to obtain any info from the proof. For the foliage, the farmer can just create a block with a brand new public key in the coinbase transaction, and no other differentiating factors that would identify the farmer. For the trunk, since the H(PoSpace) is completely canonical, the adversary cannot differentiate the farmer's H(PoSpace) with any other proofs of space, without knowing `s`  and every ` x_1 ... x_2^k` .
 
 ##  Questions / Notes
-- Q1: Which hash functions do we use? Could use pedersen hash function with jub jub like zcash, maybe MiMC:w
+- Q1: Which hash functions do we use? Could use pedersen hash function with jub jub like zcash, maybe MiMC
 - Q2: Do we need a different hash function for the final function?
 - Q3: Which ZKP technique to use? Bulletproofs require no trusted setup, are fast to prove, but are relatively large and slow to verify. zkSnarks are small and fast to verify, but require a trusted setup and take a long time to prove. Starks have no trusted setup but are very large. Also need to decide on curves..
 - Q4: Should we have different levels of rewards, in order to minimize the variance in rewards?
 - Q5: Can we reveal the output of the individual hash functions in the levels of the pyramid?
 - Q6: How fast does the hash function need to be? Pedersen hash with jub jub is quite slow.
-- Q7: Collision resistance necessary? 
+- Q7: Collision resistance necessary?
 - Q8: Upper limit for verification time and size of proof? 1kb and 100 ms? If we can batch proofs between multiple blocks that would be great. SPV needs to download and verify every header.
 - Q9: Attack where all values are encrypted with pool operator's keys. Need to address.
 - Q10: Attack where only some values are encrypted with pool operator's keys.
