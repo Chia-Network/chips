@@ -17,6 +17,7 @@
 * chip015 -- Genesis Block
 * chip016 -- Fraud Proofs and Double Block Signing
 * chip017 -- Blockchain Structure
+* chip018 -- Rewards Chains
 
 Take a look at notes/TODO.md to see chips that still need to be created.
 

@@ -25,7 +25,7 @@ This keeps the system simple, although it still requires transferring rewards fr
 
 
 In order to transfer rewards, all Chia nodes maintain a list of blocks from all rewards chains.
-Farmers can include blocks (block hash) from other rewards cha8ins in the main chain header, as long as the weight of the included block is greater than the weight of the previous included block from that rewards chain.
+Farmers can include blocks (block hash) from other rewards chains in the main chain header, as long as the weight of the included block is greater than the weight of the previous included block from that rewards chain.
 For example (Figure 1), if the last included block from rewards chain 2 had height 4, the next included block from that rewards chain must have height of at least 5 (or more work, if there is a work difficulty reset).
 This also allows for reorgs. As can be seen in Figure 1, a farmer includes block 5 of rewards chain 2, causing a reorg in that rewards chain, without requiring a reorg in the main chain.
 After D blocks, this included block becomes finalized, or checkpointed, and the rewards from that block can be spent.
@@ -45,15 +45,17 @@ Network parameter D: depth of reward chain block required for spending rewards
 
 ## Rationale
 
-The purpose of the rewards chains are to reduce the variability of the farming rewards, without decreasing the security of the system.
+The purpose of the rewards chains is to reduce the variability of the farming rewards, without decreasing the security of the system.
 The simplest way to do this is to increase the block rate (reduce block time), but this can have a centralizing effect by giving advantages to large miners with zero block propogation time, and also add incentive to pooling.
+
+
 In most cryptocurrencies, pools are very dangerous centralized entities, that have the power to cause damage to their own, or other coins. Although decentralized pools like P2Pool exist, there is no real incentive to use them, and they suffer from security issues and lower smoothness than centralized pools.
-The main purpose of pools is to increase rewards smoothness, and lower the amount of time that miners/farmers must wait until they get paid. Rewards chains make rewards C + 1 times more common for everyone on chain, without reducing security.
+The reason most miners use pools is to increase rewards smoothness, and lower the amount of time that miners/farmers must wait until they get paid. Rewards chains make rewards C + 1 times more common for everyone on chain, without reducing security.
 
 
 Since proof of space does not require intensive computation or lookups, farmers can easily farm on all rewards chains simultaneously, which will lead to very similar difficulty on all chains.
 A similar effect might lead other cryptocurrencies to adopt the same proof of space algorithm, allowing easy "merge farming" without having to adopt complex protocols.
-Since there are no transactions or validations on these chains, full nodes can easily download all the headers of all chains, without incurring much cost to bandwidth, processing, or storage.
+Since there are no transactions or validations on rewards chains, full nodes can easily download all the headers of all chains, without incurring much cost to bandwidth, processing, or storage.
 
 The checkpointing of blocks before their rewards can be spent is important, because it guarantees that a rewards chain reorg will not cause any issues in the main chain.
 
