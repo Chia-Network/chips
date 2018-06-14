@@ -38,6 +38,8 @@ For the proof of time, a similar issue arises. If the proof of time were to comm
 
 A notable exception is where a work difficulty reset has to happen. In this case, the farmer will add in the new difficulty, based on the data from the timestamps of the foliage. However grinding will still not be possible, since there will be a few discrete options for work difficulty, and they do not happen every block.
 
+The previous block pointer can be a merkle root of all previous blocks, if flyclient (CHIP19) is used.
+
 ## Questions / Notes
 - Q1: Krzysztof made the point that the VDF does not really have to commit to the previous block's PoSpace, since it already kind of does, from the number of iterations. However, it allows for more flexibility to commit to it. for example, we can allow different number of iterations in the future...
 I think the same thing can be said about including the proof of space in the challenge for the next proof of space.

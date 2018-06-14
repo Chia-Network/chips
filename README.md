@@ -18,6 +18,7 @@
 * chip016 -- Fraud Proofs and Double Block Signing
 * chip017 -- Blockchain Structure
 * chip018 -- Rewards Chains
+* chip019 -- Flyclient support (needs review)
 
 Take a look at notes/TODO.md to see chips that still need to be created.
 

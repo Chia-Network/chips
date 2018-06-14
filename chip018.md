@@ -59,14 +59,28 @@ Since there are no transactions or validations on rewards chains, full nodes can
 
 The checkpointing of blocks before their rewards can be spent is important, because it guarantees that a rewards chain reorg will not cause any issues in the main chain.
 
-One potential issue with the number of rewards chains is the imbalance between block rewards or transaction fees.
-Transaction fees are only given in the main chain: they cannot be split between all the chains, because that would lead to users paying farmers under the table, to get their transaction included in the main chain.
+### Reasons to limit the number of chains
+For the following reasons, C (the number of rewards chains) should not be increased too far.
+* **Imbalance between block rewards or transaction fees**:
+transaction fees are only given in the main chain: they cannot be split between all the chains, because that would lead to users paying farmers under the table, to get their transaction included in the main chain.
 Since all transaction fees are given out to farmers that win blocks in the main chain, there can be a scenario where transaction fees are much greater than the block reward in the main chain.
 For example, if there are 1000 chains, the main chain rewards will be 1/1000 of the total, and thus transaction fees might be greater than this. This can lead to adverse mining incentives like not following the heavient main chain, but following a main chain which will lead to a greater amount of claimed fees.
 Therefore, the total number of rewards chains should be kept relativily small
 
 
-Another potential issue (or feature) is that more proof of time servers are required to keep working on all of the rewards chains.
+* **More POT servers**: more proof of time servers are required to keep working on all of the rewards chains.
+If there are not enough POT servers, this can lead to a situation where some chains require less space than others for the same rewards, because some have weaker PoT, but the difficulty adjust to the same time.
+
+* **Too many lookups**: Many sequential lookups (10-100) are required to check a proof of space solution, if there are too many chains, the farmer might run out of time, and not be able to check the proofs of space for all chains.
+
+* **Computation**: All farmers will have to compute the ZKP for the proof of space, which might not be trivial.
+All full nodes must verify this proof for every chain, as well as verify the PoT for every chain.
+
+* **Bandwidth**: Headers must be transferred for every block or potential block. These are large headers ~(10KB) due to the PoS and PoT.
+
+The first issue can be fixed by allocation a large proportion of the block rewards to the main chain.
+For example, 10% of the rewards go to the main chain, and 1% of the rewards go to each of the 90 rewards chains.
+However this can cause incentive issues since it's preferrable to farm on the main chain (although it's preferrable anyway, due to the transaction fees).
 
 ## Questions / Notes
 1. Should we incentivize inclusing of blocks from rewards chains in order to make sure that the main chain is up to date? If the main chain is rarely updated with new reward blocks, this increases the chance that a shorter fork will be finalized/checkpointed.
@@ -74,3 +88,4 @@ Another potential issue (or feature) is that more proof of time servers are requ
 3. Is farmer storage fast enough to do all the lookups necessary?
 4. Should nodes keep old forks of rewards chains in case there is a massive reorg that "uncheckpoints" blocks?
 5. Will a checkpoint ever be reversed? What would be the impact of that?
+6. Larger reward for the main chain?
