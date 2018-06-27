@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 ## ALL CHIPS ARE IN EARLY DRAFT. THEY ARE A CONCEPTUAL REFERENCE, NOT AN IMPLEMENTATION GUIDE
 
 ## Chip list
@@ -22,3 +26,7 @@
 
 Take a look at notes/TODO.md to see chips that still need to be created.
 
+To view these chips in pretty rendered markdown in your browser, type:
+
+gem install bundler jekyll
+jekyll serve
