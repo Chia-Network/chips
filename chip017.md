@@ -2,7 +2,7 @@
 layout: markdown
 ---
 
-#chip017 -- Blockchain Structure
+# chip017 -- Blockchain Structure
 
 ## Abstract
 
