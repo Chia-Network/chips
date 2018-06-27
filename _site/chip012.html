@@ -1,0 +1,25 @@
+<h1 id="chip012--nsequence-and-relative-time-lock-semantics-changes">chip012 – nSequence and relative time lock semantics changes</h1>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>The format of the <code class="highlighter-rouge">nSequence</code> field is modified to allow longer relative time locks, remove replace-by-fee (RBF) signalling, and remove the disable flag.</p>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>The <code class="highlighter-rouge">nSequence</code> associated with each input in Bitcoin has significance to absolute time locks, replace-by-fee policy, and consensus-enforced relative lock times. This CHIP removes its significance to absolute lock times and RBF policy. It also changes its name and semantic structure to accurately describe its sole purpose.</p>
+
+<h2 id="specification">Specification</h2>
+
+<p><code class="highlighter-rouge">nSequence</code> is renamed to <code class="highlighter-rouge">nRelativeLockTime</code>.</p>
+
+<p>The disable flag is removed. A value of <code class="highlighter-rouge">0x00000000</code> indicates that relative time locks are disabled</p>
+
+<p>nSequence no longer signals opt-in replace-by-fee, as RBF is now default behavior.</p>
+
+<p>The type flag is changed to Bit (1 « 31).</p>
+
+<p>The rightmost 24 bits encode the value. If the type flag is set, they specify a timespan in units of 512 second granularity. If the type flag is not set, they specify a number of blocks.</p>
+
+<p>Bits (1«24) through (1 « 30) are reserved for future use.</p>
+
+<p>A value of <code class="highlighter-rouge">0xFFFFFFFF</code> no longer disables absolute time locks via the <code class="highlighter-rouge">nLockTime</code> field.</p>

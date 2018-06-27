@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 ## How to verify Bitcoin transactions:
 
 https://bitcoin.stackexchange.com/questions/52528/how-is-a-standard-bitcoin-transaction-defined

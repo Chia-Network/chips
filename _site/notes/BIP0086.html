@@ -1,0 +1,147 @@
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  BIP: 86
+  Layer: Consensus (soft fork)
+  Title: BIT86 Scripting
+  Author: Bram Cohen &lt;bram@chia.net&gt;, James Prestwich &lt;james@prestwi.ch&gt;
+  Comments-URI: #TODO
+  Status: Draft
+  Type: Standards Track
+  Created: 2018-02-01
+  License: PD
+  Requiers: 173
+</code></pre></div></div>
+
+<h1 id="todo">TODO</h1>
+<p>More discussion of advantages
+Comments-uri
+Bram Review
+    more op_codes reclaimed?
+    include CLTV+CSV semantics changes?
+BIP8 parameters
+Limitations on Jumps (don’t fill scripts with arbitrary data)</p>
+
+<h1 id="abstract">Abstract</h1>
+
+<p>This document proposes a new witness script version based on Script.</p>
+
+<h1 id="summary">Summary</h1>
+
+<p>Bit86 is an updated version of Script. It is intended to simplify script evaluation and enable future upgrades. To this end, Bit86 reclaims many disabled opcodes, replaces <code class="highlighter-rouge">OP_IF</code> and other flow control opcodes with new a new flow control system based on forward jumps, and introduces the concept of Abort-Succeed. It may be soft-forked in as a new witness script version.</p>
+
+<h1 id="motivation">Motivation</h1>
+
+<p>Because unknown or reserved opcodes render a transaction invalid, Script has limited room for new opcodes. Upgrades must replace <code class="highlighter-rouge">OP_NOP4</code> through <code class="highlighter-rouge">OP_NOP10</code>. Some opcodes have been disabled (<code class="highlighter-rouge">OP_CAT</code>). Some are simply inadvisable (<code class="highlighter-rouge">OP_SHA1</code>). An improved version of Script can provide a simpler and more extensible compilation target for higher-level constructs like <a href="https://blog.chain.com/ivy-for-bitcoin-a-smart-contract-language-that-compiles-to-bitcoin-script-bec06377141a">Ivy</a> or <a href="https://eprint.iacr.org/2018/122.pdf">BitML</a>.</p>
+
+<h1 id="specification">Specification</h1>
+
+<p>If the witness program’s version byte is 2, the witness program is treated as a Bit86 program. Generally Bit86 behaves identically to Script, with the following exceptions:</p>
+
+<h2 id="abort-succeed">Abort-Succeed</h2>
+
+<p>Reserved opcodes cause script execution to abort. Scripts aborted by execution of a reserved opcode are deemed to have been executed successfully. Because older nodes will abort-succeed, future soft forks may add any functionality to any reserved opcode.</p>
+
+<p>In addition, <code class="highlighter-rouge">OP_RESERVED</code> is renamed to <code class="highlighter-rouge">OP_ABORTSUCCEED</code>. Whenver a new opcode is created, it overrides a specific reserved opcode. <code class="highlighter-rouge">OP_ABORTSUCCEED</code> may not be overwritten by new opcodes.</p>
+
+<p>While Bit86 maintains the cleanstack rule, abort-succeed overrides it. When encountering an abort-succeed, the script execuction is deemed to be successful regardless of the state of the stack.</p>
+
+<h2 id="reclaimed-opcodes">Reclaimed opcodes</h2>
+
+<p>The following opcodes are converted to reserved (abort-succeed) opcodes.</p>
+
+<ol>
+  <li>All disabled opcodes (<code class="highlighter-rouge">OP_CAT</code>, <code class="highlighter-rouge">OP_SUBSTR</code>, <code class="highlighter-rouge">OP_LEFT</code> etc.)</li>
+  <li><code class="highlighter-rouge">OP_SHA1</code></li>
+  <li><code class="highlighter-rouge">OP_CODESEPARATOR</code></li>
+  <li><code class="highlighter-rouge">OP_VERIF</code>, <code class="highlighter-rouge">OP_VERNOTIF</code>, <code class="highlighter-rouge">OP_RESERVED1</code>, <code class="highlighter-rouge">OP_RESERVED2</code>, <code class="highlighter-rouge">OP_VER</code>, <code class="highlighter-rouge">OP_VERIF</code>,</li>
+  <li><code class="highlighter-rouge">OP_NOP4</code> through <code class="highlighter-rouge">OP_NOP10</code></li>
+  <li><code class="highlighter-rouge">OP_ENDIF</code></li>
+</ol>
+
+<h2 id="jump-based-flow-control">Jump-based flow control</h2>
+
+<p><code class="highlighter-rouge">OP_IF</code> is replaced with <code class="highlighter-rouge">OP_IFJUMP</code>. <code class="highlighter-rouge">OP_IFJUMP</code> is always immediately followed by a varint dictating the number of bytes to jump forward. <code class="highlighter-rouge">OP_IFJUMP</code> pops the top stack item. If the popped item is true, script execution jumps forward the specified number of bytes (excluding the varint specifier).</p>
+
+<p><code class="highlighter-rouge">OP_NOTIF</code> is replaced with <code class="highlighter-rouge">OP_NOTIFJUMP</code>. <code class="highlighter-rouge">OP_NOTIFJUMP</code> is always immediately followed by a varint dictating the number of bytes to jump forward. <code class="highlighter-rouge">OP_NOTIFJUMP</code> pops the top stack item. If the popped item is false, script execution jumps forward the specified number of bytes (excluding the varint specifier).</p>
+
+<p><code class="highlighter-rouge">OP_ELSE</code> is replaced with <code class="highlighter-rouge">OP_JUMP</code>. <code class="highlighter-rouge">OP_JUMP</code> is always immediately followed by a varint dictating the number of bytes to jump forward. Script execution jumps forward the exact number of specified bytes (excluding the varint specifier).</p>
+
+<p><code class="highlighter-rouge">OP_ENDIF</code> is converted to a reserved (abort-succeed) opcode.</p>
+
+<h2 id="examples">Examples</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Script
+
+OP_DUP
+OP_HASH160
+OP_IF
+    pushdata(&lt;pubkeyhash 0&gt;)
+OP_ELSE
+    pushdata(&lt;pubkeyhash 1&gt;)
+OP_ENDIF
+OP_EQUALVERIFY
+OP_CHECKSIGVERIFY
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Bit86
+
+OP_DUP
+OP_HASH160
+OP_IFNOTJUMP 0x16
+    pushdata(&lt;pubkeyhash 0&gt;) OP_JUMP 0x14    
+    pushdata(&lt;pubkeyhash 1&gt;)
+OP_EQUALVERIFY
+OP_CHECKSIGVERIFY
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Script
+
+OP_IF
+    OP_HASH160 pushdata(&lt;digest&gt;) OP_EQUALVERIFY
+    OP_DUP OP_HASH160 pushdata(&lt;pubkeyhash 0&gt;)
+OP_ELSE
+    pushdata(&lt;timeout&gt;) OP_CHECKLOCKTIMEVERIFY OP_DUP OP_HASH160 pushdata(&lt;pubkey 1&gt;)
+OP_ENDIF
+OP_EQUALVERIFY
+OP_CHECKSIG
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Bit86
+
+OP_IFNOTJUMP 0x2E
+    OP_HASH160 pushdata(&lt;digest&gt;) OP_EQUALVERIFY
+    OP_DUP OP_HASH160 pushdata(&lt;pubkeyhash 0&gt;)
+    OP_JUMP 0x1B
+    pushdata(&lt;timeout&gt;) OP_CHECKLOCKTIMEVERIFY OP_DUP OP_HASH160 pushdata(&lt;pubkey 1&gt;)
+OP_EQUALVERIFY
+OP_CHECKSIGVERIFY
+</code></pre></div></div>
+
+<h1 id="reference-implementation">Reference Implementation</h1>
+
+<p>A reference implementation is being developed in Python. A C++ implementation will follow.</p>
+
+<h1 id="compatibility">Compatibility</h1>
+
+<p>Pre-SegWit clients will not see or validate the witness program or data.</p>
+
+<p>SegWit clients that do not support Bit86 will not validate the Bit86 witness program.</p>
+
+<p>If new opcodes are added to Bit86, older Bit86 clients will abort-succeed when attempting to execute new opcodes.</p>
+
+<h1 id="deployment">Deployment</h1>
+
+<p>This BIP will be deployed by BIP8 (Version bits with lock-in by height) with the name “bit86script” and using bit 4.</p>
+
+<p>For Bitcoin mainnet, the BIP8 startheight will be at height M to be determined and BIP8 timeout activation will occur on height M + 50,400 blocks.</p>
+
+<p>For Bitcoin testnet, the BIP8 startheight will be at height T to be determined and BIP8 timeout activation will occur on height T + 50,400 blocks.</p>
+
+<h1 id="references">References</h1>
+
+<p>https://github.com/bitcoin/bitcoin/blob/master/src/script/script.h
+https://en.bitcoin.it/wiki/Script
+https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
+https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki</p>
+
+<h1 id="copyright">Copyright</h1>
+
+<p>This document is placed in the public domain.</p>

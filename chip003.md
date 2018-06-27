@@ -1,3 +1,8 @@
+---
+layout: markdown
+---
+
+
 # Transaction Format Revision
 
 ## Abstract

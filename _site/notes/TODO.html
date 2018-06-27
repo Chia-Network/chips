@@ -1,0 +1,44 @@
+<h2 id="notes">NOTES</h2>
+
+<p>This note keeps track of important things we should remember in the future, and document somewhere</p>
+
+<ul>
+  <li>Other notable changes that we need to document:</li>
+  <li>5 minute target block time</li>
+  <li>3 heads (deckchair reorgs)
+  backbone vs body</li>
+  <li>Proofs of space</li>
+  <li>VDF</li>
+  <li>get rid of transactions entirely?
+    <ul>
+      <li>parent is a TXO that is consumed in the same block this is created.</li>
+      <li>witness info:
+        <ul>
+          <li>timelock</li>
+          <li>input list – these TXOs must consumed in this block</li>
+          <li>output list – these TXOs must be created in this block</li>
+          <li>consumed input – reference to specific input this witness info is associated with (1-to-1 correspondance)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Chip011 would modify the function and structure of chips 005, 007, 010. Update these?</li>
+  <li>chip003 needs to be rewritten, probably chip004 too</li>
+  <li>Maybe cut IFJUMP in favor of enumerated scripts with MAST</li>
+  <li>Need Terminology CHIP</li>
+  <li>VDF input takes in previous block’s proof of space, but runs for number of iterations of current proof of space.</li>
+  <li>ln(c) and how to approximate it</li>
+  <li>Need a Chip for work difficulty reset
+    <ul>
+      <li>How often</li>
+      <li>When it kicks in</li>
+      <li>formula</li>
+      <li>discrete increments?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="other-random-things">Other random things</h2>
+<ul>
+  <li>Default farmers should delete their proofs of space as soon as they spend it, to prevent other people from hacking them, and using this proof of space to sign a different block.</li>
+</ul>

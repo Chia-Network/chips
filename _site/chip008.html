@@ -1,0 +1,23 @@
+<h1 id="reverse-bls-signature-scheme">Reverse BLS signature scheme</h1>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>Chia will use the BLS12-381 pairing as described <a href="https://github.com/ebfull/pairing/tree/master/src/bls12_381">here</a>. However, rather than instantiating public keys on G1 and signatures on G2, as is typical in BLS signature schemes, Chia’s signature scheme will instantiate signatures on G1 and public keys on G2. This preserves the security and aggregation properties of the signature scheme.</p>
+
+<h3 id="motivation">Motivation</h3>
+
+<p>One of the main advantages of the BLS signature scheme is space saving via aggregation. Any number of signatures may be aggregated into a single curve point. In the BLS12-381 instantiations, signatures are exceptionally short, 48 bytes, while pubkeys are long, 96 bytes. As in Bitcoin, pubkeys must be revealed during transaction validation and are included on chain. The long pubkey negates much of the advantage of signature aggregation. Placing the signature on G2 and the pubkey on G1, on the other hand, means that Chia transaction will contain many 48 byte pubkeys (50% larger than ECDSA’s 33 byte pubkey), and a single 96 byte signature. This is more space-efficient so long as at least 2 signatures are aggregated.</p>
+
+<h3 id="specification">Specification</h3>
+
+<p>As in <a href="https://cseweb.ucsd.edu/~hovav/dist/sigs.pdf">BLS</a> with the following exceptions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>privkeygen: x &lt;-R- Z_p
+pubkeygen: v &lt;- g_1^x
+hashing: h &lt;- H(M) ∈ G_2
+signing: σ &lt;- h^x
+verification: e(v, h) =? e(g_1, σ)
+
+aggregation: σ &lt;- Π (σ_i)
+aggregation verification: e(g_1, σ) =? Π e(v_i, m_i)
+</code></pre></div></div>

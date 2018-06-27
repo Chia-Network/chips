@@ -1,4 +1,8 @@
-chip012 -- nSequence and relative time lock semantics changes
+---
+layout: markdown
+---
+
+# chip012 -- nSequence and relative time lock semantics changes
 
 ## Abstract
 

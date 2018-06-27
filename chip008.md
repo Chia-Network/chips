@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 # Reverse BLS signature scheme
 
 ## Abstract

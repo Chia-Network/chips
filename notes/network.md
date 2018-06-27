@@ -1,8 +1,12 @@
+---
+layout: markdown
+---
+
 Bitcoin Network Protocol Notes
 ==============================
 
-These notes intend to outline the bitcoin network's peer protocol, messages, 
-and routines for joining and syncing in a "human-readable" manner to serve 
+These notes intend to outline the bitcoin network's peer protocol, messages,
+and routines for joining and syncing in a "human-readable" manner to serve
 as a guide for the development of Chia's network and peer protocol.
 
 Peer Discovery
@@ -40,7 +44,7 @@ node sends `version` message
     * Best block height (why? not used by receiver)
     * Flag indicating whether or not this node wants to receive unsolicted `inv` or `tx` messages
 * Receiving node sends it's own `version` message
-* If both nodes have compatible version, they each respond to the respective 
+* If both nodes have compatible version, they each respond to the respective
 `version` messages with a `verack`
   * Verack messages contains no payload
 
@@ -102,7 +106,7 @@ Broadcasting and Relaying New Blocks
   * Number of headers hashes included in the message
   * Block header hashes (mulitple sent because some may be stale)
   * Last block header hash (set to 0 for requesting an `inv` message)
-* Missing block headers used to `getdata` for missing block(s) for orphan 
+* Missing block headers used to `getdata` for missing block(s) for orphan
 
 Broadcasting New Transactions
 -----------------------------

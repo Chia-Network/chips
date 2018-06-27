@@ -1,0 +1,26 @@
+<h2 id="how-to-verify-bitcoin-transactions">How to verify Bitcoin transactions:</h2>
+
+<p>https://bitcoin.stackexchange.com/questions/52528/how-is-a-standard-bitcoin-transaction-defined
+https://www.cryptocompare.com/coins/guides/how-does-a-bitcoin-node-verify-a-transaction/
+https://www.cryptocompare.com/coins/guides/what-are-the-bitcoin-transaction-types/</p>
+
+<ol>
+  <li>The transactions syntax and data structure are correct.</li>
+  <li>The input and outputs have values.</li>
+  <li>The transaction is less than the block size of 1 MB.</li>
+  <li>The values must be more than 0 and less than 21 million.</li>
+  <li>None of the inputs have a hash that is equal to 0.</li>
+  <li>The locktime is less than the maximum allowed number.</li>
+  <li>The transaction size is greater than or equal to 100 bytes.</li>
+  <li>The number of signatures is less than the signatute limit.</li>
+  <li>The unlocking script can only push numbers onto the stack.</li>
+  <li>The locking script must match isstandard format.</li>
+  <li>A matching transaction must exist.</li>
+  <li>If a transaction is missing move the transaction to the orphan transaction pool.</li>
+  <li>If the transaction is a coinbase transaction then it must have a maturity of 100 confirmations.</li>
+  <li>For each input the output must exist and not have been spent.</li>
+  <li>Check that each input value is in the required range.</li>
+  <li>Reject if the input value is less than the output value.</li>
+  <li>Reject if the transaction value is to low to get into an empty block.</li>
+  <li>The unlocking scripts for each input must be verified against the output locking scripts.</li>
+</ol>

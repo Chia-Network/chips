@@ -1,4 +1,8 @@
-chip013 -- Taproot and Graftroot via BLS Aggregates
+---
+layout: markdown
+---
+
+# chip013 -- Taproot and Graftroot via BLS Aggregates
 
 ## Abstract
 

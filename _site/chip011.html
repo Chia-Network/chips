@@ -1,0 +1,24 @@
+<h1 id="chip011--opcodes-to-push-witness-info-properties-to-stack">chip011 – Opcodes to push witness info properties to stack</h1>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>Some Script opcodes check properties of the witness info. For example, OP_CHECKLOCKTIMEVERIFY examines the <code class="highlighter-rouge">nLockTime</code> field and fails script execution if it does not meet certain criteria. These opcodes are replaced with versions that push the value of the field to the stack. There it may be operated on or verified as desired by the author of the script.</p>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Intuitively, it is more powerful to push the value of that field to the stack.</p>
+
+<h2 id="specification">Specification</h2>
+
+<p>OP_CLTV and OP_CSV are removed.</p>
+
+<p>The following new opcodes are added:</p>
+
+<ol>
+  <li>OP_PUSHLOCKTIME</li>
+  <li>OP_PUSHRELATIVELOCKTIME</li>
+  <li>OP_PUSHLOCKHEIGHT</li>
+  <li>OP_PUSHRELATIVELOCKHEIGHT</li>
+</ol>
+
+<p>These opcodes push the relevant features of the witness info to the stack. <code class="highlighter-rouge">nLockTime</code> and <code class="highlighter-rouge">nSequence</code> are 32 bit numbers in the witness info. OP_PUSHLOCKTIME and OP_PUSHRELATIVELOCKTIME fail script execution if the field is not greater than 500,000,000. OP_PUSHLOCKHEIGHT and OP_PUSHRELATIVELOCKHEIGHT verify that these numbers are 500,000,000 or less.</p>

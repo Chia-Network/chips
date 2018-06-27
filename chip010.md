@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 chip010 -- OP_CHECKINPUTVERIFY & OP_CHECKOUTPUTVERIFY
 
 ## Abstract

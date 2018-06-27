@@ -1,0 +1,246 @@
+<h1 id="bitcoin-network-protocol-notes">Bitcoin Network Protocol Notes</h1>
+
+<p>These notes intend to outline the bitcoin network’s peer protocol, messages,
+and routines for joining and syncing in a “human-readable” manner to serve
+as a guide for the development of Chia’s network and peer protocol.</p>
+
+<h2 id="peer-discovery">Peer Discovery</h2>
+
+<ul>
+  <li>If a node is starting for the first time, it will perform a DNS query to a set of “DNS seeds” hardcoded into the client, which return A records for IP addresses of known nodes</li>
+  <li>Once peers are discovered, they are stored on disk so that subsequent joins do not use the DNS seeds</li>
+  <li>Nodes will establish a maximum of 8 outbound connections to discovered peers</li>
+  <li>Nodes will accept a user-configurable number of inbound connections</li>
+  <li>Peers with certain characteristics are protected from “connection eviction”:
+    <ul>
+      <li>8 peers with the lowest ping time</li>
+      <li>4 peers that most recently sent us transactions</li>
+      <li>4 peers that most recently sent us blocks</li>
+      <li>Half of the remaining nodes which have been connected the longest</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="connecting-to-the--network">Connecting to the  Network</h2>
+
+<ul>
+  <li>Once peers have been discovered via DNS seeds or from local on-disk cache,
+node sends <code class="highlighter-rouge">version</code> message
+    <ul>
+      <li>If using on-disk cache, choose from the most recently connected peers</li>
+      <li>Version message contains:
+        <ul>
+          <li>Protocol version number</li>
+          <li>Services supported - encoded in bitfield, possible services include:
+            <ul>
+              <li>Flag indicating not a full node</li>
+            </ul>
+          </li>
+          <li>Timestamp</li>
+          <li>Services perceived to be supported by target node (why? - if wrong no recourse)</li>
+          <li>IP address of target node perceived by sender (why? - if wrong no recourse)</li>
+          <li>Services supported (why? - duplicate, already included in message)</li>
+          <li>IP address of sender</li>
+          <li>Port of sender</li>
+          <li>Nonce (for detecting connection to self, almost certainly a better way to do this)</li>
+          <li>Number of bytes in user agent field</li>
+          <li>User agent field</li>
+          <li>Best block height (why? not used by receiver)</li>
+          <li>Flag indicating whether or not this node wants to receive unsolicted <code class="highlighter-rouge">inv</code> or <code class="highlighter-rouge">tx</code> messages</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Receiving node sends it’s own <code class="highlighter-rouge">version</code> message</li>
+  <li>If both nodes have compatible version, they each respond to the respective
+<code class="highlighter-rouge">version</code> messages with a <code class="highlighter-rouge">verack</code>
+    <ul>
+      <li>Verack messages contains no payload</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="synchronizing-the-blockchain">Synchronizing the Blockchain</h2>
+
+<ul>
+  <li>Node performs initial block download to catch up to the latest blockchain</li>
+  <li>Node selects a peer randomly from it’s pool</li>
+  <li>Node sends a <code class="highlighter-rouge">getheaders</code> message, which includes:
+    <ul>
+      <li>Protocol version</li>
+      <li>Header hash count (current known block height)</li>
+      <li>All the block header hashes from 0 - height (why? receiving node doesn’t need to validate this)</li>
+      <li>Header stop height, the block header hash to stop at (zeroes for max size of 2000)</li>
+    </ul>
+  </li>
+  <li>Receiving node searches it’s best blockchain for the starting header hash</li>
+  <li>If node finds header hash, it responds with <code class="highlighter-rouge">headers</code> message, which contains:
+    <ul>
+      <li>Number of headers  included in message</li>
+      <li>All block headers (up to max of 2000) starting at the received start + 1</li>
+    </ul>
+  </li>
+  <li>Node validates (partially) the headers</li>
+  <li>Node downloads more headers (if needed) and blocks for validated headers in parallel</li>
+  <li>If node receives a <code class="highlighter-rouge">headers</code> message with less than 2000 headers:
+    <ul>
+      <li>Node selects all of it’s outbound peers (8 - 1 (the initial sync node))</li>
+      <li>Node sends <code class="highlighter-rouge">getheaders</code> to each of them and compares responses to ensure sync node provided the best chain</li>
+    </ul>
+  </li>
+  <li>For every validated header received, node sends a <code class="highlighter-rouge">getdata</code> message for every header
+    <ul>
+      <li>Can be performed in parallel using all full node peers (as indicated in services flag in <code class="highlighter-rouge">version</code>)</li>
+      <li>Bitcoin Core only requests 16 blocks at a time from a peer (multiply by the 8 outbound connections) for 128 blocks downloading simultaneously</li>
+    </ul>
+  </li>
+  <li>The <code class="highlighter-rouge">getdata</code> message contains the same payload as an <code class="highlighter-rouge">inv</code> message:
+    <ul>
+      <li>The number of entries</li>
+      <li>One or more inventory entries, containing:
+        <ul>
+          <li>Type (block or tx)</li>
+          <li>Hash (block header or tx)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Nodes receiving <code class="highlighter-rouge">getdata</code> message, respond with a <code class="highlighter-rouge">block</code> message for every requested block, which contains a serialized block:
+    <ul>
+      <li>Block header</li>
+      <li>Number of transactions</li>
+      <li>All raw transactions in block</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="broadcasting-and-relaying-new-blocks">Broadcasting and Relaying New Blocks</h2>
+
+<ul>
+  <li>Node notifies it’s peers (outbound connections) when it mines a new block</li>
+  <li>Multiple methods for signalling a new block
+    <ul>
+      <li>Inventory Relay, node sends an <code class="highlighter-rouge">inv</code> message, containing:
+        <ul>
+          <li>Number of entries</li>
+          <li>Inventory entries, each with:
+            <ul>
+              <li>Type (block)</li>
+              <li>Hash (block header)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Headers Announcement, node sends peers who previously sent a <code class="highlighter-rouge">sendheaders</code> message (no payload) a <code class="highlighter-rouge">headers</code> message, containing:
+        <ul>
+          <li>Number of headers in message</li>
+          <li>Up to 2000 block headers</li>
+        </ul>
+      </li>
+      <li>Header Announcements are followed by a <code class="highlighter-rouge">getdata</code> message from the recipient</li>
+      <li>Block Push, node sends a <code class="highlighter-rouge">block</code> message directly to each of it’s peers, containing:
+        <ul>
+          <li>Block header</li>
+          <li>Number of transactions</li>
+          <li>All raw transactions in block</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Bitcoin Core uses header announcements for nodes who signalled and Inventory relay for others</li>
+  <li>There is also a <code class="highlighter-rouge">merkleblock</code> message which can be used for nodes who previously sent a <code class="highlighter-rouge">filterload</code> - used for SPV clients (see BIP37)</li>
+  <li>Nodes receiving blocks, validate them and and use the Inventory Relay method with their peers</li>
+  <li>If a node receives an orphan block, it sends a <code class="highlighter-rouge">getblocks</code> message to the sender containing:
+    <ul>
+      <li>Protocol version</li>
+      <li>Number of headers hashes included in the message</li>
+      <li>Block header hashes (mulitple sent because some may be stale)</li>
+      <li>Last block header hash (set to 0 for requesting an <code class="highlighter-rouge">inv</code> message)</li>
+    </ul>
+  </li>
+  <li>Missing block headers used to <code class="highlighter-rouge">getdata</code> for missing block(s) for orphan</li>
+</ul>
+
+<h2 id="broadcasting-new-transactions">Broadcasting New Transactions</h2>
+
+<ul>
+  <li>Node notifies all it’s outbound peers when it wishes to broadcast a transaction</li>
+  <li>Similar to broadcasting a block</li>
+  <li>Uses the inventory relay method
+    <ul>
+      <li>Node sends an <code class="highlighter-rouge">inv</code> message to peers, containing
+        <ul>
+          <li>Number of entries</li>
+          <li>Inventory entries, each with:
+            <ul>
+              <li>Type (tx)</li>
+              <li>Hash (tx)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>If receiving node has not seen this transaction(s), sends <code class="highlighter-rouge">getdata</code> (same payload format as <code class="highlighter-rouge">inv</code>)</li>
+  <li>Node responds to the <code class="highlighter-rouge">getdata</code> with <code class="highlighter-rouge">tx</code> message, containing:
+    <ul>
+      <li>Raw transaction format</li>
+    </ul>
+  </li>
+  <li>Receiving nodes check validity + policy rules for transaction</li>
+  <li>If the transaction is valid, receiving node relays an <code class="highlighter-rouge">inv</code> message to it’s own peers</li>
+  <li>Process repeats until all nodes have transaction</li>
+  <li>Full nodes generally keep track of unconfirmed transactions</li>
+  <li>Transaction mined into blocks that become stale are added back to the memory pool</li>
+  <li>If those transactions appear in a new block, they are removed from the memory pool</li>
+</ul>
+
+<hr />
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>Why duplicate services information in version message?
+    <ul>
+      <li>Compatibility with older clients?</li>
+    </ul>
+  </li>
+  <li>Why custom binary message encoding?
+    <ul>
+      <li>Satoshi grumpy old bastard?</li>
+      <li>Makes protocol updates more difficult</li>
+      <li>Lots of nasty parsing code</li>
+      <li>Bencode? Msgpack? Literally anything?</li>
+    </ul>
+  </li>
+  <li>Why extraneous parameters in version message?
+    <ul>
+      <li>Like echoing perceived services - we don’t do anything with that info if it’s wrong</li>
+      <li>Why 3 different block broadcasting methods?
+        <ul>
+          <li>Standard relay seems fine</li>
+          <li>Header announcements make sense for SPV</li>
+          <li>Unsolicited doesn’t seem useful - remnant of old protocol?</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>What do we do if we receive a version message that has incorrect perceived address/port information?
+    <ul>
+      <li>There is no “correction” message</li>
+      <li>Send another version message?</li>
+      <li>Why does this matter, why would the perceived ip/port be anything other than what we sent?</li>
+    </ul>
+  </li>
+  <li>Why include best block height in version message?
+    <ul>
+      <li>Does not appear to be used to select a sync node</li>
+      <li>Is it thrown away?</li>
+    </ul>
+  </li>
+  <li>Why do we send all the the block headers from 0 - latest in the getheaders message?
+    <ul>
+      <li>Don’t we only need to send our tip?</li>
+    </ul>
+  </li>
+</ul>

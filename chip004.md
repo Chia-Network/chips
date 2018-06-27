@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 # CHIP 004 Revised Block Headers
 
 ## THIS CHIP IS SUBJECT TO CHANGE
