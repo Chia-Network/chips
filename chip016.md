@@ -1,4 +1,8 @@
-chip016 -- Fraud Proofs for Double Block Signing
+---
+layout: markdown
+---
+
+# chip016 -- Fraud Proofs for Double Block Signing
 
 ## Abstract
 
@@ -11,15 +15,15 @@ Since proofs of space and proofs of time are canonical, this means that a farmer
 The canonical nature of these algorithms is required to prevent grinding attacks.
 This can lead to an attack where a group of farmers gets a long series of consecutive blocks, and decides to force a reorg by providing an alternate chain with different signatures.
 This can be even more problematic when the attacker is bribing other farmers for their proof of space.
-Therefore, to disincentivize double signing, we can slash the rewards of double signers, making it very costly to attempt such an attack. 
+Therefore, to disincentivize double signing, we can slash the rewards of double signers, making it very costly to attempt such an attack.
 
 ## Specification
 
-An extra field is added to the block header with a list of fraud proofs. Each fraud proof includes the height of the fraudulent block, and an alternate payload + signature. 
-If the payload is a correct CHIP14 proof for that block, different than the proof on the block, then that farmer can add `v = p * R` to their own coinbase reward, where `p` is a consensus parameter, established to be less than or equal to something like 0.1, and `R` is the reward of the fraudulent block. 
+An extra field is added to the block header with a list of fraud proofs. Each fraud proof includes the height of the fraudulent block, and an alternate payload + signature.
+If the payload is a correct CHIP14 proof for that block, different than the proof on the block, then that farmer can add `v = p * R` to their own coinbase reward, where `p` is a consensus parameter, established to be less than or equal to something like 0.1, and `R` is the reward of the fraudulent block.
 The coinbase transactions of the fraudulent blocks are removed from the UTXO set.
 
-After the coinbase rewards get unlocked, the farmers can claim the rewards, and fraud proofs cannot be submitted. However, the coinbase rewards will be locked for far longer than is reasonable for a farmer to obtain consecutive blocks. 
+After the coinbase rewards get unlocked, the farmers can claim the rewards, and fraud proofs cannot be submitted. However, the coinbase rewards will be locked for far longer than is reasonable for a farmer to obtain consecutive blocks.
 
 The probability of a malicious group of miners obtaining `t` consecutive blocks is `(α)^t`, for a 50% group of miners to obtain 10 consecutive blocks, it's 0.09%, and to obtain 20 consecutive blocks it's 0.000095%, making a reorg that deep, almost impossible.
 

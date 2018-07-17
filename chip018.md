@@ -1,4 +1,8 @@
-chip018 -- Rewards Chains
+---
+layout: markdown
+---
+
+#chip018 -- Rewards Chains
 
 ## Abstract
 

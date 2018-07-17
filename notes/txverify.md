@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 ## How to verify Bitcoin transactions:
 
 https://bitcoin.stackexchange.com/questions/52528/how-is-a-standard-bitcoin-transaction-defined
@@ -20,5 +24,5 @@ https://www.cryptocompare.com/coins/guides/what-are-the-bitcoin-transaction-type
 14. For each input the output must exist and not have been spent.
 15. Check that each input value is in the required range.
 16. Reject if the input value is less than the output value.
-17. Reject if the transaction value is to low to get into an empty block.
+17. Reject if the transaction value is too low to get into an empty block.
 18. The unlocking scripts for each input must be verified against the output locking scripts.

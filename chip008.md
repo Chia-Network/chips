@@ -1,3 +1,6 @@
+---
+layout: markdown
+---
 chip009 -- BLS Signatures Scheme
 
 ## Abstract

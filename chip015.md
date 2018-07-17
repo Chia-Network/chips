@@ -1,4 +1,8 @@
-chip015 -- Genesis Block
+---
+layout: markdown
+---
+
+# chip015 -- Genesis Block
 
 ## Abstract
 
@@ -11,7 +15,7 @@ Having a secure random seed based on a Bitcoin hash ensures that everyone is on 
 
 ## Specification
 
-The genesis block allocation will be specified in a special genesis block file, which users can specify in their client. This file also includes a field for initial_random_seed. This is a field that will act as the VDF output of the genesis block, so the proofs of space and time will start immediately after this value is known. 
+The genesis block allocation will be specified in a special genesis block file, which users can specify in their client. This file also includes a field for initial_random_seed. This is a field that will act as the VDF output of the genesis block, so the proofs of space and time will start immediately after this value is known.
 
 initial_random_seed will be set to the Bitcoin block header at a specific miniumum block height, for example, 600000, that is specified in advance of the launch, and that meets certain requirements. This means that nobody will be able to predict what the hash will be, and thus everyone will start proofs of space and proofs of time at the same time (nobody will have an unfair advantage, apart from a negligible advantage to the Bitcoin miner that wins the block, if he withholds the block). The additional requirements can be that the the Bitcoin block hash, in hex, ends with two zeros. This helps prevent the case where there is an orphan block, and there is disagreement on which is the right block at that height.
 

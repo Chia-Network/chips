@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 chip009 -- TXO bitfield
 
 ## Abstract
@@ -14,4 +18,4 @@ Nodes maintain the current state of the ledger in a bitfield describing TXOs. Th
 
 Output order within a block is committed to in the block header via the `hashStateChanges` tree root. Therefore, the location of any TXO in the bitfield can be easily establishd. As such, transactions can be accompanied by a succinct proof of their position in the bitfield. Nodes using the bitfield instead of the UTXO set may require these proofs before relaying transactions.
 
-Once a TXOs position in the bitfield is determined, its state may be easily updated when the TXO is spent in a block. As such, an up-to-date bitfield is a canonical record of the state of each TXO (both UTXOs and STXOs), and can be used in place of an in-memory UTXO set. 
+Once a TXOs position in the bitfield is determined, its state may be easily updated when the TXO is spent in a block. As such, an up-to-date bitfield is a canonical record of the state of each TXO (both UTXOs and STXOs), and can be used in place of an in-memory UTXO set.

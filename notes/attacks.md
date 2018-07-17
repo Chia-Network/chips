@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 ## Possible attacks on Chia
 
 1. 51% attack: A farmer has more than 51% of the total hashpower, they can force arbitrary long reorgs, reverse or censor any transaction, claim all of the rewards, stop the network from running or getting any transactions in. Should not be a problem if network is large enough. However, this means we need a significant proportion of the world's storage on the system, to defend against google, NSA, etc.

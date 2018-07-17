@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 ## NOTES
 
 This note keeps track of important things we should remember in the future, and document somewhere
@@ -30,4 +34,3 @@ This note keeps track of important things we should remember in the future, and 
 
 ## Other random things
 - Default farmers should delete their proofs of space as soon as they spend it, to prevent other people from hacking them, and using this proof of space to sign a different block.
- 

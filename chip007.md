@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 chip007 -- Precursors (Adoptive parents) and OP_CHECKPRECURSORVERIFY
 
 ## Abstract

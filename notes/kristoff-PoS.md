@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 Unique digital signatures
     only one valid signature for message/pubkey pair
 

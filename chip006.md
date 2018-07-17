@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 # Cross-input BLS Aggregation
 
 ## Abstract

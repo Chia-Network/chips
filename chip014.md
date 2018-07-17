@@ -1,4 +1,8 @@
-chip014 -- Non Outsourceability (DRAFT)
+---
+layout: markdown
+---
+
+# chip014 -- Non Outsourceability (DRAFT)
 
 ## Abstract
 

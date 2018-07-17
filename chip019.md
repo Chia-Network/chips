@@ -1,4 +1,8 @@
-chip019 -- Flyclient Support
+---
+layout: markdown
+---
+
+# chip019 -- Flyclient Support
 
 ## Abstract
 

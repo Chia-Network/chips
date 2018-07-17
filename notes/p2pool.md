@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 P2Pool
 
 P2Pool is a decentralized mining pool for Bitcoin, BCH, Dash, Litecoin, etc. The

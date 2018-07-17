@@ -1,3 +1,7 @@
+---
+layout: markdown
+---
+
 # New Opcodes
 
 ## Scaffolding and notation
