@@ -99,9 +99,13 @@ where t<sub>i</sub> <- H<sub>1</sub>(pk<sub>i</sub> || (pk<sub>1</sub> || pk<sub
 * e(g<sub>1</sub>, σ) =? e(pk<sub>1</sub><sup>t<sub>1</sub></sup>, H<sub>2</sub>(m<sub>1</sub>)) • ... • e(pk<sub>n</sub><sup>t<sub>n</sub></sup>, H<sub>2</sub>(m<sub>n</sub>))
 
 ### Serialization
-privkey: 32 bytes: 255 bit unsigned integer in big endian.
-pubkey: 48 bytes: 1 bit of sign, and 381 bits of big endian affine x coordinate.
-signature: 96 bytes: 1 bit of sign, TODO
+**privkey (32 bytes):** 255 bit unsigned integer in big endian.
+
+**pubkey (48 bytes):** 381 bit affine x coordinate, encoded into 48 big-endian bytes. Since we have 3 bits left over in the beginning, the first bit is set to 1 iff affine y = 1.
+
+**signature (96 bytes):** Two 381 bit integers (affine x coordinate), encoded into two 48 big-endian byte arrays. Since we have 3 bits left over in the beginning, the first bit is set to 1 iff affine y = 1.
+
+
 
 ### HD keys
 HD keys will follow Bitcoin's BIP32 specification, with the following exceptions:
