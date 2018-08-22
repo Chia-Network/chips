@@ -17,11 +17,11 @@ layout: markdown
 * chip011 -- Opcodes to push witness info properties to stack
 * chip012 -- nSequence and relative time lock semantics changes
 * chip013 -- Taproot and Graftroot
-* chip014 -- Non Outsourceability
+* chip014 -- Non Outsourceability (CANCELLED)
 * chip015 -- Genesis Block
 * chip016 -- Fraud Proofs and Double Block Signing
 * chip017 -- Blockchain Structure
-* chip018 -- Rewards Chains
+* chip018 -- Rewards Chains (POSTPONED)
 * chip019 -- Flyclient support (needs review)
 
 Take a look at notes/TODO.md to see chips that still need to be created.

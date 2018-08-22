@@ -18,7 +18,7 @@ The trunk and foliage are not a replacement for block headers: block headers are
 In the diagram above, the arrows signify a dependency on (or a commitment to) what is being pointed to. For example, the prevBlockHash is a dependency on the previous block.
 
 The trunk section includes a proof of time and proof of space.
-Both take in a challenge from the trunk of the previous block. The challenge can be `H(PoT output || H(PoSpace) || difficultyReset)`
+Both take in a challenge from the trunk of the previous block. The challenge can be `H(PoT output || PoSpace || difficultyReset)`
 This commits to both the proof of space and proof of time of the previous block.
 The Proof of time itself, is two values: the output of the VDF, and the proof that the VDF was correctly computed.
 The proof of time uses the challenge as an input to the verifiable delay function.
@@ -26,11 +26,9 @@ The proof of space uses the challenge as the target value when looking up the pr
 
 The trunk will also include an occasional work difficulty reset.
 
-The foliage includes the rest of the block header, and the block data. The signature in the block, is a proof of knowledge of the preimage of `H(PoSpace)`, signing the rest of the fields in the block header.
+The foliage includes the rest of the block header, and the block data. The signature in the block, is a signature using the pk in the proof of space, signing the rest of the fields in the block header.
 
-During operation of the protocol, farmers build blocks with the PoSpace and signature, and broadcast these. Proof of time servers then add the Proof of Time on top of these blocks, to finalize them.
-
-Furthermore, Chia will also have a number of parallel rewards chains, which are identical, but do not contain `hashStateChanges`, `hashValidations`, and `rewardInclusion`.
+During operation of the protocol, farmers build blocks with the PoSpace and signature, and broadcast these. Proof of time servers then add the Proof of Time on top of these blocks, to "finalize" them.
 
 ## Rationale
 

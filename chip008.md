@@ -1,7 +1,7 @@
 ---
 layout: markdown
 ---
-chip009 -- BLS Signatures Scheme
+chip009 -- BLS Signature Scheme
 
 ## Abstract
 
@@ -9,7 +9,7 @@ Chia will use BLS aggregate signatures, using the BLS12-381 curve. This includes
 
 ## Motivation
 
-One of the main advantages of the BLS signature scheme is space saving via aggregation. Any number of signatures may be aggregated into a single curve point. In the BLS12-381 instantiations, signatures are exceptionally short, 48 bytes, while pubkeys are long, 96 bytes. As in Bitcoin, pubkeys must be revealed during transaction validation and are included on chain. The long pubkey negates much of the advantage of signature aggregation. Placing the signature on G2 and the pubkey on G1, on the other hand, means that Chia transaction will contain many 48 byte pubkeys (50% larger than ECDSA's 33 byte pubkey), and a single 96 byte signature. This is more space-efficient so long as at least 2 signatures are aggregated.
+One of the main advantages of the BLS signature scheme is space saving via aggregation. Any number of signatures may be aggregated into a single curve point. In the BLS12-381 instantiations, signatures are exceptionally short, 48 bytes, while pubkeys are long, 96 bytes. As in Bitcoin, pubkeys must be revealed during transaction validation and are included on chain. The long pubkey negates much of the advantage of signature aggregation. Placing the signature on G2 and the pubkey on G1, on the other hand, means that Chia transaction will contain many 48 byte pubkeys (50% larger than ECDSA's 33 byte pubkey), and a single 96 byte signature. This is more space-efficient so long as at least 2 signatures are aggregated. Furthermore, to make verification faster, and reduce the number of pairing computations, we can combine public keys during verification. In order to do this securely, exponents are used on signatures and public keys.
 
 ## Specification
 
@@ -48,58 +48,57 @@ for aggregation of distinct messages: in this case, all public keys must be used
 
 The simple and secure schemes can also be combined. When there are many signatures, some of which are identical, the identical ones can be combined using the secure method (which makes all messages distinct), and then the remaining signatures, including these new aggregates, can be combined using the simple aggregation method.
 
-The signature scheme is composed of the following methods: keyGen, sign, verify, aggregateSigsSimple, aggregateSigsSecure, aggregatePubKeysSimple, aggregatePubKeysSecure, aggregatePrivKeysSimple, aggregatePrivKeysSecure, verifyAggregateSimple, and verifyAggregateSecure.
+The signature scheme is composed of the following methods: keyGen, sign, aggregate, verify, aggregatePks, aggregateSks.
 
-#### keyGen()
-* sk <-R- Z<sub>p</sub>
-* pk <- (g<sub>1</sub>)<sup>sk</sup>
+#### keyGen
+* input:
+* output: field element in Z<sub>p</sub>, G<sub>1</sub> element
+```python
+sk = SHA256(random seed) mod p
+pk <- g1 ^ sk
+```
 
-#### sign(sk, m)
-* σ <- H<sub>2</sub>(m)<sup>sk</sup>
 
-#### verify(σ, m, pk)
+#### sign
+* input: bytes m, Z<sub>p</sub> element sk
+* output: G<sub>2</sub> element σ
+```python
+σ <- H2(m) ^ sk
+```
 
-* e(g<sub>1</sub>, σ) =? e(pk, H(m))
 
-#### aggregateSigsSimple(σ<sub>1</sub>, ..., σ<sub>n</sub>)
+#### verify
+
+* input:
+    * G<sub>2</sub> element σ
+    * map((bytes m, G<sub>1</sub> pk) -> Z<sub>n</sub> exponent) aggInfo
+* output: bool
+```python
+if aggInfo is empty: return false
+pks = []
+ms = []
+for each distinct messsageHash m in aggInfo:
+    pkAgg = g1
+    for each pk grouped with m:
+        pkAgg *= pk ^ aggInfo[(m, pk)]
+    pks.add(pkAgg)
+    ms.add(m)
+return e(g1, σ) == prod e(pks[i], ms[i])
+```
+
+#### aggregate
+* input:
+    * list of G<sub>2</sub> elements σ
+    * list of map((bytes m, G<sub>1</sub> pk) -> Z<sub>n</sub> exponent) aggInfo
+* output:
+    * G<sub>2</sub> element σ<sub>agg</sub>
+    * map((bytes m, G<sub>1</sub> pk) -> Z<sub>n</sub> exponent) newAggInfo
+```python
+
+
 
 * σ<sub>agg</sub> <- (σ<sub>1</sub> • ...• σ<sub>n</sub>)
-#### aggregateSigsSecure(σ<sub>1</sub>, ..., σ<sub>n</sub>, pk<sub>1</sub>, ..., pk<sub>n</sub>)
-
-* generate
-(t<sub>1</sub>, t<sub>2</sub>, ... t<sub>n</sub>)
-where t<sub>i</sub> <- H<sub>1</sub>(pk<sub>i</sub> || (pk<sub>1</sub> || pk<sub>2</sub> || ... || pk<sub>n</sub>))
-* σ<sub>agg</sub> <- (σ<sub>1</sub><sup>t<sub>1</sub></sup> • ... • σ<sub>n</sub><sup>t<sub>n</sub></sup>)
-
-#### aggregatePubKeysSimple(pk<sub>1</sub>, ..., pk<sub>n</sub>)
-* pk<sub>agg</sub> <- (pk<sub>1</sub> • ... • pk<sub>n</sub>)
-
-#### aggregatePubKeysSecure(pk<sub>1</sub>, ..., pk<sub>n</sub>)
-* generate
-(t<sub>1</sub>, t<sub>2</sub>, ... t<sub>n</sub>)
-where t<sub>i</sub> <- H<sub>1</sub>(pk<sub>i</sub> || (pk<sub>1</sub> || pk<sub>2</sub> || ... || pk<sub>n</sub>))
-* pk<sub>agg</sub> <- (pk<sub>1</sub><sup>t<sub>1</sub></sup> • ... • pk<sub>n</sub><sup>t<sub>n</sub></sup>)
-
-#### aggregatePrivKeysSimple(sk<sub>1</sub>, ..., sk<sub>n</sub>)
-* sk<sub>agg</sub> <- (sk<sub>1</sub> + ... +  sk<sub>n</sub> ) mod N
-
-#### aggregatePrivKeysSecure(sk<sub>1</sub>, ..., sk<sub>n</sub>, pk<sub>1</sub>, ..., pk<sub>n</sub>)
-* generate (t<sub>1</sub>, t<sub>2</sub>, ... t<sub>n</sub>)
-where t<sub>i</sub> <- H<sub>1</sub>(pk<sub>i</sub> || (pk<sub>1</sub> || pk<sub>2</sub> || ... || pk<sub>n</sub>))
-* sk<sub>agg</sub> <- (sk<sub>1</sub> • t<sub>1</sub> + ... + sk<sub>n</sub> • t<sub>n</sub>)
-
-#### verifyAggregateSimple(σ, m<sub>1</sub>, ..., m<sub>n</sub>, pk<sub>1</sub>, ..., pk<sub>n</sub>)
-
-* e(g<sub>1</sub>, σ) =? e(pk<sub>1</sub>, H<sub>2</sub>(m<sub>1</sub>)) • ... • e(pk<sub>n</sub>, H<sub>2</sub>(m<sub>n</sub>))
-
-#### verifyAggregateSecure(σ, m<sub>1</sub>, ..., m<sub>n</sub>, pk<sub>1</sub>, ..., pk<sub>n</sub>)
-
-* generate (t<sub>1</sub>, t<sub>2</sub>, ... t<sub>n</sub>)
-where t<sub>i</sub> <- H<sub>1</sub>(pk<sub>i</sub> || (pk<sub>1</sub> || pk<sub>2</sub> || ... || pk<sub>n</sub>))
-* e(g<sub>1</sub>, σ) =? e(pk<sub>1</sub><sup>t<sub>1</sub></sup>, H<sub>2</sub>(m<sub>1</sub>)) • ... • e(pk<sub>n</sub><sup>t<sub>n</sub></sup>, H<sub>2</sub>(m<sub>n</sub>))
-
-### Serialization
-**privkey (32 bytes):** 255 bit unsigned integer in big endian.
+```
 
 **pubkey (48 bytes):** 381 bit affine x coordinate, encoded into 48 big-endian bytes. Since we have 3 bits left over in the beginning, the first bit is set to 1 iff affine y = 1.
 

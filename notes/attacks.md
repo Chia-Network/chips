@@ -22,6 +22,7 @@ Then they ask for the data on every block, making it impossible for the farmer t
 7. Partial hash computation: If using H(salt || x) for plotting, and if using a hash function like pedersen or merkle damgard, the pool can compute a partial computation of the hash function, and give this to the user. The user can then perform the rest of the plotting, without finding out the key. This means pooling can happen easily.
 7. Proof of space efficiency innovations: an attacker can figure out a more efficient way to store the tables and get an advantage this way.
 8. Selfish farming attack: similar to selfish mining on Bitcoin. A farmer can choose to withhold his solution, and gain some advantage. Not clear if it's exactly the same, needs more analysis.
+9. Censorship: Attacker with less than 50% hashpower, promises to attempt to fork anyone who includes X transaction. Therefore, other miners incentivized to censor.
 
 ## Other attacks
 1. Eclipse attack: Node surrounds another node and gives them false information, censors transactions, etc.

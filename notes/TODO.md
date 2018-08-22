@@ -12,6 +12,11 @@ This note keeps track of important things we should remember in the future, and 
     backbone vs body
 - Proofs of space
 - VDF
+    - Classgroup representation
+    - Generation of determinant and element
+    - VDF construction
+    - Proof construction
+- Tadge UTreeXO
 - get rid of transactions entirely?
     - parent is a TXO that is consumed in the same block this is created.
     - witness info:
@@ -19,7 +24,6 @@ This note keeps track of important things we should remember in the future, and 
         - input list -- these TXOs must consumed in this block
         - output list -- these TXOs must be created in this block
         - consumed input -- reference to specific input this witness info is associated with (1-to-1 correspondance)
-
 - Chip011 would modify the function and structure of chips 005, 007, 010. Update these?
 - chip003 needs to be rewritten, probably chip004 too
 - Maybe cut IFJUMP in favor of enumerated scripts with MAST
