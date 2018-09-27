@@ -91,6 +91,10 @@ The theorems here will be presented without proof. Please see the References sec
 
 \bigskip
 
+Throughout this paper, recall that \(\mathbb{R}\) represents the set of real numbers, \(\mathbb{Z}\) represents the set of integers, and \(\mathbb{Q}\) represents the set of rational numbers.
+
+\bigskip
+
 \theoremstyle{definition}
 \begin{definition}[Binary quadratic form]
 A binary quadratic form is
@@ -102,7 +106,7 @@ where \(a, b, c \in \mathbb{R}\) and \(a, b, c\) are not all equal to zero.
 
 \bigskip
 
-We write \(f = (a, b, c)\) and call \(f\) a ``form''. These are the objects that we'll be working with throughout this handout.
+We write \(f = (a, b, c)\) and call \(f\) a ``form''. These are the objects that we'll be working with throughout this paper.
 
 \bigskip
 
@@ -145,7 +149,7 @@ The discriminant of a form \(f\) is \(\Delta(f) = b^{2} - 4ac\).
 
 \bigskip
 
-Note that because the square of an integer is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\), the discriminant of an integral binary quadratic form is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).
+Note that because the square of an integer is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\), the discriminant of an integral binary quadratic form is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).\footnote{Every integer is congruent to \(0\), \(1\), \(2\), or \(3 \ \textrm{mod} \ 4\). Therefore, every square of an integer is congruent to \(0\), \(1\), \(4\), or \(9 \ \textrm{mod} \ 4\), but because \(4\) and \(9\) are congruent to \(0\) and \(1 \ \textrm{mod} \ 4\) respectively, every square is congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).}
 
 \bigskip
 
@@ -172,7 +176,7 @@ One can easily check that if \(f = (a, b, c)\) is an integral form, then \(b\) a
 \begin{definition}[Fundamental discriminant]
 For \(\Delta \in \mathbb{Z}\), \(\Delta\) is a fundamental discriminant if and only if:
 \begin{enumerate}
-\item \(\Delta \equiv 1 \ \textrm{mod} \ 4\) and \(\Delta\) is square-free\footnote{A square-free integer is one which isn't divisible by any perfect squares, i.e. there are no repeated factors in its prime decomposition.}, or
+\item \(\Delta \equiv 1 \ \textrm{mod} \ 4\) and \(\Delta\) is square-free,\footnote{A square-free integer is one which isn't divisible by any perfect squares, i.e. there are no repeated factors in its prime decomposition.} or
 \item \(\Delta \equiv 0 \ \textrm{mod} \ 4\), \(\frac{\Delta}{4} \equiv 2, 3 \ \textrm{mod} \ 4\), and \(\frac{\Delta}{4}\) is square-free
 \end{enumerate}
 \end{definition}
@@ -180,20 +184,6 @@ For \(\Delta \in \mathbb{Z}\), \(\Delta\) is a fundamental discriminant if and o
 \bigskip
 
 Connecting back to algebraic number fields, fundamental discriminants are exactly those values which are discriminants of quadratic fields.
-
-\bigskip
-
-\theoremstyle{definition}
-\begin{definition}[Positive definite binary quadratic form]
-A binary form is called positive definite if for any \((x, y) \in \mathbb{R}^{2}\) with \((x, y) \ne (0, 0)\), the value \(f(x, y)\) is positive, i.e. \(f(x, y) > 0\).
-\end{definition}
-
-\bigskip
-
-\theoremstyle{definition}
-\begin{definition}[Negative definite binary quadratic form]
-A binary form is called negative definite if for any \((x, y) \in \mathbb{R}^{2}\) with \((x, y) \ne (0, 0)\), the value \(f(x, y)\) is negative, i.e. \(f(x, y) < 0\).
-\end{definition}
 
 \bigskip
 
@@ -207,6 +197,20 @@ A binary form is called positive semi-definite if for any \((x, y) \in \mathbb{R
 \theoremstyle{definition}
 \begin{definition}[Negative semi-definite binary quadratic form]
 A binary form is called negative semi-definite if for any \((x, y) \in \mathbb{R}^{2}\) with \((x, y) \ne (0, 0)\), the value \(f(x, y)\) is non-positive, i.e. \(f(x, y) \le 0\).
+\end{definition}
+
+\bigskip 
+
+\theoremstyle{definition}
+\begin{definition}[Positive definite binary quadratic form]
+A binary form is called positive definite if for any \((x, y) \in \mathbb{R}^{2}\) with \((x, y) \ne (0, 0)\), the value \(f(x, y)\) is positive, i.e. \(f(x, y) > 0\).
+\end{definition}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Negative definite binary quadratic form]
+A binary form is called negative definite if for any \((x, y) \in \mathbb{R}^{2}\) with \((x, y) \ne (0, 0)\), the value \(f(x, y)\) is negative, i.e. \(f(x, y) < 0\).
 \end{definition}
 
 \bigskip
@@ -250,15 +254,15 @@ Recall that the quadratic formula helps us solve single-variable quadratic equat
 
 \bigskip
 
-In the quadratic formula, what happens when \(b^{2} - 4ac = 0\)? The square root reduces to zero, and we're left with \(x = \frac{-b}{2a}\). Hence, there is only one (repeated) root. This is the case in which the graph of the curve grazes the x-axis at just one point. Relative to binary quadratic forms, these discriminants correspond to the extreme case of the semi-definite binary quadratic forms mentioned above.\footnote{Note that the positive and negative semi-definite quadratic forms also include the positive and negative definite forms, respectively.}
+In the quadratic formula, what happens when \(b^{2} - 4ac = 0\)? The square root reduces to zero, and we're left with \(x = \frac{-b}{2a}\). Hence, there is only one (repeated) root. This is the case in which the graph of the curve grazes the x-axis at just one point. Relative to binary quadratic forms, these discriminants correspond to the extreme case of the semi-definite binary quadratic forms mentioned above.\footnote{Note that the positive and negative semi-definite quadratic forms also include the positive and negative definite forms, respectively.} (See definitions 2.7 and 2.8 and consider the case where \(f(x, y) = 0\).)
 
 \bigskip
 
-When \(b^{2} - 4ac < 0\), however, the quantity under the square root is negative and the roots are complex. Therefore, the curve has no roots on the real x-axis and therefore never crosses it. This gives a curve which is entirely positive or entirely negative. These cases analogously correspond to the definite binary quadratic forms.
+When \(b^{2} - 4ac < 0\), however, the quantity under the square root is negative and the roots are complex. Therefore, the curve has no roots on the real x-axis and therefore never crosses it. This gives a curve which is entirely positive or entirely negative. These cases analogously correspond to the definite binary quadratic forms. (See definitions 2.9 and 2.10.)
 
 \bigskip
 
-Finally, when \(b^{2} - 4ac > 0\), two real roots exist, and the curve crosses the x-axis at two points, leading to at least one positive and at least one negative value along the curve. These cases analogously correspond with indefinite binary quadratic forms.
+Finally, when \(b^{2} - 4ac > 0\), two real roots exist, and the curve crosses the x-axis at two points, leading to at least one positive and at least one negative value along the curve. These cases analogously correspond with indefinite binary quadratic forms. (See definition 2.11.)
 
 \bigskip
 
@@ -276,7 +280,7 @@ Finally, when \(b^{2} - 4ac > 0\), two real roots exist, and the curve crosses t
         \centering
         \includegraphics[height=1.9in]{bqf3}
     \end{subfigure}    
-    \caption{Analogous correspondences between binary quadratic forms (in purple) and single-variable quadratic curves (in blue and red).}
+    \caption{Analogous correspondences between binary quadratic forms (purple text) and single-variable quadratic curves (blue and red curves).}
 \end{figure}
 
 
@@ -424,7 +428,7 @@ Two forms \(f(x, y) = ax^{2} + bxy + cy^{2}\) and \(g(x, y) = Ax^{2} + Bxy + Cy^
 
 \bigskip
 
-Given the above definitions, a change of variables of a wide equivalence relation can be represented by a matrix\footnote{See the Appendix for definitions of \(GL(2, \mathbb{Z})\) and \(SL(2, \mathbb{Z})\).}
+Given the above definitions, a change of variables of a wide equivalence relation can be represented by a matrix\footnote{See Appendix 7.1 for definitions of \(GL(2, \mathbb{Z})\) and \(SL(2, \mathbb{Z})\).}
 \begin{center}
 \(T = \begin{bmatrix} r & s \\ t & u \end{bmatrix} \in GL(2, \mathbb{Z})\)
 \end{center}
@@ -487,7 +491,7 @@ Then we can state a second definition for proper equivalence as the following.
 
 \theoremstyle{definition}
 \begin{definition}[Proper equivalence]
-Two forms \(f\) and \(g\) are properly equivalent if \(g = fU\) for some \(U \in SL(2, \mathbb{Z})\). The \(SL(2, \mathbb{Z})\)-orbit of a form is called the proper equivalence class of that form.\footnote{See Appendix for discussion on orbits. This sentence basically means that the proper equivalence class of a form is the set of all forms given by computing \(U^{\top} \ M(f) \ U\) for all of the \(U \in SL(2, \mathbb{Z})\).}
+Two forms \(f\) and \(g\) are properly equivalent if \(g = fU\) for some \(U \in SL(2, \mathbb{Z})\). The \(SL(2, \mathbb{Z})\)-orbit of a form is called the proper equivalence class of that form.\footnote{See Appendix 7.2 for discussion on orbits. Essentially, the above sentence means that the proper equivalence class of a form is the set of all forms given by computing \(U^{\top} M(f) \ U\) for all of the \(U \in SL(2, \mathbb{Z})\).}
 \end{center}
 \end{definition}
 
@@ -526,11 +530,11 @@ Take a negative discriminant \(\Delta\) and let \(F ( \Delta)\) be the set of pr
 
 \bigskip
 
-Now consider a quadratic extension field \(K = \mathbb{Q}(\sqrt{d})\), where \(d\) is square-free. If \(d \equiv 1 \ \textrm{mod} \ 4\), then the discriminant of \(K\) is \(\Delta = d\). Otherwise, the discriminant of \(K\) is \(\Delta = 4d\). Let \(O_{K}\) be the ring of integers of \(K\), and let \(J_{K}\) be the group of fractional ideals of the ring of integers \(O_{K}\). \(P_{K}\) is the subgroup of \(J_{K}\) consisting of principal fractional ideals. We define the ideal class group of \(K\) as the quotient group \(Cl(K) = J_{K} / P_{K}\). % add a reference here to paper on ideal class groups
+Now consider a quadratic extension field \(K = \mathbb{Q}(\sqrt{d})\), where \(d\) is square-free.\footnote{See Appendix 7.3 for definitions of the following terms in this paragraph: quadratic extension field, ring of integers, fractional ideal, principal fractional ideal, quotient group.} If \(d \equiv 1 \ \textrm{mod} \ 4\), then the discriminant of \(K\) is \(\Delta = d\). Otherwise, the discriminant of \(K\) is \(\Delta = 4d\). Let \(O_{K}\) be the ring of integers of \(K\), and let \(J_{K}\) be the group of fractional ideals of the ring of integers \(O_{K}\). \(P_{K}\) is the subgroup of \(J_{K}\) consisting of principal fractional ideals. We define the ideal class group of \(K\) as the quotient group \(Cl(K) = J_{K} / P_{K}\). % add a reference here to paper on ideal class groups
 
 \bigskip
 
-The connection between the above two types of class groups --- and therefore between binary quadratic forms and ideals in quadratic fields --- involves bijections between special versions of each type of class group, the details of which depend on whether the discriminant in question is positive or negative. For a real quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} > 0\), there is a bijection between the narrow ideal class group\footnote{The narrow ideal class group is such that instead of using \(P_{K}\) in our class group quotient group, we use \(P_{K}^{+}\), which is the group of totally positive principal fractional ideals of \(K\).} of \(K\) and the form class group of primitive integral binary quadratic forms of discriminant \(\Delta_{K}\). And for an imaginary quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} < 0\), there is a bijection between the ideal class group of \(K\) and the form class group of primitive positive-definite integral binary quadratic forms of discriminant \(\Delta_{K}\).
+The connection between the above two types of class groups --- and therefore between binary quadratic forms and ideals in quadratic fields --- involves bijections between special versions of each type of class group, the details of which depend on whether the discriminant in question is positive or negative.\footnote{A bijection is a mapping that is both injective and surjective; in other words, every element in the mapping's codomain is mapped to by exactly one element in the mapping's domain.} For a real quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} > 0\), there is a bijection between the narrow ideal class group\footnote{The narrow ideal class group is such that instead of using \(P_{K}\) in our class group quotient group, we use \(P_{K}^{+}\), which is the group of totally positive principal fractional ideals of \(K\).} of \(K\) and the form class group of primitive integral binary quadratic forms of discriminant \(\Delta_{K}\). And for an imaginary quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} < 0\), there is a bijection between the ideal class group of \(K\) and the form class group of primitive positive-definite integral binary quadratic forms of discriminant \(\Delta_{K}\).
 
 
 
@@ -911,9 +915,9 @@ Putting \(\xi\) in terms of \(k\), we have
 
 \bigskip
 
-To ensure that the fraction on the righthand side is an integer, we solve the equation
+To ensure that the fraction on the righthand side is an integer, we solve the congruence\footnote{See Appendix 7.4 for one method of solving an congruence of this form.}
 \begin{center}
-\((tu)k = hu + sc \quad \textrm{mod} \ st\)
+\((tu)k \equiv hu + sc \quad \textrm{mod} \ st\)
 \end{center}
 which produces a set of solutions of the form \(k = \mu + \nu n\), where \(\mu, \nu \in \mathbb{Z}\) and \(n\) ranges over all of \(\mathbb{Z}\). Any choice of \(n\) will yield integer values for \(k\) and \(m\), but some \(n\) values may produce a non-integer value for \(l\), so we now find an appropriate \(n\) value that guarantees \(l \in \mathbb{Z}\). Putting \(l\) in terms of \(n\), we have
 \begin{center}
@@ -922,9 +926,9 @@ which produces a set of solutions of the form \(k = \mu + \nu n\), where \(\mu, 
 
 \bigskip
 
-We want the fraction on the righthand side to equal an integer, so we solve the equation
+We want the fraction on the righthand side to equal an integer, so we solve the congruence
 \begin{center}
-\((t\nu)n = h - t\mu \quad \textrm{mod} \ s\)
+\((t\nu)n \equiv h - t\mu \quad \textrm{mod} \ s\)
 \end{center}
 which gives a set of solutions of the form \(n = \lambda + \sigma n'\), where \(\lambda, \sigma \in \mathbb{Z}\) and \(n'\) ranges over all of \(\mathbb{Z}\). We choose \(n' = 0\) and let \(n = \lambda\).
 
@@ -1036,14 +1040,14 @@ f_{2} &= \alpha x_{2}^{2} + \beta x_{2} y_{2} + \gamma y_{2}^{2} \\
 \bigskip
 
 Given \(f_{1} = (a, b, c)\) and \(f_{2} = (\alpha, \beta, \gamma)\), the composition algorithm for \(f_{1} f_{2} = f_{3}\) is as follows:
-\begin{itemize}
+\begin{enumerate}
 \item Set \(g = \frac{1}{2} (b + \beta)\), \(h = - \frac{1}{2} (b - \beta)\), and \(w = \gcd(a, \alpha, g)\).
 \item Set \(j = w, \quad r = 0, \quad s = \frac{a}{w}, \quad t = \frac{\alpha}{w}, \quad u = \frac{g}{w}\).
 \item Solve \((tu)k = hu + sc \, \, \textrm{mod} \ st\), the solutions to which have the form \(k = \mu + \nu n\) for all \(n \in \mathbb{Z}\). Store \(\mu\) and \(\nu\).
 \item Solve \((t\nu)n = h - t\mu \, \, \textrm{mod} \ s\), the solutions to which have the form \(n = \lambda + \sigma n'\) for all \(n' \in \mathbb{Z}\). Store \(\lambda\).
 \item Set \(k = \mu + \nu \lambda\), \(l = \frac{kt - h}{s}\), and \(m = \frac{tuk - hu - cs}{st}\).
 \item Set \(A = s t - r u\), \(B = (j u + m r) - (k t + l s)\), and \(C = k l - j m\). Then \(f_{3} = (A, B, C)\).
-\end{itemize}
+\end{enumerate}
 
 
 
@@ -1129,6 +1133,250 @@ We have an analogous definition for a \textit{right action} of a group \(G\) on 
 \bigskip
 
 Orbits should bring to mind ring ideals, gesturing toward the deep connection between ideal class groups and form class groups.
+
+\bigskip
+
+\subsection{Ideal class group definitions}
+
+\bigskip
+
+Here are various definitions relating to the content about ideal class groups in Section 4. This information is included to acknowledge the relationship between ideal class groups and form class groups, and to satisfy those curious about the topic, but an understanding of this material is not needed for implementing class group composition of binary quadratic forms.
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Quadratic extension field]
+A quadratic extension field is an extension \(F(\sqrt{z})\) of a field \(F\) such that \(z\) is the root of some irreducible quadratic equation whose coefficients are in \(F\).
+\end{definition}
+
+\bigskip
+
+Here we are particularly concerned with quadratic extension fields which are finite field extensions of the rational numbers \(\mathbb{Q}\) --- these are called algebraic extension fields. In other words, they are finite dimensional fields when taken as vector spaces over Q.
+
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Ring of integers]
+The ring of integers of an algebraic number field \(K\) is the set of elements in \(K\) which are roots of monic polynomials with integer coefficients.
+\end{definition}
+
+\bigskip
+
+Examples of rings of integers:
+\begin{itemize}
+\item For \(K = \mathbb{Q}(i)\), where \(i = \sqrt{-1}\), the ring of integers of \(K\) is \(O_{K} = \{a + b i \ | \ a, b \in \mathbb{Z} \} \).
+\item In general, for \(K = \mathbb{Q}(\sqrt{d})\), if \(d \equiv 1 \ \textrm{mod} \ 4\), then \(O_{K} = \{ a + b \frac{1 + \sqrt{d}}{2} \ | \ a, b \in \mathbb{Z} \} \), and if \(d \equiv 2, 3 \ \textrm{mod} \ 4\), then \(O_{K} = \{ a + b \sqrt{d} \ | \ a, b \in \mathbb{Z} \} \).
+\end{itemize}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Ideal]
+An ideal \(I\) of a ring \(R\) is an additive subgroup of \(R\) which multiplicatively absorbs all elements in \(R\) which are outside of \(I\). In other words, for every \(x \in R\) and \(y \in I\), \(xy \in I\) and \(yx \in I\).
+\end{definition}
+
+\bigskip
+
+Examples of ideals:
+\begin{itemize}
+\item In the ring \(\mathbb{Z}\), the ideals of \(\mathbb{Z}\) have the form \(n\mathbb{Z}\) for \(n \in \mathbb{Z}\).
+\item In \(\mathbb{Z}_{6}\) (i.e. the integers modulo \(6\)), the set \(I = \{ 0, 2, 4 \}\) is an ideal.
+\end{itemize}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Principal ideal]
+An ideal \(I\) of a ring \(R\) is called a (right) principal ideal if there is an element \(a \in R\) such that \(I = aR = \{ ar \ | \ r \in R \}\). In other words, the ideal is generated by the element \(a\)\). If \(R\) is non-commutative, then \(R\) can have left principal ideals, right principal ideals, or two-sided principal ideals, given by (respectively):
+\begin{itemize}
+\item \(Ra = \{ ra \ | \ r \in R \} \)
+\item \(aR = \{ ar \ | \ r \in R \} \)
+\item \(RaR = \{ r_{1} a s_{1} + . . . + r_{n} a s_{n} \ | \ r_{1}, s_{1}, . . . , r_{n}, s_{n} \in R \} \)
+\end{itemize}
+If \(R\) is commutative then the three above definitions are equivalent. All rings have principal ideals.
+\end{definition}
+
+\bigskip
+
+Examples of principal ideals:
+\begin{itemize}
+\item The set of even integers, \(2\mathbb{Z}\), is a principal ideal of \(\mathbb{Z}\) generated by \(\pm 2\).
+\item In fact, every ideal of the ring of integers \(\mathbb{Z}\) is a principal ideal.
+\item In the ring \(\mathbb{Z}(\sqrt{-3}) = \{ a + b \sqrt{-3} \ | \ a,b \in \mathbb{Z} \} \), the ideal generated by \(\sqrt{-3}\) is a principal ideal.
+\end{itemize}
+
+\bigskip
+
+To define fractional ideals, I must first explain modules.
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Module]
+A module \(M\) over a ring \(R\) is a generalization of a vector space over a field, with the ring elements playing the role of the field scalars. A left \(R\)-module, \(M\), is an abelian group \((M, +)\) with a scalar multiplication operation \(* : R \times M \rightarrow M\) which satisfies the following conditions for all \(r, s \in R\) and \(m, n \in M\):
+\begin{itemize}
+\item \(r * (m + n) = r * m + r * n\)
+\item \((r + s) * m = r * m + s * m\)
+\item \((rs) * m = r * (s * m)\)
+\item \(1_{R} * m = m\)
+\end{itemize}
+A right \(R\)-module is the same as above except the ring \(R\) acts on the righthand side of the module instead of on the lefthand side. If \(R\) is commutative, then the left and right \(R\)-modules are the same and the module is simply called an \(R\)-module.
+\end{definition}
+
+\bigskip
+
+Examples of modules:
+\begin{itemize}
+\item For a field \(F\), the concepts of a vector space over \(F\) and an \(F\)-module are identical.
+\item Any ideal \(I\) of a ring \(R\) is an \(R\)-module.
+\end{itemize}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Submodule]
+If \(M\) is a module of a ring \(R\), and \(S\) is a subgroup of \(M\), then \(S\) is an \(R\)-submodule if for any \(s \in S\) and any \(r \in R\), the product \(r * s\) is in \(S\) (for a left \(R\)-submodule) or the product \(s * r\) is in \(S\) (for a right \(R\)-submodule).
+\end{definition}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Fractional ideal]
+Let \(K\) be an algebraic number field with ring of integers \(O_{K}\), and let \(T_{K}\) be some subset of \(K\). \(T_{K}\) is a fractional ideal of \(O_{K}\) if it is a finitely-generated \(O_{K}\)-module such that there exists some nonzero \(r \in O_{K}\) where for all \(t \in T_{K}\), \(r t \in O_{K}\). Moreover, the set \(T'_{K} = r T_{K}\) is an ideal of \(O_{K}\), and \(T_{K} = r^{-1} T'_{K}\).
+\end{definition}
+
+\bigskip
+
+The element \(r\) can be thought of as ``clearing the denominator'' of all the elements in \(T_{K}\) to produce elements in \(O_{K}\).
+
+\bigskip
+
+Examples of fractional ideals:
+\begin{itemize}
+\item Consider the algebraic number field \(\mathbb{Q}\) with ring of integers \(\mathbb{Z}\). The subset of \(\mathbb{Q}\) defined by \\ \(I = \{ . . . , -\frac{15}{7}, -\frac{10}{7}, -\frac{5}{7}, 0, \frac{5}{7}, \frac{10}{7}, \frac{15}{7}, . . . \}\) is a fractional ideal of \(\mathbb{Z}\), with \(\pm 7 \in \mathbb{Z}\) being the element which clears the denominator such that for all \(t \in T_{K}\), \(7t \in \mathbb{Z}\).
+\item In general, fractional ideals in \(\mathbb{Q}\) have the form \(\{ r \mathbb{Z} \ | \ r \in \mathbb{Q} \}\).
+\item The set \(\mathbb{Q}\) is not a fractional ideal because its elements can have arbitrarily large denominators.
+\end{itemize}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Principal fractional ideal]
+Given an algebraic number field \(K\) and its ring of integers \(O_{K}\), a principal fractional ideal is a fractional ideal generated by a single element \(k \in K\) such that the principal fractional ideal is the set \(\{k a \ | \ a \in O_{K} \} \).
+\end{definition}
+
+\bigskip
+
+Given an algebraic number field, \(K\), the set of principal fractional ideals, \(P_{K}\), is a subgroup of the group of fractional ideals, \(J_{K}\).
+
+\bigskip
+
+To define quotient groups, I must first explain cosets.
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Right coset of a subgroup in a group]
+Let \(S\) be a subgroup of a group \(G\). Let \(s \in S\), and \(g \in G\). The congruence class of \(g\) modulo \(S\), i.e. \(Sg = \{ sg \ | \ s \in S\}\), is the right coset of \(S\) in \(G\).
+\end{definition}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Left coset of a subgroup in a group]
+Let \(S\) be a subgroup of a group \(G\). Let \(s \in S\), and \(g \in G\). \(gS = \{ gs \ | \ s \in S\}\) is the left coset of \(S\) in \(G\).
+\end{definition}
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Quotient group]
+Let \(N\) be a normal subgroup of a group \(G\). Then \(G/N\) is the quotient group of \(G\) by \(N\), and it denotes the set of all right cosets of \(N\) in \(G\). The operation on the group is defined as \((Na)(Nb) = Nab\).\footnote{Note that because \(N\) is normal, we could have equivalently defined \(G/N\) to be the set of all left cosets of \(N\) in \(G\).}
+\end{definition}
+
+\bigskip
+
+One can think of quotient groups as grouping together similar elements of a larger group into equivalence classes.
+
+\bigskip
+
+Examples of quotient groups:
+\begin{itemize}
+\item Let \(G\) be the integers modulo 6 under addition, i.e. \(G = \{ 0, 1, 2, 3, 4, 5 \}\), and let \(N\) be the subgroup \(\{ 0, 3 \}\), noting that \(N\) is normal because \(G\) is abelian. \(G/N = \{g + N \ | \ g \in G \} = \{ \{0,3\}, \{1,4\}, \{2,5\} \} = \{ 0 + N, 1 + N, 2 + N \}\).
+\item Let \(G = \mathbb{Z}\) and \(N = 2\mathbb{Z}\), i.e. \(G\) is the set of integers and \(N\) is the set of even integers. \(N\) is a normal subgroup because \(G\) is abelian. \(G/N = \{ 2\mathbb{Z}, 2\mathbb{Z} + 1 \}\), with the two cosets being the even and odd integers, respectively.
+\end{itemize}
+
+\bigskip
+
+\subsection{Solving linear congruences}
+
+\bigskip
+
+In this section, I will outline one way of solving linear congruences of the form \(ax \equiv b \ \textrm{mod} \ m\).
+
+\bigskip
+
+First, using the extended Euclidean algorithm, we may find integers \(d\), \(e\), and \(g\) such that
+\begin{center}
+\(g = \gcd(a, m) \quad \quad \textrm{and} \quad \quad da + em = g\)
+\end{center}
+
+\bigskip
+
+Then note the following theorem:
+
+\bigskip
+
+\theoremstyle{theorem}
+\begin{theorem}
+The congruence \(ax \equiv b \ \textrm{mod} \ m\) has a solution if and only if \(\gcd(a, m)\) divides \(b\).
+\end{theorem}
+
+\bigskip
+
+If the linear congruence \(ax \equiv b \ \textrm{mod} \ m\) has a solution, then by Theorem 7.1 there exists some \(q \in \mathbb{Z}\) such that \(qg = b\). Therefore we have
+\begin{center}
+\(da + em = g \quad \Rightarrow \quad qda + qem = qg \quad \Rightarrow \quad qda + qem = b\)
+\end{center}
+
+\bigskip
+
+Taking the last equation \(\textrm{mod} \ m\), we have
+\begin{center}
+\(aqd \equiv b \ \textrm{mod} \ m\)
+\end{center}
+
+\bigskip
+
+Therefore \(qd\) is one solution to the congruence relation. However, the congruence \(ax \equiv b \ \textrm{mod} \ m\) has an infinite set of solutions of the form \(k = \mu + \nu n\), where \(\mu\) is \(qd \ \textrm{mod} \ m\), \(\nu = \frac{m}{g}\), and \(n\) ranges over all of \(\mathbb{Z}\). To check these solutions, first note that because \(g = \gcd(a, m)\), \(g\) divides \(a\) and so there exists some \(w \in \mathbb{Z}\) such that \(a = wg\). Then
+\begin{center}
+\begin{aligned}
+ax &= a(qd + \frac{m}{g} n) \\
+&= aqd + a \frac{m}{g} n \\
+&= aqd + wmn \\
+&\equiv b \ \textrm{mod} \ m \quad \checkmark\\
+\end{aligned}
+\end{center}
+
+\bigskip
+
+\subsubsection{Linear congruence algorithm}
+
+\bigskip
+
+The following is an example algorithm for solving a linear congruence of the form \(ax \equiv b \ \textrm{mod} \ m\):
+
+\begin{enumerate}
+\item Use the extended Euclidean algorithm to find \(g\), \(d\), \(e\), where \(g = \gcd(a, m)\) and \(da + em = g\).
+\item Set \(q = \left\lfloor \frac{b}{g} \right\rfloor\), and set \(r = b \ \% \ g\).
+\item If \(r \ne 0\), return ``The congruence has no solution.'' End algorithm.
+\item Else set \(\mu = \(qd \ \% \ m\), and set \(\nu = \frac{m}{g}\).
+\end{enumerate}
+
+\bigskip
+
+The set of solutions of the linear congruence then have the form \(k = \mu + \nu n\), where \(n\) ranges over all of \(\mathbb{Z}\).
 
 
 
