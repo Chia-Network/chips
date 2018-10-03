@@ -51,6 +51,14 @@
 
 \begin{center}
 \LARGE{\textbf{Binary quadratic forms}}
+
+\bigskip
+
+\normalsize{Lipa Long}
+
+\medskip
+
+Chia Network
 \end{center}
 
 
@@ -68,15 +76,15 @@
 
 \bigskip
 
-Chia's underlying VDF performs computations within class groups of binary quadratic forms. This handout provides an introduction to binary quadratic forms and to their properties relevant to application in the Chia VDF.
+Chia's underlying VDF performs squaring computations within class groups of binary quadratic forms. This handout provides an introduction to binary quadratic forms and to their properties relevant to application in the Chia VDF.
 
 \bigskip
 
-The study of class groups is typically presented either in the context of fractional ideals of algebraic number fields or in the context of binary quadratic forms. The ideal class group of an algebraic number field \(K\) is the quotient group \(J_{K}/P_{K}\), where \(J_{K}\) is the group of fractional ideals of the ring of integers, \(O_{K}\) of \(K\), and \(P_{K}\) is its subgroup of principal fractional ideals. While many feel that this provides a more conceptually intuitive introduction to class groups, the representation of elements of a class group and the implementation of the group operation are best carried out through binary quadratic forms, so this handout will limit its scope to form class groups.
+The study of class groups is typically presented either in the context of binary quadratic forms or in the context of fractional ideals of algebraic number fields. The ideal class group of an algebraic number field \(K\) is the quotient group \(J_{K}/P_{K}\), where \(J_{K}\) is the group of fractional ideals of the ring of integers, \(O_{K}\), of \(K\), and \(P_{K}\) is its subgroup of principal fractional ideals.\footnote{See Appendix 7.3 for definitions of the following terms: algebraic number field, quotient group, fractional ideal, ring of integers, and principal fractional ideal.} While many feel that this provides a more conceptually intuitive introduction to class groups, the representation of elements of a class group and the implementation of the group operation are best carried out through binary quadratic forms, so in this paper I limit the scope of my discussion to form class groups.
 
 \bigskip
 
-The theorems here will be presented without proof. Please see the References section for proofs and for additional information about class groups and binary quadratic forms.
+The theorems here will often be presented without proof. Please see the References section for resources containing proofs of the theorems and additional information about class groups and binary quadratic forms.
 
 
 
@@ -106,7 +114,7 @@ where \(a, b, c \in \mathbb{R}\) and \(a, b, c\) are not all equal to zero.
 
 \bigskip
 
-We write \(f = (a, b, c)\) and call \(f\) a ``form''. These are the objects that we'll be working with throughout this paper.
+We write \(f = (a, b, c)\) and call \(f\) a \textit{form}. These are the objects that we will be working with throughout this paper.
 
 \bigskip
 
@@ -149,7 +157,11 @@ The discriminant of a form \(f\) is \(\Delta(f) = b^{2} - 4ac\).
 
 \bigskip
 
-Note that because the square of an integer is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\), the discriminant of an integral binary quadratic form is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).\footnote{Every integer is congruent to \(0\), \(1\), \(2\), or \(3 \ \textrm{mod} \ 4\). Therefore, every square of an integer is congruent to \(0\), \(1\), \(4\), or \(9 \ \textrm{mod} \ 4\), but because \(4\) and \(9\) are congruent to \(0\) and \(1 \ \textrm{mod} \ 4\) respectively, every square is congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).}
+One can easily check that if \(f = (a, b, c)\) is an integral form, then \(b\) and \(\Delta(f)\) always share the same parity, i.e. \(b \equiv \Delta(f) \ \textrm{mod} \ 2\).
+
+\bigskip
+
+Note that because the square of an integer is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\), the discriminant of an integral binary quadratic form is always congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).\footnote{Every integer is congruent to \(0\), \(1\), \(2\), or \(3 \ \textrm{mod} \ 4\). Therefore, every square of an integer is congruent to \(0\), \(1\), \(4\), or \(9 \ \textrm{mod} \ 4\), but because \(4\) and \(9\) are congruent to \(0\) and \(1 \ \textrm{mod} \ 4\) respectively, every square is therefore congruent to \(0\) or \(1 \ \textrm{mod} \ 4\).}
 
 \bigskip
 
@@ -157,7 +169,10 @@ Further, any integer which is congruent to \(0\) or \(1 \ \textrm{mod} \ 4\) is 
 \begin{center}
 \(\left(1,\ d \ \textrm{mod} \ 4, \frac{(d \ \textrm{mod} \ 4) - d}{4}\right)\)
 \end{center}
-For \(d \equiv 0\) or \(1 \ \textrm{mod} \ 4\), observe that this form will always be integral, and the discriminant \(\Delta\) of the form is equal to \(d\).
+
+\bigskip
+
+For \(d \equiv 0\) or \(1 \ \textrm{mod} \ 4\), observe that this form will always be integral, and its discriminant, \(\Delta(f)\), is equal to \(d\). We then have the following theorem.
 
 \bigskip
 
@@ -168,22 +183,18 @@ Given \(\Delta \in \mathbb{Z}\), there is at least one integer binary quadratic 
 
 \bigskip
 
-One can easily check that if \(f = (a, b, c)\) is an integral form, then \(b\) and \(\Delta(f)\) always share the same parity, i.e. \(b \equiv \Delta(f) \ \textrm{mod} \ 2\).
-
-\bigskip
-
 \theoremstyle{definition}
 \begin{definition}[Fundamental discriminant]
 For \(\Delta \in \mathbb{Z}\), \(\Delta\) is a fundamental discriminant if and only if:
 \begin{enumerate}
-\item \(\Delta \equiv 1 \ \textrm{mod} \ 4\) and \(\Delta\) is square-free,\footnote{A square-free integer is one which isn't divisible by any perfect squares, i.e. there are no repeated factors in its prime decomposition.} or
+\item \(\Delta \equiv 1 \ \textrm{mod} \ 4\) and \(\Delta\) is square-free,\footnote{A square-free integer is one which is not divisible by any perfect squares, i.e. there are no repeated factors in its prime decomposition.} or
 \item \(\Delta \equiv 0 \ \textrm{mod} \ 4\), \(\frac{\Delta}{4} \equiv 2, 3 \ \textrm{mod} \ 4\), and \(\frac{\Delta}{4}\) is square-free
 \end{enumerate}
 \end{definition}
 
 \bigskip
 
-Connecting back to algebraic number fields, fundamental discriminants are exactly those values which are discriminants of quadratic fields.
+Fundamental discriminants are exactly those values which are discriminants of quadratic fields.\footnote{See Appendix 7.3 for the definition of quadratic field.}
 
 \bigskip
 
@@ -222,7 +233,7 @@ A binary form is called indefinite if for any \((x, y) \in \mathbb{R}^{2}\) with
 
 \bigskip
 
-The forms relevant to the Chia VDF are positive definite forms.
+The forms relevant to the Chia VDF are positive definite forms. Therefore we take note of the following theorem.
 
 \bigskip
 
@@ -239,11 +250,11 @@ A form \(f\) is positive definite if and only if \(\Delta(f) < 0\) and \(a > 0\)
 
 \bigskip
 
-\subsubsection{A quick detour to build intuition about discriminants}
+\subsubsection{A brief detour to build intuition about discriminants}
 
 \bigskip
 
-The quantity \(b^{2} - 4ac\) should look familiar. You probably first saw it as the content under the square root in the quadratic formula,
+The quantity \(b^{2} - 4ac\) should look familiar. You likely first saw it as the content under the square root in the quadratic formula,
 \begin{center}
 \(x = \frac{-b \pm \sqrt{b^{2} - 4ac}}{2a}\)
 \end{center}
@@ -254,15 +265,15 @@ Recall that the quadratic formula helps us solve single-variable quadratic equat
 
 \bigskip
 
-In the quadratic formula, what happens when \(b^{2} - 4ac = 0\)? The square root reduces to zero, and we're left with \(x = \frac{-b}{2a}\). Hence, there is only one (repeated) root. This is the case in which the graph of the curve grazes the x-axis at just one point. Relative to binary quadratic forms, these discriminants correspond to the extreme case of the semi-definite binary quadratic forms mentioned above.\footnote{Note that the positive and negative semi-definite quadratic forms also include the positive and negative definite forms, respectively.} (See definitions 2.7 and 2.8 and consider the case where \(f(x, y) = 0\).)
+In the quadratic formula, what happens when \(b^{2} - 4ac = 0\)? The square root reduces to zero, and we are left with \(x = \frac{-b}{2a}\). Hence, there is only one (repeated) root. Graphically, this is the case in which the curve grazes the x-axis at a single point. Relative to binary quadratic forms, these discriminants correspond to those semi-definite binary quadratic forms for which \(f(x, y) = 0\) for some \((x, y) \ne \((0, 0)\). (See definitions 2.7 and 2.8 and Figure 1.)
 
 \bigskip
 
-When \(b^{2} - 4ac < 0\), however, the quantity under the square root is negative and the roots are complex. Therefore, the curve has no roots on the real x-axis and therefore never crosses it. This gives a curve which is entirely positive or entirely negative. These cases analogously correspond to the definite binary quadratic forms. (See definitions 2.9 and 2.10.)
+When \(b^{2} - 4ac < 0\), the quantity under the square root is negative and the roots are complex. Therefore, the curve has no roots on the real x-axis and the x-axis is never crossed. This gives a curve which is entirely positive or entirely negative. These cases analogously correspond to the definite binary quadratic forms. (See definitions 2.9 and 2.10 and Figure 1.)
 
 \bigskip
 
-Finally, when \(b^{2} - 4ac > 0\), two real roots exist, and the curve crosses the x-axis at two points, leading to at least one positive and at least one negative value along the curve. These cases analogously correspond with indefinite binary quadratic forms. (See definition 2.11.)
+Finally, when \(b^{2} - 4ac > 0\), two real roots exist, and the curve crosses the x-axis at two points, leading to at least one positive and at least one negative value along the curve. These cases analogously correspond to indefinite binary quadratic forms. (See definition 2.11 and Figure 1.)
 
 \bigskip
 
@@ -312,13 +323,22 @@ Using its matrix form, and defining
 \end{center}
 \(f(x, y)\) can be written as
 \begin{center}
-\(f(x, y) = X \ M(f) X^{\top} = \begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} a & b/2 \\ b/2 & c \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = a x^{2} + b xy + c y^{2}\)
+\begin{aligned}
+f(x, y) &= X \ M(f) X^{\top} \\
+&= \begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} a & b/2 \\ b/2 & c \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} \\
+&= a x^{2} + b xy + c y^{2}
+\end{aligned}
 \end{center}
 
-and we have
+\bigskip
+
+The determinant of \(f\) is given by
 
 \begin{center}
-\(\Delta(f) = -4 \ \det(M(f))\).
+\begin{aligned}
+\Delta(f) &= -4 \ \det(M(f)) \\
+&= b^{2} - 4 ac
+\end{aligned}
 \end{center}
 
 \bigskip
@@ -340,14 +360,14 @@ where \(n \in \mathbb{Z}\) and \(f = (a, b, c)\) is an integral binary quadratic
 
 \theoremstyle{definition}
 \begin{definition}[A representation of \(n\) by \(f\)]
-A solution \((x, y) \in \mathbb{Z}^{2}\) to the above equation for a given \(f\) and \(n\) is called a representation of \(n\) by \(f\).
+For a given \(f\) and \(n\), a solution \((x, y) \in \mathbb{Z}^{2}\) to the above equation is called a representation of \(n\) by \(f\).
 \end{definition}
 
 \bigskip
 
 \theoremstyle{definition}
 \begin{definition}[A proper representation of \(n\) by \(f\)]
-A solution \((x, y) \in \mathbb{Z}^{2}\) to the above equation for a given \(f\) and \(n\), such that \(\gcd(x, y) = 1\), is called a proper representation of \(n\) by \(f\).
+For a given \(f\) and \(n\), a solution \((x, y) \in \mathbb{Z}^{2}\) to the above equation, such that \(\gcd(x, y) = 1\), is called a proper representation of \(n\) by \(f\).
 \end{definition}
 
 \bigskip
@@ -358,7 +378,7 @@ Notice that we can restrict our representation considerations to primitive forms
 
 \theoremstyle{theorem}
 \begin{theorem}
-If \(\Delta(f) < 0\) and if \(n \in \mathbb{R}\), then the equation \(ax^{2} + bxy + cy^{2} = n\) has only finitely many solutions, and \(x\) and \(y\) are bounded by
+If \(\Delta(f) < 0\) and if \(n \in \mathbb{Z}\), then the equation \(ax^{2} + bxy + cy^{2} = n\) has only finitely many solutions, and \(x\) and \(y\) are bounded by
 \begin{center}
 \(x^{2} \le \frac{4cn}{|\Delta |}\) \quad \quad and \quad \quad \(y^{2} \le \frac{4an}{|\Delta |}\)
 \end{center}
@@ -366,7 +386,7 @@ If \(\Delta(f) < 0\) and if \(n \in \mathbb{R}\), then the equation \(ax^{2} + b
 
 \bigskip
 
-To find all of the solutions to such an equation where \(\Delta(f) < 0\) and \(n \in \mathbb{R}\), one could test for each solution \((x, y)\) that obeys the constraints given above.
+To find all of the solutions to such an equation where \(\Delta(f) < 0\) and \(n \in \mathbb{Z}\), one could test for each solution \((x, y)\) which obeys the constraints given above.
 
 \bigskip
 
@@ -374,21 +394,25 @@ To find all of the solutions to such an equation where \(\Delta(f) < 0\) and \(n
 \begin{example}
 Solve the equation
 \begin{center}
-\(3x^{2} + 2xy + 2y^{2} = 28\).
+\(2x^{2} + xy + 3y^{2} = 18\).
 \end{center}
 Notice that
 \begin{center}
-\(\Delta(f) = b^{2} - 4ac = 2^{2} - 4(3)(2) = -20 < 0\)
+\begin{aligned}
+\Delta(f) &= b^{2} - 4ac \\
+&= 1^{2} - 4(2)(3) \\
+&= -23
+\end{aligned}
 \end{center}
 Therefore
 \begin{center}
-\(x^{2} \le \frac{4(2)(28)}{| -20 |} = \frac{56}{5}} = 11.2\) \quad \quad and \quad \quad \(y^{2} \le \frac{4(3)(28)}{| -20 |} = \frac{84}{5} = 16.8\)
+\(x^{2} \le \frac{4(3)(18)}{| -23 |} = \frac{216}{23} \approx 9.391...\) \quad \quad and \quad \quad \(y^{2} \le \frac{4(2)(18)}{| -23 |} = \frac{144}{23} \approx 6.261...\)
 \end{center}
 And so
 \begin{center}
-\(|x| \le 3} \quad \quad and \quad \quad \(|y| \le 4\)
+\(|x| \le 3} \quad \quad and \quad \quad \(|y| \le 2\)
 \end{center}
-Testing all pairs of \((x, y)\) which satisfy those constraints, we find that the representations of \(28\) by \(f = (3, 2, 2)\) are \((2, 2)\), \((-2, -2)\), \((-2, 4)\), and \((2, -4)\). \(\square\)
+Testing all pairs of \((x, y)\) which satisfy those constraints, we find that the representations of \(18\) by \(f = (2, 1, 3)\) are \((-3, 0)\), \((-3, 1)\), \((3, -1)\), and \((3, 0)\). \(\square\)
 \end{example}
 
 \bigskip
@@ -401,7 +425,7 @@ Testing all pairs of \((x, y)\) which satisfy those constraints, we find that th
 
 \bigskip
 
-In this section, we'll learn what makes two forms equivalent. If two forms are equivalent then they represent the same integers, although the inverse is not necessarily true. There are two types of equivalence: wide equivalence and proper equivalence.
+This section covers equivalence between forms. If two forms are equivalent then they represent the same integers, although the inverse is not necessarily true. There are two types of equivalence: wide equivalence and proper equivalence.
 
 \bigskip
 
@@ -428,7 +452,7 @@ Two forms \(f(x, y) = ax^{2} + bxy + cy^{2}\) and \(g(x, y) = Ax^{2} + Bxy + Cy^
 
 \bigskip
 
-Given the above definitions, a change of variables of a wide equivalence relation can be represented by a matrix\footnote{See Appendix 7.1 for definitions of \(GL(2, \mathbb{Z})\) and \(SL(2, \mathbb{Z})\).}
+Given these definitions, a change of variables of a wide equivalence relation can be represented by a matrix\footnote{See Appendix 7.1 for definitions of \(GL(2, \mathbb{Z})\) and \(SL(2, \mathbb{Z})\).}
 \begin{center}
 \(T = \begin{bmatrix} r & s \\ t & u \end{bmatrix} \in GL(2, \mathbb{Z})\)
 \end{center}
@@ -443,11 +467,11 @@ In either case, we can write
 \begin{center}
 \(\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} r & s \\ t & u \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}\)
 \end{center}
-to describe the change of variables. The invertibility requirement of the change of variables is what imposes the constraint that \(ru - st = \pm 1\) (in the case of wide equivalence, or \(ru - st = +1\) in the case of proper equivalence) since only those \(2 \times 2\) matrices whose determinant is equal to \(\pm 1\) are invertible.
+to describe the change of variables. The invertibility requirement of the change of variables is what imposes the constraint that \(ru - st = \pm 1\) (in the case of wide equivalence, or \(ru - st = +1\) in the case of proper equivalence) because only those \(2 \times 2\) matrices whose determinant is equal to \(\pm 1\) are invertible.
 
 \bigskip
 
-We'll restrict our discussion to proper equivalence. What follows doesn't necessarily generalize to wide equivalence, and in particular to cases where the matrix is in \(GL(2, \mathbb{Z}) \setminus SL(2, \mathbb{Z})\).
+We will restrict our discussion to proper equivalence. What follows does not necessarily generalize to wide equivalence, and in particular to cases where the matrix is in \(GL(2, \mathbb{Z}) \setminus SL(2, \mathbb{Z})\).
 
 \bigskip
 
@@ -476,8 +500,14 @@ Therefore, \(M(g) = U^{\top} \ M(f) \ U\).
 
 Further, observe that
 \begin{center}
-\(f\left(\begin{bmatrix} r & s \\ t & u \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}\right) = f ( r x + s y, t x + u y) = a (r x + sy)^{2} + b (rx + sy)(tx + uy) + c (tx + uy)^{2}\)
+\begin{aligned}
+f\left(\begin{bmatrix} r & s \\ t & u \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}\right) &= f ( r x + s y, t x + u y) \\
+&= a (r x + sy)^{2} + b (rx + sy)(tx + uy) + c (tx + uy)^{2}
+\end{aligned}
 \end{center}
+
+\bigskip
+
 For ease of notation, define \((fU)(x, y) = f\left(\begin{bmatrix} r & s \\ t & u \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}\right)\), and note that
 \begin{center}
 \(M(fU) = U^{\top} \ M(f) \ U\)
@@ -485,13 +515,13 @@ For ease of notation, define \((fU)(x, y) = f\left(\begin{bmatrix} r & s \\ t & 
 
 \bigskip
 
-Then we can state a second definition for proper equivalence as the following.
+We can then state a second definition for proper equivalence as the following.
 
 \bigskip
 
 \theoremstyle{definition}
 \begin{definition}[Proper equivalence]
-Two forms \(f\) and \(g\) are properly equivalent if \(g = fU\) for some \(U \in SL(2, \mathbb{Z})\). The \(SL(2, \mathbb{Z})\)-orbit of a form is called the proper equivalence class of that form.\footnote{See Appendix 7.2 for discussion on orbits. Essentially, the above sentence means that the proper equivalence class of a form is the set of all forms given by computing \(U^{\top} M(f) \ U\) for all of the \(U \in SL(2, \mathbb{Z})\).}
+Two forms \(f\) and \(g\) are properly equivalent if \(g = fU\) for some \(U \in SL(2, \mathbb{Z})\). The \(SL(2, \mathbb{Z})\)-orbit of a form is called the proper equivalence class of that form.\footnote{See Appendix 7.2 for discussion on orbits. Essentially, this statement means that the proper equivalence class of a form is the set of all forms given by computing \(U^{\top} M(f) \ U\) for all of the \(U \in SL(2, \mathbb{Z})\).}
 \end{center}
 \end{definition}
 
@@ -499,8 +529,15 @@ Two forms \(f\) and \(g\) are properly equivalent if \(g = fU\) for some \(U \in
 
 Notice that because \(SL(2, \mathbb{Z})\) is a group (and associative under matrix multiplication), equivalence is transitive. To see this, consider three forms \(f(x, y)\), \(g(x,y)\), and \(h(x,y)\), and let \(g = fU\) and \(h = gV\), where \(U, V \in SL(2, \mathbb{Z})\). Then
 \begin{center}
-\(M(h) = V^{\top} \ M(g) \ V = V^{\top} \ U^{\top} \ M(f) \ U \ V = W^{\top} \ M(f) \ W\)
+\begin{aligned}
+M(h) &= V^{\top} \ M(g) \ V \\
+&= V^{\top} \ U^{\top} \ M(f) \ U \ V \\
+&= W^{\top} \ M(f) \ W\)
+\end{aligned}
 \end{center}
+
+\bigskip
+
 where \(W = UV \in SL(2, \mathbb{Z})\) and \(W^{\top} = V^{\top} U^{\top} \in SL(2, \mathbb{Z})\). Therefore \(h = fW\), where \(W \in SL(2, \mathbb{Z})\).
 
 
@@ -526,7 +563,7 @@ We can now say a bit more about the connection between ideal class groups and fo
 
 \bigskip
 
-Take a negative discriminant \(\Delta\) and let \(F ( \Delta)\) be the set of primitive positive definite binary quadratic forms \(ax^{2} + b xy + c y^{2}\) whose discriminant is \(\Delta\). Define a proper equivalence relation (we'll call it \(\sim \)) on \(F (\Delta)\) such that \(f \sim g\) when \(g = fU\) for \(U \in SL(2, \mathbb{Z})\). This breaks up \(F (\Delta)\) into a set of equivalence classes, \(C(\Delta) = F(\Delta) / \sim\).
+Take a negative discriminant \(\Delta\) and let \(F ( \Delta)\) be the set of primitive positive definite binary quadratic forms \(ax^{2} + b xy + c y^{2}\) whose discriminant is \(\Delta\). Define a proper equivalence relation \(\sim \) on \(F (\Delta)\) such that \(f \sim g\) when \(g = fU\) for \(U \in SL(2, \mathbb{Z})\). This breaks up \(F (\Delta)\) into a set of equivalence classes, \(C(\Delta) = F(\Delta) / \sim\).
 
 \bigskip
 
@@ -534,7 +571,7 @@ Now consider a quadratic extension field \(K = \mathbb{Q}(\sqrt{d})\), where \(d
 
 \bigskip
 
-The connection between the above two types of class groups --- and therefore between binary quadratic forms and ideals in quadratic fields --- involves bijections between special versions of each type of class group, the details of which depend on whether the discriminant in question is positive or negative.\footnote{A bijection is a mapping that is both injective and surjective; in other words, every element in the mapping's codomain is mapped to by exactly one element in the mapping's domain.} For a real quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} > 0\), there is a bijection between the narrow ideal class group\footnote{The narrow ideal class group is such that instead of using \(P_{K}\) in our class group quotient group, we use \(P_{K}^{+}\), which is the group of totally positive principal fractional ideals of \(K\).} of \(K\) and the form class group of primitive integral binary quadratic forms of discriminant \(\Delta_{K}\). And for an imaginary quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} < 0\), there is a bijection between the ideal class group of \(K\) and the form class group of primitive positive-definite integral binary quadratic forms of discriminant \(\Delta_{K}\).
+The connection between these two types of class groups --- and therefore between binary quadratic forms and ideals in quadratic fields --- involves bijections between special versions of each type of class group, the details of which depend upon whether the discriminant in question is positive or negative.\footnote{A bijection is a mapping that is both injective and surjective; in other words, every element in the mapping's codomain is mapped to by exactly one element in the mapping's domain.} For a real quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} > 0\), there is a bijection between the narrow ideal class group of \(K\) and the form class group of primitive integral binary quadratic forms of discriminant \(\Delta_{K}\).\footnote{The narrow ideal class group is such that \(P_{K}^{+}\), the group of totally positive principal fractional ideals of \(K\), is used instead of \(P_{K}\) in the class group quotient group.} And for an imaginary quadratic field \(K = \mathbb{Q}(\sqrt{d})\) with discriminant \(\Delta_{K} < 0\), there is a bijection between the ideal class group of \(K\) and the form class group of primitive positive-definite integral binary quadratic forms of discriminant \(\Delta_{K}\).
 
 
 
@@ -555,7 +592,7 @@ The connection between the above two types of class groups --- and therefore bet
 
 \bigskip
 
-This section will introduce normal forms and reduced forms and give algorithms for normalization and reduction.
+This section introduces normal forms and reduced forms and give algorithms for normalization and reduction.
 
 \bigskip
 
@@ -574,9 +611,19 @@ A form \(f = (a, b, c)\) is called normal if \(-a < b \le a\).
 \begin{definition}[Normalization operator]
 We define the normalization operator \(\eta (f)\) as
 \begin{center}
-\(\eta (f)  = \eta (a, b, c) = (a, b + 2ra, ar^{2} + br + c)\)
+\begin{aligned}
+\eta (f) &= \eta (a, b, c) \\
+&= (a, b + 2ra, ar^{2} + br + c)
+\end{aligned}
 \end{center}
+
+\bigskip
+
 where \(r = \left\lfloor \frac{a-b}{2a} \right\rfloor\).
+
+\bigskip
+
+For \(f = (a, b, c)\) with \(\Delta(f) < 0\) and \(a > 0\), let \(f_{\textrm{norm}} = (a', b', c')\) be the normalized form of \(f\). Then \(f_{\textrm{norm}} = \eta(f)\).
 \end{definition}
 
 \bigskip
@@ -585,10 +632,10 @@ where \(r = \left\lfloor \frac{a-b}{2a} \right\rfloor\).
 
 \bigskip
 
-The normalization algorithm, given a form \(f = (a, b, c)\), such that \(\Delta < 0\) and \(a > 0\) is:
+Given a form \(f = (a, b, c)\), such that \(\Delta < 0\) and \(a > 0\), the normalization algorithm is:
 \begin{enumerate}
 \item Compute \(r = \left\lfloor \frac{a-b}{2a} \right\rfloor\).
-\item Compute \(\eta( f)\) and update \(f = \eta(f)\).
+\item Set \(\eta( f) = (a, b + 2ra, ar^{2} + br + c)\), and update \(f = \eta(f)\).
 \item Return \(f\), which is now normalized.
 \end{enumerate}
 
@@ -596,22 +643,40 @@ The normalization algorithm, given a form \(f = (a, b, c)\), such that \(\Delta 
 
 \theoremstyle{example}
 \begin{example}
-Let's normalize the form \(f = (11, 49, 55)\). Note that it is not normal because \(b > a\).
+Normalize the form \(f = (11, 49, 55)\). Note that it is not normal because \(b > a\).
 
 \bigskip
 
-First we compute \(r\):
+First compute \(r\):
 \begin{center}
-\(r = \left\lfloor \frac{a-b}{2a} \right\rfloor = \left\lfloor \frac{11 - 49}{2(11)} \right\rfloor = \left\lfloor -1.\overline{72} \right\rfloor = -2\)
+\begin{aligned}
+r &= \left\lfloor \frac{a-b}{2a} \right\rfloor \\
+&= \left\lfloor \frac{11 - 49}{2(11)} \right\rfloor \\
+&= \left\lfloor -1.\overline{72} \right\rfloor \\
+&= -2
+\end{aligned}
 \end{center}
 
-Then we compute \(\eta (f) \):
+\bigskip
+
+Then compute \(\eta (f) \):
 \begin{center}
-\(\eta (f) = \eta (a, b, c) = (a, b + 2ra, ar^{2} + br + c) = (11, 49 + 2(-2)(11), 11(-2)^{2} + 49(-2) + 55) = (11, 5, 1)\)
+\begin{aligned}
+\eta (f) &= \eta (a, b, c) \\
+&= (a, b + 2ra, ar^{2} + br + c) \\
+&= (11, 49 + 2(-2)(11), 11(-2)^{2} + 49(-2) + 55) \\
+&= (11, 5, 1)
+\end{aligned}
 \end{center}
 
-And so the normalization of \(f = (11, 49, 55) \) is \(f_{norm} = (11, 5, 1)\). \(\square\)
+\bigskip
+
+And so the normalization of \(f = (11, 49, 55) \) is \(f_{\textrm{norm}} = (11, 5, 1)\). \(\square\)
 \end{example}
+
+\bigskip
+
+Note that in Example 5.1 the discriminant of both \(f\) and \(f_{\textrm{norm}}\) is \(-19\). Normalizing a form does not change its discriminant.
 
 \bigskip
 
@@ -634,7 +699,7 @@ For any given \(\Delta < 0\), each proper equivalence class of binary quadratic 
 
 \bigskip
 
-For a reduced form and \(\Delta < 0\), we have
+Given a reduced form with \(\Delta < 0\), we have
 
 \begin{center}
 \begin{aligned}
@@ -694,13 +759,13 @@ The equivalence class of the principal form of discriminant \(\Delta\) is called
 
 \bigskip
 
-The principal class of a discriminant \(\Delta\) is the identity element of the form class group of \(\Delta\) with respect to form composition.\footnote{Form composition is discussed in Section 6.}
+The principal class of a discriminant \(\Delta\) is the identity element of the form class group of \(\Delta\) with respect to form composition.\footnote{Form composition is defined in Section 6.}
 
 \bigskip
 
 \theoremstyle{example}
 \begin{example}
-Let's consider the discriminant \(\Delta = -23\). This discriminant has a total of three equivalence classes of positive definite binary quadratic forms. Therefore its class number is 3. In particular, the three unique reduced representatives of the equivalence classes are
+Consider the discriminant \(\Delta = -23\). This discriminant has a total of three equivalence classes of positive definite binary quadratic forms. Therefore its class number is 3. In particular, the three unique reduced representatives of the equivalence classes are
 \begin{center}
 \((1, 1, 6), \quad (2, -1, 3), \quad \textrm{and} \quad (2, 1, 3)\).
 \end{center}
@@ -713,10 +778,24 @@ The principal form is \((1, 1, 6)\), and therefore this form (as a representativ
 \begin{definition}[Reduction operator]
 Given a form \(f = (a, b, c)\), the reduction operator \(\rho (f)\) is defined as
 \begin{center}
-\(\rho (f) = \rho (a, b, c) = (c, -b + 2sc, cs^{2} - bs + a)\)
+\begin{aligned}
+\rho (f) &= \rho (a, b, c) \\
+&= (c, -b + 2sc, cs^{2} - bs + a)
+\end{aligned}
 \end{center}
-where \(s = \left\lfloor \frac{c+b}{2c} \right\rfloor\). Notice that \(\rho (a, b, c)\) is equivalent to the normalization of \((c, -b, a)\).
+
+\bigskip
+
+where \(s = \left\lfloor \frac{c+b}{2c} \right\rfloor\).
+
+\bigskip
+
+For \(f = (a, b, c)\) with \(\Delta(f) < 0\) and \(a > 0\), let \(f_{\textrm{red}} = (a', b', c')\) be the reduced form of \(f\). Then \(f_{\textrm{red}} = \rho(f)\).
 \end{defintion}
+
+\bigskip
+
+Notice that \(\rho (a, b, c)\) is equivalent to \(\eta (c, -b, a)\), the normalization of \((c, -b, a)\).
 
 \bigskip
 
@@ -724,10 +803,10 @@ where \(s = \left\lfloor \frac{c+b}{2c} \right\rfloor\). Notice that \(\rho (a, 
 
 \bigskip
 
-The reduction algorithm, given a form \(f = (a, b, c)\) such that \(\Delta < 0\) and \(a > 0\) is:
+Given a form \(f = (a, b, c)\) such that \(\Delta < 0\) and \(a > 0\), the reduction algorithm is:
 \begin{enumerate}
 \item Normalize \(f\) and update \(f = f_{\textrm{norm}}\).
-\item If \(f\) is reduced, return \(f\); if \(f\) is not reduced, compute \(s\) and \(\rho(f)\) and update \(f = \rho(f)\).
+\item If \(f\) is reduced, return \(f\). If \(f\) is not reduced, compute \(s = \left\lfloor \frac{c+b}{2c} \right\rfloor\); set \(\rho(f) = (c, -b + 2sc, cs^{2} - bs + a)\); and update \(f = \rho(f)\).
 \item Repeat step 2 until a reduced form is produced.
 \end{enumerate}
 
@@ -735,27 +814,38 @@ The reduction algorithm, given a form \(f = (a, b, c)\) such that \(\Delta < 0\)
 
 \theoremstyle{example}
 \begin{example}
-Let's reduce the form \(f = (11, 49, 55)\). We first normalize it, which we did in Example 5.1, finding that \(f_{\textrm{norm}} = (11, 5, 1)\). Solving Example 5.1 is equivalent to performing step 1 of the reduction algorithm.
+Reduce the form \(f = (11, 49, 55)\). We first normalize it, which we did in Example 5.1, finding that \(f_{\textrm{norm}} = (11, 5, 1)\). Solving Example 5.1 is equivalent to performing step 1 of the reduction algorithm.
 
 \bigskip
 
-But \(f = f_{norm}\) is not yet reduced because \(a > c\). We implement the reduction operator until we reach a reduced form.
+But \(f = f_{\textrm{norm}}\) is not yet reduced because \(a > c\). We implement the reduction step until we reach a reduced form.
 
 \bigskip
 
 Compute \(s\):
 \begin{center}
-\(s = \left\lfloor \frac{c+b}{2c} \right\rfloor = \left\lfloor \frac{1+5}{2(1)} \right\rfloor = \left\lfloor 3 \right\rfloor = 3\)
-\end{center}
-
-Compute \(\rho(f)\):
-\begin{center}
-\(\rho(f) = (c, -b + 2sc, cs^{2} - bs + a) = (1, -5 + 2(3)(1), 1(3)^{2} - 5(3) + 11)) = (1, 1, 5)\)
+\begin{aligned}
+s &= \left\lfloor \frac{c+b}{2c} \right\rfloor \\
+&= \left\lfloor \frac{1+5}{2(1)} \right\rfloor \\
+&= \left\lfloor 3 \right\rfloor \\
+&= 3
+\end{aligned}
 \end{center}
 
 \bigskip
 
-This form is reduced and so \((1, 1, 5)\) is the reduced form of \((11, 49, 55)\). Notice that, of course, the discriminant of all three forms is \(-19\). \(\square\)
+Compute \(\rho(f)\):
+\begin{center}
+\begin{aligned}
+\rho(f) &= (c, -b + 2sc, cs^{2} - bs + a) \\
+&= (1, -5 + 2(3)(1), 1(3)^{2} - 5(3) + 11)) \\
+&= (1, 1, 5)
+\end{aligned}
+\end{center}
+
+\bigskip
+
+This form is reduced and so \((1, 1, 5)\) is the reduced form of \((11, 49, 55)\). Notice that, of course, the discriminant of all three forms, \(f\), \(f_{\textrm{norm}}\), and \(f_{\textrm{red}}\), is \(-19\). \(\square\)
 
 \end{example}
 
@@ -780,7 +870,7 @@ Originally developed by Gauss, composition of binary quadratic forms is a commut
 
 \bigskip
 
-To begin, note that we only perform composition between forms which have the same discriminant. This should make sense because we're operating within the class group of a particular discriminant, and although the objects we're operating on are integer 3-tuples, \((a, b, c)\), which represent binary quadratic forms, the more abstract objects that we're operating on are the equivalence classes of the class group. Analogously, when we add the rational numbers \(\frac{20}{12}\) and \(\frac{5}{35}\), what we're fundamentally working with are the fraction equivalence classes whose ``reduced representatives'' are \(\frac{5}{3}\) and \(\frac{1}{7}\).
+To begin, note that we only perform composition between forms which have the same discriminant. This should make sense because we are operating within the class group of a particular discriminant, and although the objects we are operating on are integer 3-tuples, \((a, b, c)\), which represent binary quadratic forms, the more abstract objects being operated upon are the equivalence classes of the class group. Analogously, when we add the rational numbers \(\frac{20}{12}\) and \(\frac{5}{35}\), what we are fundamentally working with are the fraction equivalence classes whose ``reduced representatives'' are \(\frac{5}{3}\) and \(\frac{1}{7}\).
 
 \bigskip
 
@@ -788,6 +878,9 @@ To understand the basic idea behind composition, consider two binary quadratic f
 \begin{center}
 \(f_{1} = a x_{1}^{2} + b x_{1} y_{1} + c y_{1}^{2} \quad \textrm{and} \quad f_{2} = \alpha x_{2}^{2} + \beta x_{2} y_{2} + \gamma y_{2}^{2}\)
 \end{center}
+
+\bigskip
+
 Note that we consider \((x_{1}, y_{1})\) and \((x_{2}, y_{2})\) as independent sets of variables.
 
 \bigskip
@@ -807,7 +900,7 @@ f_{1} f_{2} = \, \, & a \alpha x_{1}^{2} x_{2}^{2} + a \beta x_{1}^{2} x_{2} y_{
 
 \bigskip
 
-We want the righthand side of the equation to resemble a binary quadratic form so that
+We want the righthand side of the equation to resemble a binary quadratic form such that
 \begin{center}
 \(f_{1} f_{2} = A X^{2} + B X Y + C Y^{2} = f_{3}\)
 \end{center}
@@ -815,7 +908,7 @@ for some \(A\), \(B\), \(C \in \mathbb{Z}\).
 
 \bigskip
 
-We'll do this by using a change of variables such that \(X\) and \(Y\) are linear combinations of \(x_{1} x_{2}\), \(x_{1} y_{2}\), \(y_{1} x_{2}\), and \(y_{1} y_{2}\):
+We do this by using a change of variables such that \(X\) and \(Y\) are linear combinations of \(x_{1} x_{2}\), \(x_{1} y_{2}\), \(y_{1} x_{2}\), and \(y_{1} y_{2}\):
 \begin{center}
 \(X = j x_{1} x_{2} + k x_{1} y_{2} + l y_{1} x_{2} + m y_{1} y_{2}\), \quad \(Y = r x_{1} x_{2} + s x_{1} y_{2} + t y_{1} x_{2} + u y_{1} y_{2}\)
 \end{center}
@@ -849,7 +942,7 @@ and find \(k\), \(l\), and \(m\) using the following set of conditions:
 
 \bigskip
 
-To solve this set of equations, we'll create an augmented matrix and row reduce.
+To solve this set of equations, we create an augmented matrix and row reduce.
 \begin{center}
 \(\begin{gmatrix}[p] t & -s & 0 & \BAR & h \\ u & 0 & -s & \BAR & \gamma \\ 0 & u & -t & \BAR & c \rowops \swap{1}{2}\end{gmatrix} \quad \Rightarrow \quad \begin{gmatrix}[p] t & -s & 0 & \BAR & h \\ 0 & u & -t & \BAR & c \\ u & 0 & -s & \BAR & \gamma \rowops \mult{0}{\cdot 1/t} \mult{1}{\cdot 1/u} \end{gmatrix}
 
@@ -915,13 +1008,18 @@ Putting \(\xi\) in terms of \(k\), we have
 
 \bigskip
 
-To ensure that the fraction on the righthand side is an integer, we solve the congruence\footnote{See Appendix 7.4 for one method of solving an congruence of this form.}
+To ensure that the fraction on the righthand side is an integer, we solve the congruence\footnote{See Appendix 7.4 for one method of solving a congruence of this form.}
 \begin{center}
 \((tu)k \equiv hu + sc \quad \textrm{mod} \ st\)
 \end{center}
-which produces a set of solutions of the form \(k = \mu + \nu n\), where \(\mu, \nu \in \mathbb{Z}\) and \(n\) ranges over all of \(\mathbb{Z}\). Any choice of \(n\) will yield integer values for \(k\) and \(m\), but some \(n\) values may produce a non-integer value for \(l\), so we now find an appropriate \(n\) value that guarantees \(l \in \mathbb{Z}\). Putting \(l\) in terms of \(n\), we have
+which produces a set of solutions of the form \(k = \mu + \nu n\), where \(\mu, \nu \in \mathbb{Z}\) and \(n\) ranges over all of \(\mathbb{Z}\). Any choice of \(n\) will yield integer values for \(k\) and \(m\), but some \(n\) values may produce a non-integer value for \(l\), so we now find an appropriate \(n\) value which guarantees \(l \in \mathbb{Z}\). Putting \(l\) in terms of \(n\), we have
 \begin{center}
-\(l = \frac{t}{u} \xi + \frac{c}{u} = \frac{tk - h}{s} = \frac{t(\mu + \nu n) - h}{s} = \frac{(t\nu)n + (t\mu - h)}{s}\)
+\begin{aligned}
+l &= \frac{t}{u} \xi + \frac{c}{u} \\
+&= \frac{tk - h}{s} \\
+&= \frac{t(\mu + \nu n) - h}{s} \\
+&= \frac{(t\nu)n + (t\mu - h)}{s}
+\end{aligned}
 \end{center}
 
 \bigskip
@@ -936,20 +1034,20 @@ which gives a set of solutions of the form \(n = \lambda + \sigma n'\), where \(
 
 We can now find \(k\), \(l\), and \(m\) by
 \begin{center}
-\(k = \mu + \nu \lambda \quad \quad l = \frac{kt - h}{s} \quad \quad m = \frac{tuk - hu - cs}{st}\)
+\(k = \mu + \nu \lambda, \quad \quad l = \frac{kt - h}{s}, \quad \quad \textrm{and} \quad \quad m = \frac{tuk - hu - cs}{st}\)
 \end{center}
 and these values are guaranteed to be integers. Notice that because \(s = \frac{a}{w}\) and \(t = \frac{\alpha}{w}\), and because \(a\) and \(\alpha\) are never equal to \(0\), it will always be the case that \(s, t \ne 0\), and so \(k\), \(l\), and \(m\) will always be defined.
 
 \bigskip
 
-Finally, \(f_{3} = A X^{2} + B X Y + C Y^{2}\) is given by\footnote{Although \(r = 0\), I'm presenting these formulae with the \(r\) terms to gesture to their inherent symmetry.}
+Finally, \(f_{3} = A X^{2} + B X Y + C Y^{2}\) is given by\footnote{Although \(r = 0\), I present these formulae with the \(r\) terms to gesture to their inherent symmetry.}
 \begin{center}
 \(A = s t - r u, \quad \quad B = (j u + m r) - (k t + l s), \quad \quad C = k l - j m\)
 \end{center}
 
 \bigskip
 
-To verify that \(f_{3}\) indeed equals \(f_{1} f_{2}\), first expand \(f_{3}\) using \(X = j x_{1} x_{2} + k x_{1} y_{2} + l y_{1} x_{2} + m y_{1} y_{2}\) and \(Y = r x_{1} x_{2} + s x_{1} y_{2} + t y_{1} x_{2} + u y_{1} y_{2}\). After grouping together common terms, we end up with:
+To verify that \(f_{3}\) indeed equals \(f_{1} f_{2}\), expand \(f_{3}\) using \(X = j x_{1} x_{2} + k x_{1} y_{2} + l y_{1} x_{2} + m y_{1} y_{2}\) and \(Y = r x_{1} x_{2} + s x_{1} y_{2} + t y_{1} x_{2} + u y_{1} y_{2}\). After grouping together common terms, we end up with:
 \begin{align*}
 f_{3} = \, \, & (A j^{2} + B j r + C r^{2}) x_{1}^{2} x_{2}^{2} + (2 A j k + B (j s + k r) + 2 C r s) x_{1}^{2} x_{2} y_{2} \\
 & + (A k^{2} + B k s + C s^{2}) x_{1}^{2} y_{2}^{2} + (2 A j l + B (j t + l r) + 2 C r t) x_{1} y_{1} x_{2}^{2} \\
@@ -970,13 +1068,13 @@ f_{1} f_{2} = \, \, & a \alpha x_{1}^{2} x_{2}^{2} + a \beta x_{1}^{2} x_{2} y_{
 
 The reader may check for coefficient equality for all terms, but here I will confirm coefficient equality for two of the terms:
 \begin{enumerate}
-\item \((A j^{2} + B j r + C r^{2}) x_{1}^{2} x_{2}^{2} \stackrel{?}{=} a \alpha x_{1}^{2} x_{2}^{2} \Rightarrow A j^{2} + B j r + C r^{2} \stackrel{?}{=} a \alpha\)
-\item \((2 A l m + B (l u + m t) + 2 C t u) y_{1}^{2} x_{2} y_{2} \stackrel{?}{=} c \beta y_{1}^{2} x_{2} y_{2} \Rightarrow 2 A l m + B (l u + m t) + 2 C t u \stackrel{?}{=} c \beta\)
+\item \((A j^{2} + B j r + C r^{2}) x_{1}^{2} x_{2}^{2} \stackrel{?}{=} a \alpha x_{1}^{2} x_{2}^{2} \\ \Rightarrow A j^{2} + B j r + C r^{2} \stackrel{?}{=} a \alpha\)
+\item \((2 A l m + B (l u + m t) + 2 C t u) y_{1}^{2} x_{2} y_{2} \stackrel{?}{=} c \beta y_{1}^{2} x_{2} y_{2} \\ \Rightarrow 2 A l m + B (l u + m t) + 2 C t u \stackrel{?}{=} c \beta\)
 \end{enumerate}
 
 \bigskip
 
-We'll draw from the definitions for \(A\), \(B\), \(C\), \(g\), \(h\), \(w\), \(j\), \(r\), \(s\), \(t\), and \(u\), and from the identities defined by the three conditions on \(k\), \(l\), and \(m\).
+We draw from the definitions for \(A\), \(B\), \(C\), \(g\), \(h\), \(w\), \(j\), \(r\), \(s\), \(t\), and \(u\), and from the identities defined by the three conditions on \(k\), \(l\), and \(m\).
 
 \bigskip
 
@@ -1023,7 +1121,7 @@ There are several notes to make about this construction.
 The first, and most important, is that the system of equations defining \(k, l, \textrm{and } m\) has infinite solutions. However, all of the solutions are in the same equivalence class, and they will each reduce to the same binary quadratic form.
 \bigskip
 
-Second, we have the observation that if we wish to reconstruct \(f_{1}\) and \(f_{2}\) from \(g\), \(h\), \(w\), \(j\), \(k\), \(l\), \(m\), \(r\), \(s\), \(t\), and \(u\), we simply note that \(\det(M_{1})\) and \(\det(M_{2})\) recover \(a\) and \(\alpha\) respectively, \(\det(M_{3}) - \det(M_{4})\) and \(\det(M_{3}) + \det(M_{4})\) recover \(b\) and \(\beta\) respectively, and \(\det(M_{6})\) and \(\det(M_{5})\) recover \(c\) and \(\gamma\) respectively.\footnote{Note that recovering \(b\), \(\beta\), \(c\), and \(\gamma\) uses the three conditions on \(k\), \(l\), and \(m\)} So \(f_{1}\) and \(f_{2}\) can be represented using the determinants of the six submatrices of \(M\):
+Second, we have the observation that if we wish to reconstruct \(f_{1}\) and \(f_{2}\) from \(g\), \(h\), \(w\), \(j\), \(k\), \(l\), \(m\), \(r\), \(s\), \(t\), and \(u\), we note that \(\det(M_{1})\) and \(\det(M_{2})\) recover \(a\) and \(\alpha\) respectively, \(\det(M_{3}) - \det(M_{4})\) and \(\det(M_{3}) + \det(M_{4})\) recover \(b\) and \(\beta\) respectively, and \(\det(M_{6})\) and \(\det(M_{5})\) recover \(c\) and \(\gamma\) respectively.\footnote{Note that recovering \(b\), \(\beta\), \(c\), and \(\gamma\) uses the three conditions on \(k\), \(l\), and \(m\).} So \(f_{1}\) and \(f_{2}\) can be represented using the determinants of the six submatrices of \(M\):
 \begin{align*}
 f_{1} &= a x_{1}^{2} + b x_{1} y_{1} + c y_{1}^{2} \\
 &= (j s - k r) x_{1}^{2} + ( (j u - m r) - (k t - l s) ) x_{1} y_{1} + (l u - m t) y_{1}^{2} \\
@@ -1043,10 +1141,11 @@ Given \(f_{1} = (a, b, c)\) and \(f_{2} = (\alpha, \beta, \gamma)\), the composi
 \begin{enumerate}
 \item Set \(g = \frac{1}{2} (b + \beta)\), \(h = - \frac{1}{2} (b - \beta)\), and \(w = \gcd(a, \alpha, g)\).
 \item Set \(j = w, \quad r = 0, \quad s = \frac{a}{w}, \quad t = \frac{\alpha}{w}, \quad u = \frac{g}{w}\).
-\item Solve \((tu)k = hu + sc \, \, \textrm{mod} \ st\), the solutions to which have the form \(k = \mu + \nu n\) for all \(n \in \mathbb{Z}\). Store \(\mu\) and \(\nu\).
+\item Solve \((tu)k = hu + sc \, \, \textrm{mod} \ st\), the solutions to which have the form \(k = \mu + \nu n\) for all \(n \in \mathbb{Z}\).\footnote{See Appendix 7.4 for one method of solving such an equation.} Store \(\mu\) and \(\nu\).
 \item Solve \((t\nu)n = h - t\mu \, \, \textrm{mod} \ s\), the solutions to which have the form \(n = \lambda + \sigma n'\) for all \(n' \in \mathbb{Z}\). Store \(\lambda\).
 \item Set \(k = \mu + \nu \lambda\), \(l = \frac{kt - h}{s}\), and \(m = \frac{tuk - hu - cs}{st}\).
-\item Set \(A = s t - r u\), \(B = (j u + m r) - (k t + l s)\), and \(C = k l - j m\). Then \(f_{3} = (A, B, C)\).
+\item Set \(A = s t - r u\), \(B = (j u + m r) - (k t + l s)\), and \(C = k l - j m\).
+\item Set \(f_{3} = (A, B, C)\), and return \(f_{3}\).
 \end{enumerate}
 
 
@@ -1066,7 +1165,7 @@ Consider a composition
 \end{center}
 where
 \begin{center}
-\(f_{1} = a x_{1}^{2} + b x_{1} y_{1} + c y_{1}^{2}, \quad f_{2} = \alpha x_{2}^{2} + \beta x_{2} y_{2} + \gamma y_{2}^{2}, \quad \textrm{and} \quad f_{3} = AX^{2} + BXY + CY^{2}\)
+\(f_{1} = a x_{1}^{2} + b x_{1} y_{1} + c y_{1}^{2}, \quad \quad f_{2} = \alpha x_{2}^{2} + \beta x_{2} y_{2} + \gamma y_{2}^{2}, \quad \quad \textrm{and} \quad \quad f_{3} = AX^{2} + BXY + CY^{2}\)
 \end{center}
 
 \bigskip
@@ -1078,7 +1177,7 @@ In Section 2.3, we saw that a binary quadratic form represents certain integers,
 
 \bigskip
 
-Recall that if two forms are equivalent then they represent the same integers. If \(f_{3,nr}\) is the non-reduced form found by composing \(f_{1}\) and \(f_{2}\) using the algorithm in section 6.1.1, and if, for a given \((x_{1}, y_{1})\) and \((x_{2}, y_{2})\), \(f_{1} (x_{1}, y_{1}) = n_{1}\) and \(f_{2} (x_{2}, y_{2}) = n_{2}\), and if \(X, Y\) are defined as they were in section 6.1, then \(f_{3,nr} (X, Y) = n_{1} n_{2}\). Note that this is not necessarily true for the reduced form \(f_{3,r}\), which is found by submitting \(f_{3,nr}\) to the reduction algorithm. However, \(n_{1} n_{2}\) will be representable by \(f_{3,r}\) under some different set of integers \((X', Y')\) because \(f_{3,nr}\) and \(f_{3,r}\) are in the same equivalence class and therefore represent the same set of integers.
+Recall that if two forms are equivalent then they represent the same integers. If \(f_{3,nr}\) is the non-reduced form found by composing \(f_{1}\) and \(f_{2}\) using the algorithm in section 6.1, and if, for a given \((x_{1}, y_{1})\) and \((x_{2}, y_{2})\), \(f_{1} (x_{1}, y_{1}) = n_{1}\) and \(f_{2} (x_{2}, y_{2}) = n_{2}\), and if \(X, Y\) are defined as they were in section 6.1, then \(f_{3,nr} (X, Y) = n_{1} n_{2}\). Note that this is not necessarily true for the reduced form \(f_{3,r}\), which is found by submitting \(f_{3,nr}\) to the reduction algorithm. However, \(n_{1} n_{2}\) will be representable by \(f_{3,r}\) under some different set of integers \((X', Y')\) because \(f_{3,nr}\) and \(f_{3,r}\) are in the same equivalence class and therefore represent the same set of integers.
 
 \bigskip
 
@@ -1097,14 +1196,20 @@ Recall that if two forms are equivalent then they represent the same integers. I
 
 \bigskip
 
+\theoremstyle{definition}
+\begin{definition}[\(GL(2, \mathbb{Z})\)]
 \(GL(2, \mathbb{Z})\) is the set of all invertible \(2 \times 2\) matrices with integer entries whose determinants are equal to \(\pm 1\).
+\end{definition}
 
 \bigskip
 
+\theoremstyle{definition}
+\begin{definition}[\(SL(2, \mathbb{Z})\)]
 \(SL(2, \mathbb{Z})\) is a subgroup of \(GL(2, \mathbb{Z})\) defined as the set of all \(2 \times 2\) matrices with integer entries whose determinants are equal to \(1\). The two generating matrices of \(SL(2, \mathbb{Z})\) are
 \begin{center}
 \(S = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}\) \quad and \quad \(T = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}\).
 \end{center}
+\end{definition}
 
 \bigskip
 
@@ -1124,7 +1229,7 @@ which has the following properties:
 
 \bigskip
 
-Given a left action of \(G\) on \(S\), two elements \(s\) and \(t\) in \(S\) are equivalent if there's an element \(g \ \in G\) such that \(t = gs\). This is an equivalence relation on \(S\), and the equivalence class \(\{gs : g \in G \}\) is called the \(G\)-orbit of \(s\).
+Given a left action of \(G\) on \(S\), two elements \(s\) and \(t\) in \(S\) are equivalent if there is an element \(g \ \in G\) such that \(t = gs\). This is an equivalence relation on \(S\), and the equivalence class \(\{gs : g \in G \}\) is called the \(G\)-orbit of \(s\).
 
 \bigskip
 
@@ -1140,19 +1245,21 @@ Orbits should bring to mind ring ideals, gesturing toward the deep connection be
 
 \bigskip
 
-Here are various definitions relating to the content about ideal class groups in Section 4. This information is included to acknowledge the relationship between ideal class groups and form class groups, and to satisfy those curious about the topic, but an understanding of this material is not needed for implementing class group composition of binary quadratic forms.
+Here are various definitions relating to the content about ideal class groups in Section 4. This information is included to acknowledge the relationship between ideal class groups and form class groups, and to satisfy those curious about the topic, but an understanding of this material is not necessary for implementing class group composition of binary quadratic forms.
+
+\bigskip
+
+\theoremstyle{definition}
+\begin{definition}[Algebraic number field]
+An algebraic number field is a finite extension \(\mathbb{Q}(\alpha_{1}, . . . , \alpha_{n})\) of \(\mathbb{Q}\), where \(\alpha_{1}, . . . , \alpha_{n}\) are algebraic numbers.
+\end{definition}
 
 \bigskip
 
 \theoremstyle{definition}
 \begin{definition}[Quadratic extension field]
-A quadratic extension field is an extension \(F(\sqrt{z})\) of a field \(F\) such that \(z\) is the root of some irreducible quadratic equation whose coefficients are in \(F\).
+A quadratic extension field is an algebraic number field \(Q(\sqrt{z})\) of degree \(2\) over \(\mathbb{Q}\), such that \(\sqrt{z}\) is the root of some irreducible quadratic equation whose coefficients are in \(\mathbb{Z}\).
 \end{definition}
-
-\bigskip
-
-Here we are particularly concerned with quadratic extension fields which are finite field extensions of the rational numbers \(\mathbb{Q}\) --- these are called algebraic extension fields. In other words, they are finite dimensional fields when taken as vector spaces over Q.
-
 
 \bigskip
 
@@ -1208,7 +1315,7 @@ Examples of principal ideals:
 
 \bigskip
 
-To define fractional ideals, I must first explain modules.
+To define fractional ideals, I first explain modules.
 
 \bigskip
 
@@ -1248,7 +1355,7 @@ Let \(K\) be an algebraic number field with ring of integers \(O_{K}\), and let 
 
 \bigskip
 
-The element \(r\) can be thought of as ``clearing the denominator'' of all the elements in \(T_{K}\) to produce elements in \(O_{K}\).
+The element \(r\) can be thought of as ``clearing the denominator'' of all elements in \(T_{K}\) to produce elements in \(O_{K}\).
 
 \bigskip
 
@@ -1272,7 +1379,7 @@ Given an algebraic number field, \(K\), the set of principal fractional ideals, 
 
 \bigskip
 
-To define quotient groups, I must first explain cosets.
+To define quotient groups, I first explain cosets.
 
 \bigskip
 
@@ -1313,7 +1420,7 @@ Examples of quotient groups:
 
 \bigskip
 
-In this section, I will outline one way of solving linear congruences of the form \(ax \equiv b \ \textrm{mod} \ m\).
+In this section, I outline one way of solving linear congruences of the form \(ax \equiv b \ \textrm{mod} \ m\).
 
 \bigskip
 
@@ -1349,7 +1456,7 @@ Taking the last equation \(\textrm{mod} \ m\), we have
 
 \bigskip
 
-Therefore \(qd\) is one solution to the congruence relation. However, the congruence \(ax \equiv b \ \textrm{mod} \ m\) has an infinite set of solutions of the form \(k = \mu + \nu n\), where \(\mu\) is \(qd \ \textrm{mod} \ m\), \(\nu = \frac{m}{g}\), and \(n\) ranges over all of \(\mathbb{Z}\). To check these solutions, first note that because \(g = \gcd(a, m)\), \(g\) divides \(a\) and so there exists some \(w \in \mathbb{Z}\) such that \(a = wg\). Then
+Therefore \(qd\) is one solution to the congruence relation. However, the congruence \(ax \equiv b \ \textrm{mod} \ m\) has an infinite set of solutions --- these solutions have the form \(k = \mu + \nu n\), where \(\mu\) is \(qd \ \textrm{mod} \ m\), \(\nu = \frac{m}{g}\), and \(n\) ranges over all of \(\mathbb{Z}\). To check these solutions, first note that because \(g = \gcd(a, m)\), \(g\) divides \(a\) and so there exists some \(w \in \mathbb{Z}\) such that \(a = wg\). Then
 \begin{center}
 \begin{aligned}
 ax &= a(qd + \frac{m}{g} n) \\
@@ -1369,9 +1476,9 @@ The following is an example algorithm for solving a linear congruence of the for
 
 \begin{enumerate}
 \item Use the extended Euclidean algorithm to find \(g\), \(d\), \(e\), where \(g = \gcd(a, m)\) and \(da + em = g\).
-\item Set \(q = \left\lfloor \frac{b}{g} \right\rfloor\), and set \(r = b \ \% \ g\).
+\item Compute \(q = \left\lfloor \frac{b}{g} \right\rfloor\), and set \(r = b \ \% \ g\).
 \item If \(r \ne 0\), return ``The congruence has no solution.'' End algorithm.
-\item Else set \(\mu = \(qd \ \% \ m\), and set \(\nu = \frac{m}{g}\).
+\item Else set \(\mu = \(qd \ \% \ m\), and set \(\nu = \frac{m}{g}\). Return \(\mu\), \(\nu\).
 \end{enumerate}
 
 \bigskip
