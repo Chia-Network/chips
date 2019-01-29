@@ -23,6 +23,7 @@ layout: markdown
 * chip017 -- Blockchain Structure
 * chip018 -- Rewards Chains (POSTPONED)
 * chip019 -- Flyclient support (needs review)
+* chip020 -- Pooling protocol
 
 Take a look at notes/TODO.md to see chips that still need to be created.
 
