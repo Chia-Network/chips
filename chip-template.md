@@ -1,0 +1,76 @@
+---
+CHIP: <Creator should leave this blank. Editor will assign a number.>
+Title: <Keep this succinct. Maximum 44 characters.>
+Description: <A short, single-sentence description of this CHIP. Maximum 140 characters.>
+Author: <Name, along with email or Github address, of each author, separated by a comma. If the author prefers anonimity, user name only may be used. However, at least one author must incldue a Github username, in order to keep up with changes and/or requests.>
+Comments-URI: <Creator should leave this blank. Editor will assign a URI.>
+Status: Draft
+Category: <Standards Track | Process | Informational>
+Sub-Category: <Add according to Category>
+Created: <Date created, using yyyy-mm-dd format (ISO 8601)>
+Dependencies: <Optional, add previous CHIPs that are required for this CHIP, must include a link upon first mention>
+---
+
+This is the template for all CHIPs to use. Please fill it out according to the guidelines laid out in CHIP-0001. The preamble section above must conform to [RFC 822](https://www.ietf.org/rfc/rfc822.txt) standards. All media associated with this CHIP should be added to the `assets/chip-<CHIP number>` folder, which you may create after you receive your CHIP number.
+
+Copy and rename the template file to `chip-<your name>-<your proposal>`, then submit it as a pull request.
+
+Do not modify the following section (IETF RFC Specification), and be sure to follow the standards it lays out.
+
+## IETF RFC Specification
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [IETF RFC 2119](https://www.rfc-archive.org/getrfc?rfc=2119 "Permanent link to RFC 2119").
+
+## Abstract
+Give a single-paragraph description of your proposal. The abstract should stand on its own -- someone who reads it should be able to understand the gist of your propsal without reading anything else.
+
+## Motivation
+Describe why you are creating this proposal. Make sure to include:
+  * What problem are you trying to solve?
+  * How would this proposal benefit Chia's overall ecosystem?
+  * What are the use cases for this proposal?
+  * How technically feasible will this be to implement?
+
+## Backwards Compatibility
+If your proposal has any backwards incompatibilities, you must list them here. Make sure to include:
+  * Which aspects of your proposal are not backwards compatible?
+  * Which alternatives did you consider, and why did you not propose them?
+  * How severe are the incompatibilities introduced?
+  * How does your proposal address these incompatibilities?
+
+## Rationale
+Describe the reasons for designing your features in the way you have proposed. Make sure to include:
+  * Why did you choose your design?
+  * What design decisions did you make?
+  * What alternative designs did you consider?
+
+## Specification
+List the full technical design specification of any new feature you are proposing. This MUST include details of all syntax and semantics required to implement each new feature. When applicable, it MAY include technical diagrams to accompany your design.
+
+## Test Cases
+Most Standards Track proposals will require a suite of test cases, which you may add to the the `assets/chip-<CHIP number>` folder.
+
+Some Process proposals will require test cases, depending on the significance of new features being added.
+
+Informational proposals typically will not require test cases.
+
+Your proposal will have a greater chance of success if you err on the side of including more test cases. Use your best judgement.
+
+## Reference Implementation
+Most Standards Track and some Process proposals also will require a reference implementation to be included. It should be added to the same folder as your test cases, which is the `assets/chip-<CHIP number>` folder.
+
+## Security
+This section is mandatory for all CHIPs. List all considerations relevant to the security of this proposal if it is implemented. This section may be modified as the proposal moves toward consensus. Make sure to include:
+  * Security-related design decisions
+  * Important discussions
+  * Any security-related guidance
+  * All threats and risks, as well as how you are addressing them
+
+## Additional Assets
+Give a listing of files associated with this CHIP. This list will be added upon as the CHIP moves along the process of approval. All new files should be added to the `assets/chip-<CHIP number>` folder, which you may create after you receive your CHIP number. You should link to each individual file here, using relative links.
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
+
