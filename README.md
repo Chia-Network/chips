@@ -1,29 +1,38 @@
----
-layout: markdown
----
+# CHia Improvement Proposals (CHIPS)
 
-## ALL CHIPS ARE IN EARLY DRAFT. THEY ARE A CONCEPTUAL REFERENCE, NOT AN IMPLEMENTATION GUIDE
+This repository contains a list of improvements related to Chia. The complete procedure for proposing and managing a CHIP can be found in [CHIP 1](/CHIPs/chip-0001.md).
 
 ## Chip list
+The rest of this document will contain a summary of all notable CHIPs, organized by status.
 
-* chip003 -- Transaction Format Revision      -- NEEDS REWRITE
-* chip004 -- Revised Block Headers            -- NEEDS DISCUSSION
-* chip005 -- New Script opcodes
-* chip006 -- Cross-input BLS Aggregation      -- NEEDS REWRITE
-* chip007 -- Precursors (Adoptive parents)
-* chip008 -- Reverse BLS
-* chip009 -- UTXO bitfield
-* chip010 -- OP_CHECKINPUTVERIFY & OP_CHECKOUTPUTVERIFY
-* chip011 -- Opcodes to push witness info properties to stack
-* chip012 -- nSequence and relative time lock semantics changes
-* chip013 -- Taproot and Graftroot
-* chip014 -- Non Outsourceability (CANCELLED)
-* chip015 -- Genesis Block
-* chip016 -- Fraud Proofs and Double Block Signing
-* chip017 -- Blockchain Structure
-* chip018 -- Rewards Chains (POSTPONED)
-* chip019 -- Flyclient support (needs review)
-* chip020 -- Pooling protocol
+### Draft
+* chip001 -- CHia Improvement Proposal (CHIP) process
+
+### Review
+* None
+
+### Review (Fast Track)
+* None
+
+### Last Call
+* None
+
+### Final
+* None
+
+### Stagnant
+* None
+
+### Withdrawn
+* None
+
+### Obsolete
+* None
+
+### Living
+* None
+
+-----
 
 Take a look at notes/TODO.md to see chips that still need to be created.
 
