@@ -2,14 +2,6 @@
 
 This repository contains a list of improvements related to Chia. The complete procedure for proposing and managing a CHIP can be found in [CHIP 1](/CHIPs/chip-0001.md).
 
-The following diagram shows the workflow of CHIPs, from Idea to Obsolete.
-
-<figure>
-<img src="/assets/chip0001/CHIPs Flow Chart.png" alt="CHIPs Flow Chart"/>
-<figcaption>
-</figcaption>
-</figure>
-
 ## Chip list
 The rest of this document will contain a summary of all notable CHIPs, organized by status.
 
