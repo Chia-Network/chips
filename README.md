@@ -5,9 +5,8 @@ This repository contains a list of improvements related to Chia. The complete pr
 The following diagram shows the workflow of CHIPs, from Idea to Obsolete.
 
 <figure>
-<img src="/assets/chip0001/CHIPs Flow Chart_no_title.png" alt="CHIPs Flow Chart"/>
+<img src="/assets/chip0001/CHIPs Flow Chart.png" alt="CHIPs Flow Chart"/>
 <figcaption>
-CHIPs Flow Chart
 </figcaption>
 </figure>
 
