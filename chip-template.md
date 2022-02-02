@@ -1,19 +1,18 @@
----
-CHIP: <Creator must leave this blank. Editor will assign a number.>
-Title: <Keep succinct. Maximum 44 characters.>
-Description: <A short, single-sentence description of this CHIP. Maximum 140 characters.>
-Author: <Name, along with email or GitHub address, of each author, separated by a comma.>
-Comments-URI: <Creator must leave this blank. Editor will assign a URI.>
-Status: <Idea | Draft | Review | Last Call | Final | Stagnant | Withdrawn | Obsolete | Living>
-Category: <Standards Track | Process | Informational>
-Sub-Category: <Add according to Category>
-Created: <Date created, using yyyy-mm-dd format (ISO 8601)>
-Requires: <CHIP number(s), (optional)>
-Replaces: <CHIP number, (optional)>
-Superseded-By: <CHIP number (only allowed for Obsolete CHIPS)>
----
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | <Keep succinct. Maximum 44 characters.>
+Description   | <A short, single-sentence description of this CHIP. Maximum 140 characters.>
+Author        | <Name, along with email or GitHub address, of each author, separated by a comma.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | <Idea \| Draft \| Review \| Review (Fast Track) \| Last Call \| Final \| Stagnant \| Withdrawn \| Obsolete \| Living>
+Category      | <Standards Track \| Process \| Informational>
+Sub-Category  | < Add according to Category>
+Created       | <Date created, using yyyy-mm-dd format (ISO 8601)>
+Requires      | <CHIP number(s), (optional)>
+Replaces      | <CHIP number, (optional)>
+Superseded-By | <CHIP number (only allowed for Obsolete CHIPs)>
 
-This is the template for all CHIPs to use. Please fill it out according to the guidelines laid out in CHIP-0001. The preamble section above must conform to [RFC 822](https://www.ietf.org/rfc/rfc822.txt) standards. All media associated with this CHIP should be added to the `assets/chip-<CHIP>` folder, which you may create after you receive your CHIP number.
+This is the template for all CHIPs to use. Please fill it out according to the guidelines laid out in [chip001](/CHIPs/chip-0001.md). The preamble section above must conform to [RFC 822](https://www.ietf.org/rfc/rfc822.txt) standards. All media associated with this CHIP should be added to the `assets/chip-<CHIP>` folder, which you may create after you receive your CHIP number.
 
 Copy and rename the template file to `chip-<your name>-<your proposal>`, then submit it as a pull request.
 
