@@ -2,9 +2,9 @@ CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
 :-------------|:----
 Title         | <Keep succinct. Maximum 44 characters.>
 Description   | <A short, single-sentence description of this CHIP. Maximum 140 characters.>
-Author        | <Name, along with email or GitHub address, of each author, separated by a comma.>
+Author        | <Name, along with Keybase handle or GitHub address, of each author, separated by a comma.>
 Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
-Status        | <Idea \| Draft \| Review \| Review (Fast Track) \| Last Call \| Final \| Stagnant \| Withdrawn \| Obsolete \| Living>
+Status        | < Creator must leave this blank. Editor will assign a status.>
 Category      | <Standards Track \| Process \| Informational>
 Sub-Category  | < Add according to Category>
 Created       | <Date created, using yyyy-mm-dd format (ISO 8601)>
