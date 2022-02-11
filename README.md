@@ -6,7 +6,7 @@ This repository contains a list of improvements related to Chia. The complete pr
 The rest of this document will contain a summary of all notable CHIPs, organized by status.
 
 ### Draft
-* [chip001](/CHIPs/chip-0001.md) -- CHia Improvement Proposal (CHIP) process
+* None
 
 ### Review
 * None
@@ -30,7 +30,7 @@ The rest of this document will contain a summary of all notable CHIPs, organized
 * None
 
 ### Living
-* None
+* [chip001](/CHIPs/chip-0001.md) -- CHia Improvement Proposal (CHIP) process
 
 -----
 
