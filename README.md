@@ -6,7 +6,7 @@ This repository contains a list of improvements related to Chia. The complete pr
 The rest of this document will contain a summary of all notable CHIPs, organized by status.
 
 ### Draft
-* None
+* [chip-0002](https://github.com/Chia-Network/chips/blob/b4dad7c02949a807d96e7d86d7a09312a2c0c020/CHIPs/chip-0002.md) -- dApp protocol
 
 ### Review
 * None
@@ -30,7 +30,7 @@ The rest of this document will contain a summary of all notable CHIPs, organized
 * None
 
 ### Living
-* [chip001](/CHIPs/chip-0001.md) -- CHia Improvement Proposal (CHIP) process
+* [chip-0001](/CHIPs/chip-0001.md) -- CHia Improvement Proposal (CHIP) process
 
 -----
 
