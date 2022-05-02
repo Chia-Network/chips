@@ -12,14 +12,9 @@ Requires      | <CHIP number(s), (optional)>
 Replaces      | <CHIP number, (optional)>
 Superseded-By | <CHIP number (only allowed for Obsolete CHIPs)>
 
-This is the template for all CHIPs to use. Please fill it out according to the guidelines laid out in [chip001](/CHIPs/chip-0001.md). The preamble section above must conform to [RFC 822](https://www.ietf.org/rfc/rfc822.txt) standards. All media associated with this CHIP should be added to the `assets/chip-<CHIP>` folder, which you may create after you receive your CHIP number.
+This is the template for all CHIPs to use. Please fill it out according to the guidelines laid out in [chip001](/CHIPs/chip-0001.md). All media associated with this CHIP should be added to the `assets/chip-<CHIP>` folder, which you may create after you receive your CHIP number.
 
 Copy and rename the template file to `chip-<your name>-<your proposal>`, then submit it as a pull request.
-
-Do not modify the following section (IETF RFC Specification), and be sure to follow the standards it lays out.
-
-## IETF RFC Specification
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [IETF RFC 2119](https://www.rfc-archive.org/getrfc?rfc=2119 "Permanent link to RFC 2119").
 
 ## Abstract
 Give a single-paragraph description of your proposal. The abstract should stand on its own -- someone who reads it should be able to understand the gist of your proposal without reading anything else.
