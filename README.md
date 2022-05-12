@@ -2,7 +2,7 @@
 
 This repository contains a list of improvements related to Chia. The complete procedure for proposing and managing a CHIP can be found in [CHIP 1](/CHIPs/chip-0001.md).
 
-The [CHIP backlog project](https://github.com/Chia-Network/chips/projects/1) provides the list of on-going CHIP and their status. 
+The [CHIPs backlog project](https://github.com/Chia-Network/chips/projects/1) provides the list of on-going CHIP and their status. 
 
 ## CHIP list
 The rest of this document is a summary of all notable CHIPs, organized by status.
