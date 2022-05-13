@@ -4,6 +4,23 @@ This repository contains a list of improvements related to Chia. The complete pr
 
 The [CHIPs backlog project](https://github.com/Chia-Network/chips/projects/1) provides the list of on-going proposals and their status. 
 
+## Meetings 
+**Purpose:**
+
+The CHIPS Community meetings provide a forum for the community to gather and discuss CHIPS proposals and support each other in building a secure, sustainable, and compliant blockchain technology. 
+
+**Agenda:**
+
+The agenda of each meeting should focus on the CHIPS proposals, and it should include two main topics: 
+Author to present the CHIP
+Feedback and discussion
+
+**Logistics**
+- The meeting information will be tracked with GitHub issues and project. 
+- The agenda should be published two weeks before the actual meeting to give the community ample time to suggest agenda items or post questions about the CHIP. 
+- The CHIPS presenter is responsible for taking the notes and feedback from the call as the call is mainly to create a space for the others to get initial feedback from the community. And send PR named chips-<CHIPS NUMBER>-meeting.md to /note.
+
+
 ## CHIP list
 The rest of this document is a summary of all notable CHIPs, organized by status.
 
