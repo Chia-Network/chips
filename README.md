@@ -16,7 +16,7 @@ Author to present the CHIP
 Feedback and discussion
 
 **Logistics**
-- The meeting information will be tracked with GitHub issues and project. 
+- The meeting information will be tracked with GitHub [project](https://github.com/Chia-Network/chips/projects/2). 
 - The agenda should be published two weeks before the actual meeting to give the community ample time to suggest agenda items or post questions about the CHIP. 
 - The CHIPS presenter is responsible for taking the notes and feedback from the call as the call is mainly to create a space for the others to get initial feedback from the community. And send PR named chips-<CHIPS NUMBER>-meeting.md to /note.
 
