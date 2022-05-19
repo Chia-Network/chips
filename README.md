@@ -12,8 +12,8 @@ The CHIPS community meetings provide a forum for the community to gather and dis
 **Agenda:**
 
 The agenda of each meeting should focus on the CHIPS proposals, and it should include two main topics: 
-Author to present the CHIP
-Feedback and discussion
+- Author to present the CHIP
+- Feedback and discussion
 
 **Logistics**
 - The meeting information will be tracked with GitHub [project](https://github.com/Chia-Network/dev-community-meetings/projects/1). 
