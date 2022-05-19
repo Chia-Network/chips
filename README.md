@@ -7,7 +7,7 @@ The [CHIPs backlog project](https://github.com/Chia-Network/chips/projects/1) pr
 ## Meetings 
 **Purpose:**
 
-The CHIPS Community meetings provide a forum for the community to gather and discuss CHIPS proposals and support each other in building a secure, sustainable, and compliant blockchain technology. 
+The CHIPS community meetings provide a forum for the community to gather and discuss CHIPS proposals and support each other in building a secure, sustainable, and compliant blockchain technology. 
 
 **Agenda:**
 
