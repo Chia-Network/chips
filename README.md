@@ -1,17 +1,17 @@
-# CHia Improvement Proposals (CHIPS)
+# CHia Improvement Proposals (CHIPs)
 
 This repository contains a list of improvements related to Chia. The complete procedure for proposing and managing a CHIP can be found in [CHIP 1](/CHIPs/chip-0001.md).
 
 The [CHIPs backlog project](https://github.com/Chia-Network/chips/projects/1) provides the list of on-going proposals and their status. 
 
-## Meetings 
+## Meetings
 **Purpose:**
 
-The CHIPS community meetings provide a forum for the community to gather and discuss CHIPS proposals and support each other in building a secure, sustainable, and compliant blockchain technology. 
+The CHIPs community meetings provide a forum for the community to gather and discuss CHIPs proposals and support each other in building a secure, sustainable, and compliant blockchain technology. 
 
 **Agenda:**
 
-The agenda of each meeting should focus on the CHIPS proposals, and it should include two main topics: 
+The agenda of each meeting should focus on the CHIPs proposals, and it should include two main topics: 
 - Author to present the CHIP
 - Feedback and discussion
 
@@ -54,9 +54,11 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 -----
 
-Take a look at notes/TODO.md to see chips that still need to be created.
+Take a look at [notes/TODO.md](/notes/TODO.md) to see CHIPs that still need to be created.
 
-To view these chips in pretty rendered markdown in your browser, type:
+To view these CHIPs in pretty rendered Markdown in your browser, type:
 
+```
 gem install bundler jekyll
 jekyll serve
+```
