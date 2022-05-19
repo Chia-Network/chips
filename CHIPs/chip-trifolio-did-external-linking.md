@@ -74,7 +74,7 @@ Upon successful request, the following response payload will be used:
         {
             "direction": 2, // direction of link
             "verified": true // whether or not the link is verified
-			"didTip": "0x43c3cad3fab37959f773dac28cd59867bfc9aea507ddfdd30aa2fe64c15fb9f2" // (Optional) the singleton tip of the DID for which verification is guaranteed up until
+	    "didTip": "0x43c3cad3fab37959f773dac28cd59867bfc9aea507ddfdd30aa2fe64c15fb9f2" // (Optional) the singleton tip of the DID for which verification is guaranteed up until
         }
 ```
 
