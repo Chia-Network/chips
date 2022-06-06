@@ -1,0 +1,409 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | NFT1 Standard
+Description   | A standard for implementing non-fungible tokens (NFTs) on Chia's blockchain
+Author        | [todo]
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Chialisp
+Created       | 2022-06-05
+Requires      | 0002, [Singleton Standard](https://chialisp.com/docs/puzzles/singletons "Chia's Singleton Standard (pre-CHIP)"), [Offer Standard](https://chialisp.com/docs/puzzles/offers "Chia's Offer Standard (pre-CHIP)")
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+Non-Fungible Tokens (NFTs) are unique assets that can be bought, sold and exchanged online. NFT1 is the first standard to enable NFTs on Chia's blockchain. This standard prioritizes independence from marketplaces, strong provenance and digital permanence. It optionally incorporates Chia Decentralized Identifiers (DIDs), as well as cryptographically verifiable royalties, built into the tokens themselves.
+
+## Definitions
+Throughout this document, we'll use the following terms:
+* **Minter** -- The person or entity who creates an NFT. This could be the original artist or someone working on their behalf. Once an NFT has been created, its Minter never changes
+* **Owner** -- The person or entity who currently controls an NFT. This could be either the Minter or someone who has purchased the NFT. An NFT's Owner changes each time it is transferred
+* **DIDs** – Decentralized IDentifiers. On Chia’s blockchain, these enable on-chain proof of identity
+* **Must, required, shall** – These words indicate an absolute requirement of the specification
+* **Must not, shall not** – These phrases indicate an absolute prohibition of the specification
+* **Should, recommended** – These words indicate something that is not a requirement of the specification, but the implications of not following it should be carefully considered beforehand
+* **Should not, not recommended** – These phrases indicate something that is not a prohibition of the specification, but the implications of following it should be carefully considered beforehand
+* **May** - This word indicates something that is optional. Interoperability between implementations must not be broken because of the choice to implement, or not to implement, this feature
+
+## Motivation
+As NFTs have grown in popularity on other blockchains, several common issues with their designs have been exposed. On most blockchains:
+* Royalties are settled off-chain. This typically requires trust in the centralized marketplace on which an NFT exists. For example:
+  * [Royalties not included in ERC-721](https://medium.com/charged-particles/nft-royalties-essential-or-afterthought-e0f3f9a0b2c0)
+  * [NFT sales skirt royalties](https://www.wired.com/story/nfts-dont-work-the-way-you-think-they-do/)
+  * [Users swap NFTs to avoid paying royalties](https://www.yahoo.com/video/nft-collectors-now-trading-nfts-151339088.html)
+* NFTs only use a URL link to prove ownership. If a malicious actor changes the link, the NFT also changes. If the link is broken, the NFT disappears. For example:
+  * [$11 million NFT album missing](https://decrypt.co/62037/missing-or-stolen-nfts-how-to-protect)
+  * [Several famous artists’ NFTs have gone missing](https://www.theverge.com/2021/3/25/22349242/nft-metadata-explained-art-crypto-urls-links-ipfs)
+  * [NFTs don’t contain a data hash](https://moxie.org/2022/01/07/web3-first-impressions.html)
+* NFT fraud is rampant -- it's easy for someone to copy artwork and mint their own NFTs, posing as the original artist. For example:
+  * [NFTs are easily copied](https://edition.cnn.com/2021/03/30/tech/nft-hacking-theft-environment-concerns/index.html)
+* Provenance is difficult, if not impossible, to trace. For example:
+  * [Artists fight against forgeries](https://www.theverge.com/22905295/counterfeit-nft-artist-ripoffs-opensea-deviantart)
+
+Chia NFTs solve all of these problems. They focus on three key features:
+* **Independence**
+  * An NFT may be custodied by an individual, a group or a marketplace
+  * Custody of an NFT may be transferred between individuals, groups and marketplaces
+  * An NFT's Minter may require the use of a DID instead of an XCH address. If the Minter chooses to require a DID, then the NFT must always have a DID associated with it
+  * The Minter may define a permanent royalty structure, embedded into the NFT
+  * The Minter may define one address to be the recipient of royalty payments. This address may correspond to a smart coin with any functionality that Chialisp is capable of providing
+    * For example, the receive address may be a singleton that pays half of the royalty to the Minter and half to a specific charity
+  * Offers to purchase an NFT may be made on a marketplace. They also may come from an individual user, using a Chia wallet or a third-party wallet
+
+* **Provenance**
+  * Each NFT may be owned by one DID, based on Chia's DID1 Standard
+  * If an NFT is minted using a DID, then the NFT's provenance must be traceable to the DID of the NFT's Minter
+  
+* **Permanence**
+  * Required: 3 URI lists must be included with each NFT, which map to:
+    1. The NFT's main content
+    2. The NFT's metadata
+    3. The NFT's licensing and legal requirements
+  * The Owner may append links as needed; the Owner may not remove links
+  * Upon minting an NFT, a SHA-256 hash of the file being linked to shall be embedded within the NFT itself. This gives a permanent way to verify the NFT's contents, even if each of the links is broken
+
+Other features:
+  * **Edition numbers:** These may be embedded upon an NFT's minting. This is not a way to guarantee provenance, but NFT Minters and/or Owners can use the edition number for tracking purposes. An NFT may have an edition number, regardless of whether it is part of a collection
+  * **Collections:** Each NFT that is part of a collection should be assigned a unique number, such as "Number 25 of 100 minted." This may be added upon minting. It also may be added later, for example if the Owner of several individual NFTs decides that they should be grouped together as a set
+  * **Offers:** Any combination of XCH, CATs and NFTs may be bought, sold and traded using offers
+  * **Marketplace custody:** With the Owner's consent, central marketplaces may custody an Owner's NFT(s). This consent may not be withdrawn once given. The owner must trust the marketplace to return the NFT upon request
+  * **Marketplace payments:** Owners may also sell their NFTs on a central marketplace. It is optional for the marketplace on which the NFT is sold to include their own fees with the sale. These fees exist outside of the NFTs themselves and should be enforced through Offers
+  * **Auditability:** NFT sales shall be recorded on Chia's public blockchain. The NFT's metadata shall be discoverable by blockchain explorers. This enables data analytics, tax accounting, and airdrops of XCH, CATS and NFTs. In addition to the normal information available with each transaction, the on-chain metadata must include:
+    * The DIDs of the buyer and seller (where applicable)
+    * The NFT's file hash
+    * All links associated with the NFT
+
+Use cases for Chia NFTs include, but are not limited to:
+* Selling artwork with permanent built-in royalties
+* Maintaining a cryptographically verifiable provenance for digital or physical assets
+* Reducing the fraudulent sale, or outright theft, of artwork
+* Transferring digital assets between marketplaces
+* Creating a permanent method to verify a digital asset's originality
+* Storing metadata for an asset permanently
+
+## Backwards Compatibility
+NFT1 does not introduce any breaking changes to Chia.
+
+## Rationale
+We chose the design for NFT1 because it significantly improves upon existing NFTs. For the first time, NFTs will be available to be minted, purchased, sold and exchanged on a decentralized network. We included Offers to obviate the need for intermediaries and centralized custodians. The incorporation of DIDs will ensure strong provenance. By using multiple links and hashes, we'll increase the likelihood of digital permanence.
+
+Despite all of these advantages, NFT1 will likely only be the first NFT spec on Chia's blockchain. The rest of this section will detail the design decisions made for NFT1.
+
+### Design decisions
+* Each NFT may be owned by exactly one DID, based on Chia's DID1 Standard
+* The Minter may limit who can own the NFT by including a demand that any recipient present a DID. For the Transfer Program included in this CHIP, there are no restrictions on what that DID may be
+* NFT Owners must be able to view a list of NFTs they own. This includes both ownership scenarios for NFTs – those owned by a DID, and those owned by an XCH address
+* The Minter must include a Transfer Program with the NFT upon its minting. This program sets the standard governing how the NFT will be transferred throughout its life. The Transfer Program may not be modified after the NFT's minting
+* NFTs must support transaction fees upon gifting, selling, transferring or swapping NFTs. These fees are paid to Chia's farmers and are completely separate from royalty payments
+* Wallets that implement NFT1 must automatically discover new NFTs owned by the wallet’s owner – whether via a DID or an XCH address – and add them to the wallet
+* Users of wallets that implement NFT1 must be able to view a gallery of the NFTs they own
+* Users of wallets that implement NFT1 must be able to view the metadata and license information for all NFTs they own
+* NFT1 NFTs must be image files. The only supported types are jpg, gif, png and svg
+
+A Transfer Program may contain a wide variety of functionality. NFT1 will ship with one recommended Transfer Program, which allows the following types of transfer:
+
+#### Selling an NFT
+NFTs may be sold for XCH and/or CATs. NFT Owners are recommended to use Offers in order to facilitate the trustless peer-to-peer sale of NFTs. The Offer must contain sufficient XCH to cover the royalty price, as dictated within the NFT itself.
+
+Each time an NFT is sold, each of the following shall be made discoverable by blockchain explorers:
+* ID of the NFT being sold
+* Seller's DID (where applicable)
+* Buyer's DID (where applicable). However, because the NFT is not assigned to the buyer’s DID until the next time the coin moves, the most recent Owner might not be visible to blockchain explorers
+* Sale price
+* Royalty payment(s)
+
+#### Gifting an NFT
+* Optional: Upon minting an NFT, the Minter may allow Owners to gift the NFT. This feature must be enabled by allowing zero-royalty transfers in the Transfer Program
+* If gifting is allowed, then in order for the transfer to be considered a gift:
+  * The current Owner must send the NFT with a royalty payment of zero to the new Owner
+  * The current Owner must send the NFT using a wallet that supports NFTs
+  * The current Owner must not send the NFT using an Offer
+* When an NFT is gifted, each of the following shall be made discoverable by blockchain explorers:
+  * ID of the NFT being gifted
+  * Sender's DID (where applicable)
+  * Receiver's DID (where applicable). However, because the NFT is not assigned to the receiver’s DID until the next time the coin moves, the most recent Owner might not be visible to blockchain explorers
+  * Zero sale price
+  * Zero royalty
+
+#### Swapping NFTs
+* One or more NFT(s) may be swapped for one or more NFT(s)
+* NFT Minters must choose one of three Transfer Program options regarding royalty payments during an NFT-for-NFT swap:
+  1. Royalties must be zero for all swaps
+  2. Royalties are required. They must not be zero
+  3. Royalties are optional. They may be zero or greater
+* When NFTs are swapped, each of the following shall be made discoverable by blockchain explorers:
+  * IDs of all NFTs being swapped
+  * Sender's DID (where applicable)
+  * Receiver's DID (where applicable). However, because the NFT is not assigned to the receiver’s DID until the next time the coin moves, the most recent Owner might not be visible to blockchain explorers
+  * Zero sale price
+  * Royalty payment(s) when applicable
+
+#### Transferring NFTs
+* An NFT's owner may transfer their NFT to a DID or XCH address that they own.
+* When an NFT is transferred, each of the following shall be made discoverable by blockchain explorers:
+  * ID of the NFT being transferred
+  * Sender's DID (where applicable)
+  * Receiver's DID (where applicable)
+  * Zero sale price
+  * Zero royalty
+
+## Specification
+
+### NFT Structure
+Each NFT that follows the NFT1 standard is required to be implemented as a singleton. Because of this, users are required to spend a minimum of 1 mojo to create an NFT.
+
+Each NFT must contain the following information:
+* **NFT Address:** An NFT's ID shall be its launcher, which is a bech32-encoded address with a prefix of "nft"
+* **Minter's DID:** If a DID was used in this NFT's minting, then the Minter’s DID shall be discoverable by blockchain explorers
+* **Data URI list:** A list of URIs that map to the NFT's main content
+  * This list shall be stored as bytes, which may be encoded in any format
+  * This list must contain at least one URI
+  * The Owner optionally may prepend to this list, such that the newest URI will always be the list’s first element. The Owner shall not shorten or remove the list
+  * Each URI may be a:
+    * Decentralized storage link, such as IPFS, Arweave, Storj, etc
+    * Web URL
+  * Upon the NFT's minting, the content of the first item in this list must hash to the Data Hash (defined below)
+* **Metadata URI list:** A list of URIs that map to the NFT's metadata
+  * This list shall be stored as bytes, which may be encoded in any format
+  * This list must contain at least one URI
+  * The Owner optionally may append to this list, but they shall not shorten or remove it
+  * This list must be curried into the NFT's puzzle
+  * Upon the NFT's minting and sale, the content of the first item in this list must hash to the Metadata Hash (defined below)
+  * The following JSON fields shall be used, unless indicated otherwise:
+    * **name**
+    * **description**
+    * **collection (optional)**
+      * "name" is the name of the collection
+      * "id" is the string identifier of the collection
+    * **attributes**
+      * contains zero or more key/value pairs
+      * "trait_type" is the name of the trait
+      * "value" can be either a number or a string
+      * "min_value" (optional). This sets a floor for a numerical trait’s possible values. It may not be used for string values
+      * "max_value" is (optional). This sets a ceiling for a numerical trait's possible values. It may not be used for string values
+    * The following JSON format is required (other than recommended and optional fields):
+     ```json
+      {
+        "name": "This is the name of the NFT",
+        "description": "This is a human-readable description for the NFT",
+        "collection_name": "The human-readable name of the collection",
+        "collection_id": "A sha256 hash that should be the same for every NFT that is part of the same collection",
+        "attributes": [
+          {
+            "trait_type": "Sample type 1",
+            "value": 9.5
+          },
+          {
+            "trait_type": "Sample type 2",
+            "value": "Sample string value"
+          },
+          {
+            "trait_type": "Sample type 3",
+            "value": 10,
+            "min_value": 4
+            "max_value": 11
+          }
+        ]
+      }
+      ```
+  * **License URI list:** A list of URIs that map to the NFT's licensing and legal requirements
+    * This list shall be stored as bytes, which may be encoded in any format
+    * This list must contain at least one URI
+    * The Owner optionally may append to this list, but they shall not shorten or remove it
+    * Upon the NFT's minting, the content of the first item in this list must hash to the the License Hash (defined below)
+  * **Data Hash:** The SHA-256 hash of the NFT’s content. For example, if the NFT is a .jpeg file, then the Data Hash is the hash of that file. Upon the NFT's minting, this hash must match the hash of the content of the first item of the Data URI list (defined above). This hash shall not be modified after the NFT's minting
+  * **Metadata Hash:** A SHA-256 hash of the contents of the first item of the Metadata URI list. The Owner may modify this hash
+  * **License Hash:** A SHA-256 hash of the contents of the first item of the License URI list. The Transfer program shall dictate whether this hash may be modified after the NFT's minting
+  * **Royalty structure:** This must be created upon minting, with the following options
+    * Royalties may be disabled
+    * If royalties are enabled, the NFT must contain a list of one or more royalty recipients and percentages. The royalty percentage is represented by an unsigned int with the three least significant digits representing values past the decimal point. For example, a royalty of 1575 would equal 1.575%
+    * Each royalty recipient must be either an XCH address or a DID
+  * **Edition information:**
+    * Each NFT must contain an edition number
+    * Each NFT may contain an edition's total count
+  * **Transfer Program:** Required for all NFTs, explained in detail in the next section
+
+The JSON response coming from the RPC endpoint shall be formatted as
+```json
+{
+  "data_url": ["https://..."],
+  "data_hash": "...",
+  "metadata_url": ["https://..."],
+  "metadata_hash": "...",
+  "license_url": ["https://..."],
+  "license_hash": "...",
+  "edition_number": 1,
+  "edition_count": 1
+}
+```
+
+All values are required, other than edition_count, which is optional and may be null.
+
+### Transfer Program
+A Transfer program is required for all NFTs. This program sets the rules of transferring an NFT’s ownership and DID information. The Minter shall set the Transfer Program by currying its tree hash into NFT's inner puzzle.
+
+NFT1 will ship with one example [Transfer Program](https://github.com/Chia-Network/chia-blockchain/blob/main_dids/chia/wallet/puzzles/nft_transfer_program.clvm), which is recommended for Minters to use. In this Transfer Program:
+
+  * Royalties may be directed to an XCH address. This address is derived from the puzzlehash of any Chialisp puzzle
+  * The Minter may choose to allow royalty-free transfers by leaving trade_price_list empty
+  * The NFT may be swapped for one or more NFTs
+  * The solution may include a list of trade prices, which must be signed by both parties
+
+### Metadata Updater
+This puzzle prepends to the list of rules governing an NFT’s metadata. The minter may set this list to anything. It is located in GitHub, under [https://github.com/Chia-Network/chia-blockchain/blob/main_dids/chia/wallet/puzzles/nft_metadata_updater.clvm](https://github.com/Chia-Network/chia-blockchain/blob/main_dids/chia/wallet/puzzles/nft_metadata_updater.clvm).
+
+The metadata updater program can also update itself by using this puzzle:
+[https://github.com/Chia-Network/chia-blockchain/blob/nft1_ownership_layer/chia/wallet/puzzles/nft_metadata_updater_updateable.clvm](https://github.com/Chia-Network/chia-blockchain/blob/nft1_ownership_layer/chia/wallet/puzzles/nft_metadata_updater_updateable.clvm)
+
+### Inner Puzzle
+This puzzle defines the primary characteristics of the NFT. It is located in GitHub, under [https://github.com/Chia-Network/chia-blockchain/blob/release/1.4.0/chia/wallet/puzzles/nft_state_layer.clvm](https://github.com/Chia-Network/chia-blockchain/blob/release/1.4.0/chia/wallet/puzzles/nft_state_layer.clvm).
+
+### Offer 2.0
+The NFT1 standard includes Offer 2.0, which builds on top of the [Offer 1.0 standard](https://chialisp.com/docs/puzzles/offers) to enable the buying, selling and trading of XCH, CATs and NFTs.
+
+Offer 2.0 is backward compatible with Offer 1.0. Therefore, all wallets that implement NFT1 must allow all functionality included with Offer 1.0. Additionally, these wallets must allow the following functionality, organized by the offers’ Makers and Takers:
+
+**Makers**
+* May include any combination of XCH, CATs and NFTs with the offer. This includes the assets being offered, as well as the assets they will be exchanged for
+* Must be shown all royalties associated with all NFTs being offered
+* Must specify the NFT ID of any NFTs they want to offer
+* Must be shown a visual image of all NFTs they are offering to send and receive
+* May see their Open and Accepted NFT offers, including the creation date of all offers
+
+**Takers**
+* Must be shown all royalties associated with all NFTs being offered
+* Must be shown a visual image of any NFTs they will send and receive in the offer
+* May see their Open and Accepted NFT offers, including creation date of all offers
+
+### RPC Calls
+
+#### nft_mint_nft
+
+Functionality: Mint a new NFT
+
+Usage: chia rpc wallet [OPTIONS] nft_mint_nft [REQUEST]
+
+Options:
+
+| Short Command | Long Command | Type | Required | Description |
+|:--------------|:-------------|:-----|:---------|:------------|
+| -j            | --json-file  | TEXT | False    | Instead of REQUEST, provide a json file containing the request data |
+| -h            | --help       | None | False    | Show a help message and exit
+
+Request Parameters:
+
+| Parameter         | Required | Description |
+|:------------------|:---------|:------------|
+| wallet_id         | True     | The Wallet ID in which to mint an NFT |
+| uris              | True     | A list of URIs to mark the location(s) of the NFT |
+| meta_uris         | True     | A list of URIs to mark the location(s) of the NFT’s metadata |
+| license_uris      | True     | A list of URIs to mark the location(s) of the NFT’s license
+| hash              | True     | The hash of the NFT. This should use sha256 for proper verification against the URI list
+| artist_percentage | False    | The royalty that will go to the original artist each time the NFT is sold. The percentage is multiplied by 100 -- for example, to set a 15% royalty, set this value to 1500. The default value is 0
+| royalty_address   | False    | The wallet address of the NFT’s artist. This is where royalties will be sent. It could be either an XCH address or a DID address
+| target_address    | False    | The wallet address of the initial owner of the NFT. This may be the same as the royalty address
+| series_number     | False    | If this NFT is part of a series, then this indicates the number/sequence of this NFT in the series
+| series_total      | False    | If this NFT is part of a series, then this indicates the total number of NFTs in the series
+| fee               | False    | The one-time blockchain fee to be used upon minting the NFT
+
+#### nft_get_nfts
+
+Functionality: Show all NFTs in a given wallet
+
+Usage: chia rpc wallet [OPTIONS] nft_get_nfts [REQUEST]
+
+Options:
+
+| Short Command | Long Command | Type | Required | Description |
+|:--------------|:-------------|:-----|:---------|:------------|
+| -j            | --json-file  | TEXT | False    | Instead of REQUEST, provide a json file containing the request data |
+| -h            | --help       | None | False    | Show a help message and exit
+
+Request Parameters:
+
+| Parameter | Required | Description |
+|:----------|:---------|:------------|
+| wallet_id | True     | The Wallet ID from which to retrieve the NFTs |
+
+#### nft_transfer_nft
+
+Functionality: Transfer an NFT to a new wallet address
+
+Usage: chia rpc wallet [OPTIONS] nft_transfer_nft [REQUEST]
+
+Options:
+
+| Short Command | Long Command | Type | Required | Description |
+|:--------------|:-------------|:-----|:---------|:------------|
+| -j            | --json-file  | TEXT | False    | Instead of REQUEST, provide a json file containing the request data |
+| -h            | --help       | None | False    | Show a help message and exit
+
+Request Parameters:
+
+| Parameter      | Required | Description |
+|:---------------|:---------|:------------|
+| wallet_id      | True     | The Wallet ID of the NFT to transfer |
+| target_address | True     | The address to transfer the NFT to. For NFT0 this must be an XCH address. For NFT1 this could also be a DID address |
+| nft_coin_id    | True     | The coin ID of the NFT to transfer
+
+#### nft_get_info
+
+Functionality: Get info about an NFT
+
+Usage: chia rpc wallet [OPTIONS] nft_get_info [REQUEST]
+
+Options:
+
+| Short Command | Long Command | Type | Required | Description |
+|:--------------|:-------------|:-----|:---------|:------------|
+| -j            | --json-file  | TEXT | False    | Instead of REQUEST, provide a json file containing the request data |
+| -h            | --help       | None | False    | Show a help message and exit
+
+Request Parameters:
+
+Request Parameters:
+
+| Parameter      | Required | Description |
+|:---------------|:---------|:------------|
+| wallet_id      | True     | The Wallet ID of the NFT from which to retrieve info |
+| nft_coin_id    | True     | The coin ID of the NFT about which to retrieve info |
+
+#### nft_add_uri
+
+Functionality: Add a new URI to the location URI list
+
+Usage: chia rpc wallet [OPTIONS] nft_add_uri [REQUEST]
+
+Options:
+
+| Short Command | Long Command | Type | Required | Description |
+|:--------------|:-------------|:-----|:---------|:------------|
+| -j            | --json-file  | TEXT | False    | Instead of REQUEST, provide a json file containing the request data |
+| -h            | --help       | None | False    | Show a help message and exit
+
+Request Parameters:
+
+Request Parameters:
+
+| Parameter      | Required | Description |
+|:---------------|:---------|:------------|
+| wallet_id      | True     | The Wallet ID of the DID wallet to transfer |
+| nft_coin_id    | True     | The coin ID of the NFT on which to add a URI |
+
+## Test Cases
+Test cases for Chia NFTs are located in the main_dids branch of the chia-blockchain GitHub repository, in the /tests/wallet/nft_wallet folder:
+* [test_nft_clvm.py](https://github.com/Chia-Network/chia-blockchain/blob/main_dids/tests/wallet/nft_wallet/test_nft_clvm.py)
+* [test_nft_wallet.py](https://github.com/Chia-Network/chia-blockchain/blob/main_dids/tests/wallet/nft_wallet/test_nft_wallet.py)
+  
+Note: The main_dids branch will eventually be merged into main
+
+## Reference Implementation
+The reference implementation for Chia NFTs is located in the main_dids branch of the chia-blockchain GitHub repository, under [chia/wallet/nft_wallet](https://github.com/Chia-Network/chia-blockchain/tree/main_dids/chia/wallet/nft_wallet).
+
+## Security
+[A security review is currently being conducted, the results of which will be posted here]
+
+## Additional Assets
+[Additional diagrams or assets not already referenced should be listed here]
