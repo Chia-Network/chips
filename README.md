@@ -24,19 +24,23 @@ The agenda of each meeting should focus on the CHIPs proposals, and it should in
 The rest of this document is a summary of all notable CHIPs, organized by status.
 
 ### Living
-* [chip-0001](/CHIPs/chip-0001.md) -- CHia Improvement Proposal (CHIP) process
+* [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 
 ### Draft
-* [chip-0002](https://github.com/Chia-Network/chips/blob/b4dad7c02949a807d96e7d86d7a09312a2c0c020/CHIPs/chip-0002.md) -- dApp protocol
+* [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
 
-* [chip-0003](https://github.com/Chia-Network/chips/blob/9baab1dc92e4819d016f27bab8311de1ce2acc77/CHIPs/chip-0003.md) -- minimum fee
+* [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
+
+* [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
 
 ### Review
 * None
 
 ### Review (Fast Track)
-* None
+* [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
+
+* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
 
 ### Last Call
 * None
