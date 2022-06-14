@@ -1,14 +1,14 @@
-CHIP Number   | .
+CHIP Number   | 0006
 :-------------|:----
 Title         | DID External Identity Linking Specification
 Description   | A proposal for adding external identity linking integration into the Chia DID specification
 Author        | [Daniel Desiderio](https://github.com/ddesiderio) (Trifolio, Inc.)
-Comments-URI  | .
+Comments-URI  |  [https://github.com/Chia-Network/chips/pull/12](https://github.com/Chia-Network/chips/pull/12)
 Status        | Draft
 Category      | Standards Track
 Sub-Category  | Interface
 Created       | 2022-05-14
-Requires      | None
+Requires      | 0004
 Replaces      | None
 Superseded-By | None
 
