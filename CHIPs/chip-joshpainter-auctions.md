@@ -13,7 +13,7 @@ Replaces      | none
 Superseded-By | none
 
 ## Abstract
-Auction is one of the oldest methods of negotiating the exchange of goods and commodities between buyers and sellers. As early as 500 BC, Babylonians held annual auctions for attractive maidens who had reached marrying age. Ancient Greeks and Romans would auction off their spoils of battle to gain treasure for the war effort. Romans also used auctions to liquidate assets and pay off debt. Surprisingly, the entire Roman Empire was put up for auction on March 28th, 193 AD by the Praetorian Guard and purchased by Didius Julianus! Although it couldn't be built in a day, apparently Rome could at least be *purchased* within that timeframe. More recently, the Internet has enabled a massive new market for online auctions. Starting with eBay in 1995 and growing every year, online auctions continue to be an important method for trading assets to this day.
+Auction is one of the oldest methods of negotiating the exchange of goods and commodities between buyers and sellers. As early as 500 BC, Babylonians held annual auctions for attractive maidens who had reached marrying age*. Ancient Greeks and Romans would auction off their spoils of battle to gain treasure for the war effort. Romans also used auctions to liquidate assets and pay off debt. Surprisingly, the entire Roman Empire was put up for auction on March 28th, 193 AD by the Praetorian Guard and purchased by Didius Julianus! Although it couldn't be built in a day, apparently Rome could at least be *purchased* within that timeframe. More recently, the Internet has enabled a massive new market for online auctions. Starting with eBay in 1995 and growing every year, online auctions continue to be an important method for trading assets to this day.
 
 However, even with all this history, auctions still have unsolved risks for the buyer, the seller, and especially the auction house holding the auction itself. The Chia blockchain, along with the coinset model and Chialisp, brings about new and unique opportunities to improve on this millenia-old practice and eliminate risk for all parties. This document will explore the counterparty risks and issues with modern-day auction. It will then propose high-level solutions to these problems using puzzles created in Chialisp and executed directly on the Chia blockchain. Finally, it will recommend detailed specifications that can be used to build these Chialisp puzzles to enable these solutions.
 
@@ -94,6 +94,9 @@ IMPLEMENTING...
 ## Security
 SECURING...
 
+## Community Feedback
+6/15/2022: Twitter user @Engarneering suggested removing the historical fact about Babylonian auctions from the Abstract because "I mean, really??" This has been taken under advisement and in the meantime, a footnote has been added to the offending sentence.
+
 ## Terminology
 This section describes common auction terminology for which the reader might not be familiar. Even more detailed information, including terminology, history and descriptions of different auction types can be found at https://en.wikipedia.org/wiki/Auction. The terms below are a subset of those found at the preceding link.
 
@@ -120,3 +123,6 @@ NONE YET...
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+## Footnotes
+* Relaying historical fact of first recorded auction does not mean author endorses such auctions.
