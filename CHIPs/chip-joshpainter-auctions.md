@@ -44,10 +44,46 @@ Although there are many auction variations, this proposal will focus on the use-
   This type of auction is also known as a "descending price auction" and it is well-suited for commmodities or lots of the same asset, including CATs. It begins with a high asking price and is successively lowered by the bid increment until a bidder is willing to pay it. The bidder may request any quantity of lots of the item at that bid price. If there are remaining lots of the asset left after the high bidder declares their lot quantity selection, the auction continues until another bidder is willing to pay the descending bid price. That second-highest bidder is also allowed to choose the quantity of lots that they desire, and the auction will continue on until the quantity of lots of the asset is exhausted or the minimum bid amount is met and no more bids are received.
 
 ## Conceptual Design
-CONCEPTUALIZING...
+An auction on the Chia blockchain will be represented by a singleton that wraps an asset, represented by an inner puzzle. A single-lot auction wraps an asset that represents a single unique item, such as an NFT. A multi-lot auction wraps an asset that represents multiple amounts of the same item, such as a CAT.
+
+The auction singleton puzzle will include several parameters that allow customization of the auction event itself. Bidders must follow all rules and parameters set by the auctioneer.
+
+The seller may not be the same entity as the auctioneer. This differentiation allows commissions and/or buyer's premiums to be paid to the auction house to cover promotion, marketing and any other expenses incurred for the real-world execution of the auction. Of course, the seller may also hold the auction on their own behalf.
+
+A normal real-world auction does not settle until after it has closed, which introduces all of the counterparty risks mentioned above. But by using a unique and novel auction protocol, we can completely "settle" each high bid as it happens in real-time. For *every successful high bid* the asset immediately trades ownership and all bid payments, commissions and fees are sent and confirmed at the same time. This means that an auction running on Chia blockchain does not have *any* of the counter-party risks mentioned above. Because the high bid itself actually contains the payment transactions, it is not necessary to trust that either party will follow through with the agreed-upon sale after the auction has concluded. When a high-bidder successfully makes a high bid, the seller has been paid and the high-bidder now officially owns the asset. The only reason they will not hold the asset at the end of the auction is if another high-bidder successfully "steals" it from them by bidding higher. Of course, the original high-bidder then can "steal" it back, and so on. But if no other bidding action happens after a successful high bid, the auction will close and the high-bidder can then claim the wrapped asset.
+
+This concept is easy to understand for the first successful high bid. The high bidder actually sends their high bid amount to the seller as a normal transaction. The high bidder may also be required to send an additional buyer's premium fee and/or commission fees to the auctioneer, depending on the settings chosen when the auction singleton is minted.
+
+However, the second and subsequent successful high bids work quite differently. The new high bidder will first reimburse the current high bidder for their current high bid and commission fees via a normal transaction. The current high bidder is now "whole" and loses the ownership of the asset contained within the auction singleton. Ownership is now transferred to the new high bidder. The difference between the new high bid and the current high bid is sent to the seller, along with any required buyer's premium fees and/or commission fees. The seller has now received the initial high bid amount (from the first high bidder) plus the difference between the initial high bid and the new high bidn (from the second high bidder). This process continues until the auction has concluded.
+
+It should be understood that all of this happens "behind the scenes" from the user's perspective. The user's experience will be very familiar to all who have used any existing auction software. All of this complexity should be accessible via transaction logs of course, but most users will just make high bids on auctions as they always have. Perhaps the only new user education that needs to happen is to make sure that users understand the true immediacy and finality of high bids. Auction houses will be particularly excited with this technology as they will no longer be caught in the middle of buyer and seller disagreements that can arise during the time that the auction has concluded but has not yet settled. All auctions are now actually settled *before* they are concluded!
 
 ## Specification
-SPECULATING...
+* Singleton launcher puzzle Parameters
+  * ASSET_PUZZLE - can be any inner-puzzle coin such as NFTs, CATs, etc.
+  * ORIGINAL_OWNER_PH - the original owner's puzzle hash to which the high bid payments should be sent.
+  * STARTING_BID_AMOUNT - the starting minimum bid amount, in mojos.
+  * CALC_MIN_LOT_AMOUNT - the Lisp program that calculates the minimum amount per lot. For a single-item auction, this value will be the same as TOTAL_ASSET_AMOUNT.
+  * TOTAL_ASSET_AMOUNT - The total amount of the asset, in mojos.
+  * CALC_MIN_BID_AMOUNT - the Lisp program that calculates the minimum bid amount required to make a new high bid. This allows smaller increments for lower amounts, larger increments for larger amounts, or any other custom logic. The program should output a minimum bid amount given the current_high_bid.
+  * CALC_HAMMER_TIME - the Lisp program that returns either the datetime or the blockheight after which the auction is considered closed. The could be either a static value (pre-committed datetime or blockheight) or a dynamic value (automatically extend until no more bids received).
+  * CALC_BUYERS_PREMIUM - the Lisp program that returns conditions for the Buyer's Premium, if applicable.
+  * CALC_COMMISSION - the Lisp program that returns conditions for the Commission, if applicable.
+  * PAY_HIGH_BID - the Lisp program that returns conditions for the High Bid payment.
+    * If this is the first bid
+      * Send new_high_bid amount to ORIGINAL_OWNER_PH. At this point, the original owner has been paid and the new owner officially owns the asset with the caveat that the asset may be "stolen" by another high bidder before the auction has ended.
+    * Else
+      * Send current_high_bid amount to current_owner_ph. This repays the last high bidder for their bid. The last high bidder no longer officially owns this asset, but they have been reimbursed for their previous bid by the new high bidder. The new high bidder now officially owns the asset.
+      * Send difference between new_high_bid and current_high_bid to ORIGINAL_OWNER_PH. This adds to the original owner's other high bid payments so total payments received equals current high bid at all times.
+    * Include conditions returned from CALC_BUYERS_PREMIUM, if any. This guarantees that the Buyer's Premium is paid for every bid.
+    * Include conditions returned from CALC_COMMISSION, if any. This guarantees that the Commission is paid for every bid.
+  * CLAIM_ASSET - the Lisp program that returns conditions needed to claim the asset after the auction has ended. This program is also responsible for melting this Auction singleton once the wrapped assets are claimed.
+
+* Singleton puzzle Parameters
+  * current_high_bid - the amount of the current high bid, in mojos.
+  * current_owner_ph - the puzzlehash to be used when assigning this asset to the Auction Winner when the auction has completed.
+  * new_high_bid - the amount of this newly submitted high bid, in mojos.
+  * new_owner_ph - the puzzle hash of this new high bidder.
 
 ## Test Cases
 TESTING...
