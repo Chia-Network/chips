@@ -13,7 +13,7 @@ Replaces      | none
 Superseded-By | none
 
 ## Abstract
-Auction is one of the oldest methods of negotiating the exchange of goods and commodities between buyers and sellers. As early as 500 BC, Babylonians held annual auctions for attractive maidens who had reached marrying age*. Ancient Greeks and Romans would auction off their spoils of battle to gain treasure for the war effort. Romans also used auctions to liquidate assets and pay off debt. Surprisingly, the entire Roman Empire was put up for auction on March 28th, 193 AD by the Praetorian Guard and purchased by Didius Julianus! Although it couldn't be built in a day, apparently Rome could at least be *purchased* within that timeframe. More recently, the Internet has enabled a massive new market for online auctions. Starting with eBay in 1995 and growing every year, online auctions continue to be an important method for trading assets to this day.
+Auction is one of the oldest methods of negotiating the exchange of goods and commodities between buyers and sellers. As early as 500 BC, Babylonians held auctions. Later, ancient Greeks and Romans would auction off their spoils of battle to gain treasure for the war effort. More recently, the Internet has enabled a massive new market for online auctions. Starting with eBay in 1995 and growing every year, online auctions continue to be an important method for trading assets to this day.
 
 However, even with all this history, auctions still have unsolved risks for the buyer, the seller, and especially the auction house holding the auction itself. The Chia blockchain, along with the coinset model and Chialisp, brings about new and unique opportunities to improve on this millenia-old practice and eliminate risk for all parties. This document will explore the counterparty risks and issues with modern-day auction. It will then propose high-level solutions to these problems using puzzles created in Chialisp and executed directly on the Chia blockchain. Finally, it will recommend detailed specifications that can be used to build these Chialisp puzzles to enable these solutions.
 
@@ -54,7 +54,7 @@ A normal real-world auction does not settle until after it has closed, which int
 
 This concept is easy to understand for the first successful high bid. The high bidder actually sends their high bid amount to the seller as a normal transaction. The high bidder may also be required to send an additional buyer's premium fee and/or commission fees to the auctioneer, depending on the settings chosen when the auction singleton is minted.
 
-However, the second and subsequent successful high bids work quite differently. The new high bidder will first reimburse the current high bidder for their current high bid and commission fees via a normal transaction. The current high bidder is now "whole" and loses the ownership of the asset contained within the auction singleton. Ownership is now transferred to the new high bidder. The difference between the new high bid and the current high bid is sent to the seller, along with any required buyer's premium fees and/or commission fees. The seller has now received the initial high bid amount (from the first high bidder) plus the difference between the initial high bid and the new high bidn (from the second high bidder). This process continues until the auction has concluded.
+However, the second and subsequent successful high bids work quite differently. The new high bidder will first reimburse the current high bidder for their current high bid and commission fees via a normal transaction. The current high bidder is now "whole" and loses the ownership of the asset contained within the auction singleton. Ownership is now transferred to the new high bidder. The difference between the new high bid and the current high bid is sent to the seller, along with any required buyer's premium fees and/or commission fees. The seller has now received the initial high bid amount (from the first high bidder) plus the difference between the initial high bid and the new high bid (from the second high bidder). This process continues until the auction has concluded.
 
 It should be understood that all of this happens "behind the scenes" from the user's perspective. The user's experience will be very familiar to all who have used any existing auction software. All of this complexity should be accessible via transaction logs of course, but most users will just make high bids on auctions as they always have. Perhaps the only new user education that needs to happen is to make sure that users understand the true immediacy and finality of high bids. Auction houses will be particularly excited with this technology as they will no longer be caught in the middle of buyer and seller disagreements that can arise during the time that the auction has concluded but has not yet settled. All auctions are now actually settled *before* they are concluded!
 
@@ -96,6 +96,17 @@ SECURING...
 
 ## Community Feedback
 6/15/2022: Twitter user @Engarneering suggested removing the historical fact about Babylonian auctions from the Abstract because "I mean, really??" This has been taken under advisement and in the meantime, a footnote has been added to the offending sentence.
+6/15/2022: Twitter user @_nezzee suggested shortening the intro and notes that most intros just start with a simple definition.
+
+## Updates
+6/15/2022:
+  * Added Community Feedback section
+  * Added feedback from @Engarneering and @nezzee
+6/17/2022:
+  * Added this Updates section
+  * Shorted intro to take into account community feedback. Thank you @Engarneering and @_nezzee!
+  * Added Credit section
+  * Added credit paragraph for @Omakasea_ - thank you!
 
 ## Terminology
 This section describes common auction terminology for which the reader might not be familiar. Even more detailed information, including terminology, history and descriptions of different auction types can be found at https://en.wikipedia.org/wiki/Auction. The terms below are a subset of those found at the preceding link.
@@ -120,6 +131,10 @@ This section describes common auction terminology for which the reader might not
 
 ## Additional Assets
 NONE YET...
+
+## Credit
+  * Around the end of April 2022, @Omakasea_ and team released the "onchain unicorn" on the Ethereum network. One of the features was the ability for it to be "stolen" from the current owner by a new buyer. Authors recognized the ability for this idea to be the basis of an auction protocol running on the Chia blockchain and began working on the basic idea in early May. Authors would like to thank @Omakasea_ for his brilliant original "onchain unicorn" idea!
+  * Dan Perry (@DanPerry_Chia) and Ken Griggs (@fizpawiz) were instrumental in providing early feedback for the idea itself, along with great improvement ideas and lots of knowledge and motivation. Thank you both!
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
