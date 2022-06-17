@@ -102,6 +102,7 @@ SECURING...
 6/15/2022:
   * Added Community Feedback section
   * Added feedback from @Engarneering and @nezzee
+  
 6/17/2022:
   * Added this Updates section
   * Shorted intro to take into account community feedback. Thank you @Engarneering and @_nezzee!
