@@ -140,4 +140,3 @@ NONE YET...
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 ## Footnotes
-* Relaying historical fact of first recorded auction does not mean author endorses such auctions.
