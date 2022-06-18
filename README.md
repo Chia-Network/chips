@@ -24,7 +24,7 @@ The agenda of each meeting should focus on the CHIPs proposals, and it should in
 The rest of this document is a summary of all notable CHIPs, organized by status.
 
 ### Living
-* [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
+* [1 - Chia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 
 ### Draft
