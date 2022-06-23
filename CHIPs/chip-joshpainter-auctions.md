@@ -50,7 +50,7 @@ However, the specification is designed so that almost any kind of auction can be
 1. The initial seller "mints" the "egg" that represents the auction. The egg wraps any Chia asset (i.e. NFTs, CATs, DIDs, DL, etc).
 2. The first bidder makes a bid on the egg by paying the seller the minimum bid amount.
 3. The first bidder now becomes the new owner of the egg.
-4  However, the current owner of the egg cannot "crack" the egg and claim the asset inside until a certain future time or blockheight.
+4. However, the current owner of the egg cannot "crack" the egg and claim the asset inside until a certain future time or blockheight.
 5. Any other bidder may make a higher bid on the egg while it is uncracked. The second and subsequent bidders must pay back the current owner for that owner's last bid and must now pay the original seller the *difference* between the last bidder's bid and this new higher bid.
 6. Continues from step 3 above and loops until the current owner "cracks" the egg and claims the asset.
 
