@@ -42,6 +42,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 * [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
 
+* [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/pull/26)
+
 ### Last Call
 * None
 
