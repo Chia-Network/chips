@@ -1,14 +1,14 @@
 {
-    "$id": "https://raw.githubusercontent.com/Chia-Network/chips/main/assets/chip-XXXX/schema.json",
+    "$id": "https://raw.githubusercontent.com/Chia-Network/chips/main/assets/chip-0007/schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "CHIP-XXXX",
+    "title": "CHIP-0007",
     "description": "Chia NFT off-chain metadata format",
     "type": "object",
     "properties": {
         "format": {
             "type": "string",
             "enum": [
-                "CHIP-XXXX"
+                "CHIP-0007"
             ],
             "description": "CHIP number of the metadata format"
         },

@@ -1,10 +1,10 @@
-CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+CHIP Number   | 0007
 :-------------|:----
 Title         | Off-chain metadata format for NFT1
 Description   | A standard for formatting off-chain metadata for NFT1-compliant NFTs on Chia's blockchain
 Author        | [Will Riches](https://github.com/wriches)
-Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
-Status        | < Creator must leave this blank. Editor will assign a status.>
+Comments-URI  | [https://github.com/Chia-Network/chips/pull/26](https://github.com/Chia-Network/chips/pull/26)
+Status        | Review (Fast Track)
 Category      | Process
 Sub-Category  | Other
 Created       | 2022-06-25
@@ -38,7 +38,7 @@ In this section, the schema of the root JSON object is described.
 
 | Property       | Type                    | Required | Description                                                          |
 |----------------|-------------------------|----------|----------------------------------------------------------------------|
-| `format`       | string                  | **Yes**  | CHIP number of the metadata format. Possible values are: `CHIP-XXXX`. |
+| `format`       | string                  | **Yes**  | CHIP number of the metadata format. Possible values are: `CHIP-0007`. |
 | `name`         | string                  | **Yes**  | Name of the NFT                                                      |
 | `description`  | string                  | **Yes**  | Description of the NFT                                               |
 | `attributes`   | [object](#attributes)[] | No       | Attributes of the NFT                                                |
@@ -80,9 +80,9 @@ Attributes of the NFT collection
 
 
 ## Reference Implementation
-The schema is [made available for consumption as a JSON Schema dialect](assets/chip-XXXX/schema.json). The dialect can be used to validate that metadata files are compliant with the schema.
+The schema is [made available for consumption as a JSON Schema dialect](assets/chip-0007/schema.json). The dialect can be used to validate that metadata files are compliant with the schema.
 
-An [example metadata file](assets/chip-XXXX/example.json) has also been included.
+An [example metadata file](assets/chip-0007/example.json) has also been included.
 
 ## Security
 Currently, there are no requirements of the metadata's file format or data structure. From a security perspective, introducing a standard format is only a net gain.
@@ -90,8 +90,8 @@ Currently, there are no requirements of the metadata's file format or data struc
 This format includes collection information, which itself does not verify the legitimacy of the collection. It is incumbent on NFT tools and services to combine this collection information with verifiable ownership data, such as the DID of the creator. The risk of NFT tools not implementing these checks is not introduced by this format, but it's possible that the availability of collection information in a standard metadata format could infer that this information is verified. This can be prevented by providing clear information and documentation to developers.
 
 ## Additional Assets
- * JSON Schema dialect: [assets/chip-XXXX/schema.json](assets/chip-XXXX/schema.json)
- * Example off-chain metadata file: [assets/chip-XXXX/example.json](assets/chip-XXXX/example.json)
+ * JSON Schema dialect: [assets/chip-0007/schema.json](assets/chip-0007/schema.json)
+ * Example off-chain metadata file: [assets/chip-0007/example.json](assets/chip-0007/example.json)
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

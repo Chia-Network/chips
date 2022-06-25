@@ -1,5 +1,5 @@
 {
-    "format": "CHIP-XXXX",
+    "format": "CHIP-0007",
     "name": "Pikachu",
     "description": "Electric-type Pokémon with stretchy cheeks",
     "minting_tool": "SuperMinter/2.5.2",
