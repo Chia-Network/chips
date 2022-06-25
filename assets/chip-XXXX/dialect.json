@@ -1,0 +1,114 @@
+{
+    "$id": "https://raw.githubusercontent.com/Chia-Network/chips/main/assets/chip-XXXX/schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "CHIP-XXXX",
+    "description": "Chia NFT off-chain metadata format",
+    "type": "object",
+    "properties": {
+        "format": {
+            "type": "string",
+            "enum": [
+                "CHIP-XXXX"
+            ],
+            "description": "CHIP number of the metadata format"
+        },
+        "name": {
+            "type": "string",
+            "description": "Name of the NFT"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description of the NFT"
+        },
+        "minting_tool": {
+            "type": "string",
+            "description": "Name or short tag of the minting tool used to create this NFT"
+        },
+        "attributes": {
+            "type": "array",
+            "description": "Attributes of the NFT",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": [
+                            "integer",
+                            "string"
+                        ],
+                        "description": "Name of the NFT attribute"
+                    },
+                    "value": {
+                        "type": [
+                            "integer",
+                            "string"
+                        ],
+                        "description": "Value of the NFT attribute"
+                    },
+                    "min_value": {
+                        "type": "integer",
+                        "description": "Minimum value of the NFT attribute in relation to other NFTs. Only applicable to integers."
+                    },
+                    "max_value": {
+                        "type": "integer",
+                        "description": "Maximum value of the NFT attribute in relation to other NFTs. Only applicable to integers."
+                    }
+                },
+                "required": [
+                    "type",
+                    "value"
+                ]
+            }
+        },
+        "collection": {
+            "type": "object",
+            "description": "NFT collection information",
+            "properties": {
+                "name": {
+                    "type": "string",
+                     "description": "Name of the NFT collection"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                     "description": "ID of the NFT collection"
+                },
+                "attributes": {
+                    "type": "array",
+                    "description": "Attributes of the NFT collection",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": [
+                                    "integer",
+                                    "string"
+                                ],
+                                "description": "Name of the NFT collection attribute"
+                            },
+                            "value": {
+                                "type": [
+                                    "integer",
+                                    "string"
+                                ],
+                                "description": "Value of the NFT collection attribute"
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "value"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "id"
+            ]
+        }
+    },
+    "required": [
+        "format",
+        "name",
+        "description"
+    ]
+}
