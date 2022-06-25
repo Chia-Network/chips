@@ -80,9 +80,9 @@ Attributes of the NFT collection
 
 
 ## Reference Implementation
-The schema is [made available for consumption as a JSON Schema dialect](assets/chip-0007/schema.json). The dialect can be used to validate that metadata files are compliant with the schema.
+The schema is [made available for consumption as a JSON Schema dialect](../assets/chip-0007/schema.json). The dialect can be used to validate that metadata files are compliant with the schema.
 
-An [example metadata file](assets/chip-0007/example.json) has also been included.
+An [example metadata file](../assets/chip-0007/example.json) has also been included.
 
 ## Security
 Currently, there are no requirements of the metadata's file format or data structure. From a security perspective, introducing a standard format is only a net gain.
@@ -90,8 +90,8 @@ Currently, there are no requirements of the metadata's file format or data struc
 This format includes collection information, which itself does not verify the legitimacy of the collection. It is incumbent on NFT tools and services to combine this collection information with verifiable ownership data, such as the DID of the creator. The risk of NFT tools not implementing these checks is not introduced by this format, but it's possible that the availability of collection information in a standard metadata format could infer that this information is verified. This can be prevented by providing clear information and documentation to developers.
 
 ## Additional Assets
- * JSON Schema dialect: [assets/chip-0007/schema.json](assets/chip-0007/schema.json)
- * Example off-chain metadata file: [assets/chip-0007/example.json](assets/chip-0007/example.json)
+ * JSON Schema dialect: [assets/chip-0007/schema.json](../assets/chip-0007/schema.json)
+ * Example off-chain metadata file: [assets/chip-0007/example.json](../assets/chip-0007/example.json)
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
