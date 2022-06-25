@@ -21,7 +21,7 @@ The NFT1 standard does not require compliant NFTs to reference an off-chain meta
 For projects in the Chia ecosystem to be able to create, display and interact with NFTs in a consistent manner, some coordination of metadata file formats is necessary.
 
 ## Backwards Compatibility
-If this CHIP is accepted and the data format becomes widely used by projects in the Chia NFT ecosystem, it is possible that non-compliant NFTs which have already been minted will not be displayed correctly, or at least will have their full metadata displayed. However, the same risk is present without this CHIP being put forward, since there would be little standardization.
+If this CHIP is accepted and the data format becomes widely used by projects in the Chia NFT ecosystem, it is possible that non-compliant NFTs which have already been minted will not be displayed correctly, or at least may not have their full metadata displayed. However, the same risk is present without this CHIP being put forward, since there would be little standardization.
 
 ## Rationale
  * For wide compatibility with developers, JSON format was selected.
@@ -38,9 +38,9 @@ In this section, the schema of the root JSON object is described.
 
 | Property       | Type                    | Required | Description                                                          |
 |----------------|-------------------------|----------|----------------------------------------------------------------------|
-| `description`  | string                  | **Yes**  | Description of the NFT                                               |
 | `format`       | string                  | **Yes**  | CHIP number of the metadata format. Possible values are: `CHIP-XXXX`. |
 | `name`         | string                  | **Yes**  | Name of the NFT                                                      |
+| `description`  | string                  | **Yes**  | Description of the NFT                                               |
 | `attributes`   | [object](#attributes)[] | No       | Attributes of the NFT                                                |
 | `collection`   | [object](#collection)   | No       | NFT collection information                                           |
 | `minting_tool` | string                  | No       | Name or short tag of the minting tool used to create this NFT        |
