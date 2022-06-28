@@ -36,26 +36,27 @@ In this section, the schema of the root JSON object is described.
 
 ### Properties
 
-| Property       | Type                    | Required | Description                                                          |
-|----------------|-------------------------|----------|----------------------------------------------------------------------|
-| `format`       | string                  | **Yes**  | CHIP number of the metadata format. Possible values are: `CHIP-0007`. |
-| `name`         | string                  | **Yes**  | Name of the NFT                                                      |
-| `description`  | string                  | **Yes**  | Description of the NFT                                               |
-| `attributes`   | [object](#attributes)[] | No       | Attributes of the NFT                                                |
-| `collection`   | [object](#collection)   | No       | NFT collection information                                           |
-| `minting_tool` | string                  | No       | Name or short tag of the minting tool used to create this NFT        |
+| Property            | Type                    | Required | Description                                                          |
+|---------------------|-------------------------|----------|----------------------------------------------------------------------|
+| `format`            | string                  | **Yes**  | CHIP number of the metadata format Possible values are: `CHIP-0007`. |
+| `name`              | string                  | **Yes**  | Name of the NFT                                                      |
+| `description`       | string                  | **Yes**  | Description of the NFT                                               |
+| `attributes`        | [object](#attributes)[] | No       | Attributes of the NFT                                                |
+| `collection`        | [object](#collection)   | No       | NFT collection information                                           |
+| `minting_tool`      | string                  | No       | Name or short tag of the minting tool used to create this NFT        |
+| `sensitive_content` | boolean or string[]     | No       | Indicator for sensitive content within the NFT                       |
 
 ### `attributes`
 Attributes of the NFT
 
 #### Properties
 
-| Property    | Type              | Required | Description                                                                                |
-|-------------|-------------------|----------|--------------------------------------------------------------------------------------------|
-| `type`      | integer or string | **Yes**  | Name of the NFT attribute                                                                  |
-| `value`     | integer or string | **Yes**  | Value of the NFT attribute                                                                 |
-| `max_value` | integer           | No       | Maximum value of the NFT attribute in relation to other NFTs. Only applicable to integers. |
-| `min_value` | integer           | No       | Minimum value of the NFT attribute in relation to other NFTs. Only applicable to integers. |
+| Property     | Type              | Required | Description                                                                                |
+|--------------|-------------------|----------|--------------------------------------------------------------------------------------------|
+| `trait_type` | integer or string | **Yes**  | Name of the NFT attribute                                                                  |
+| `value`      | integer or string | **Yes**  | Value of the NFT attribute                                                                 |
+| `min_value`  | integer           | No       | Minimum value of the NFT attribute in relation to other NFTs. Only applicable to integers. |
+| `max_value`  | integer           | No       | Maximum value of the NFT attribute in relation to other NFTs. Only applicable to integers. |
 
 ### `collection`
 NFT collection information

@@ -24,13 +24,24 @@
             "type": "string",
             "description": "Name or short tag of the minting tool used to create this NFT"
         },
+        "sensitive_content": {
+            "type": [
+                "boolean",
+                "array"
+            ],
+            "description": "Indicator for sensitive content within the NFT",
+            "items": {
+                "type": "string",
+                "description": "List of types of sensitive content within the NFT"
+            }
+        },
         "attributes": {
             "type": "array",
             "description": "Attributes of the NFT",
             "items": {
                 "type": "object",
                 "properties": {
-                    "type": {
+                    "trait_type": {
                         "type": [
                             "integer",
                             "string"
@@ -54,7 +65,7 @@
                     }
                 },
                 "required": [
-                    "type",
+                    "trait_type",
                     "value"
                 ]
             }

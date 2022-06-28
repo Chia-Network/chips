@@ -3,17 +3,18 @@
     "name": "Pikachu",
     "description": "Electric-type Pokémon with stretchy cheeks",
     "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
     "attributes": [
         {
-            "type": "Species",
+            "trait_type": "Species",
             "value": "Mouse"
         },
         {
-            "type": "Color",
+            "trait_type": "Color",
             "value": "Yellow"
         },
         {
-            "type": "Friendship",
+            "trait_type": "Friendship",
             "value": 50,
             "min_value": 0,
             "max_value": 255
