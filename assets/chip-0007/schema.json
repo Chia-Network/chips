@@ -35,6 +35,16 @@
                 "description": "List of types of sensitive content within the NFT"
             }
         },
+        "series_number": {
+            "type": "integer",
+            "description": "Number that this NFT is within the series (sequence of unique NFTs)",
+            "minimum": 1
+        },
+        "series_total": {
+            "type": "integer",
+            "description": "Total number of NFTs within the series (sequence of unique NFTs)",
+            "minimum": 1
+        },
         "attributes": {
             "type": "array",
             "description": "Attributes of the NFT that may be directly displayed to the user",
