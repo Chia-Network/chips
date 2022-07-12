@@ -36,18 +36,19 @@ In this section, the schema of the root JSON object is described.
 
 ### Properties
 
-| Property            | Type                    | Required | Description                                                          |
-|---------------------|-------------------------|----------|----------------------------------------------------------------------|
-| `format`            | string                  | **Yes**  | CHIP number of the metadata format Possible values are: `CHIP-0007`. |
-| `name`              | string                  | **Yes**  | Name of the NFT                                                      |
-| `description`       | string                  | **Yes**  | Description of the NFT                                               |
-| `attributes`        | [object](#attributes)[] | No       | Attributes of the NFT                                                |
-| `collection`        | [object](#collection)   | No       | NFT collection information                                           |
-| `minting_tool`      | string                  | No       | Name or short tag of the minting tool used to create this NFT        |
-| `sensitive_content` | boolean or string[]     | No       | Indicator for sensitive content within the NFT                       |
+| Property            | Type                    | Required | Description                                                                                   |
+|---------------------|-------------------------|----------|-----------------------------------------------------------------------------------------------|
+| `format`            | string                  | **Yes**  | CHIP number of the metadata format Possible values are: `CHIP-0007`.                          |
+| `name`              | string                  | **Yes**  | Name of the NFT                                                                               |
+| `description`       | string                  | **Yes**  | Description of the NFT                                                                        |
+| `minting_tool`      | string                  | No       | Name or short tag of the minting tool used to create this NFT                                 |
+| `sensitive_content` | boolean or string[]     | No       | Indicator for sensitive content within the NFT                                                |
+| `attributes`        | [object](#attributes)[] | No       | Attributes of the NFT that may be directly displayed to the user                              |
+| `collection`        | [object](#collection)   | No       | NFT collection information                                                                    |
+| `data`              | [object]                | No       | Any NFT data which is not suitable for the atrtributes array, such as non-human-readable data |
 
 ### `attributes`
-Attributes of the NFT
+Attributes of the NFT that may be directly displayed to the user
 
 #### Properties
 

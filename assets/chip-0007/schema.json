@@ -37,7 +37,7 @@
         },
         "attributes": {
             "type": "array",
-            "description": "Attributes of the NFT",
+            "description": "Attributes of the NFT that may be directly displayed to the user",
             "items": {
                 "type": "object",
                 "properties": {
@@ -115,6 +115,10 @@
                 "name",
                 "id"
             ]
+        },
+        "data": {
+            "type": "object",
+            "description": "Any NFT data which is not suitable for the atrtributes array, such as non-human-readable data"
         }
     },
     "required": [
