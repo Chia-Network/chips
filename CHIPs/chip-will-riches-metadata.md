@@ -43,8 +43,8 @@ In this section, the schema of the root JSON object is described.
 | `description`       | string                  | **Yes**  | Description of the NFT                                                                        |
 | `minting_tool`      | string                  | No       | Name or short tag of the minting tool used to create this NFT                                 |
 | `sensitive_content` | boolean or string[]     | No       | Indicator for sensitive content within the NFT                                                |
-| `series_number`     | integer                 | No       | Number that this NFT is within the series (sequence of unique NFTs)                           |
-| `series_total`      | integer                 | No       | Total number of NFTs within the series (sequence of unique NFTs)                              |
+| `series_number`     | integer                 | No       | Number that this NFT is within the series (sequence of distinct NFTs)                           |
+| `series_total`      | integer                 | No       | Total number of NFTs within the series (sequence of distinct NFTs)                              |
 | `attributes`        | [object](#attributes)[] | No       | Attributes of the NFT that may be directly displayed to the user                              |
 | `collection`        | [object](#collection)   | No       | NFT collection information                                                                    |
 | `data`              | [object]                | No       | Any NFT data which is not suitable for the atrtributes array, such as non-human-readable data |
