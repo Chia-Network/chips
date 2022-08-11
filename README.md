@@ -57,14 +57,14 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Obsolete
-* None
+* CAT1 -- This standard was replaced with CAT2
 
 
 ### Grandfathered
 The following standards were finalized before the CHIP process had been created:
 * [Singletons](https://chialisp.com/docs/puzzles/singletons) -- A standard for creating puzzles with unique IDs
 * [Pooling](https://chialisp.com/docs/puzzles/pooling) -- Chia's decentralized pooling protocol
-* [CAT1](https://chialisp.com/docs/puzzles/cats) -- The first standard for Chia Asset Tokens
+* [CAT2](https://chialisp.com/docs/puzzles/cats) -- The second standard for Chia Asset Tokens
 * [Offers](https://chialisp.com/docs/puzzles/offers) -- The first standard for peer-to-peer asset exchange on Chia's blockchain
 
 -----
