@@ -8,7 +8,7 @@ provider.request({ method: 'chainId' })
     });
 
 // check if wallet is connected
-provider.request({ method: 'connect', params: {eager: true}})
+provider.request({ method: 'connect', params: { eager: true } })
     .then((value) => {
         const expectedValue = true; //
     })
@@ -34,7 +34,7 @@ provider.request({
     // user reject
 })
 
-provider.request({ method: 'getPublicKeys', params: { offset: 0, limit: 2} })
+provider.request({ method: 'getPublicKeys', params: { offset: 0, limit: 2 } })
     .then((publicKeys) => {
         const expectedPublicKeys = [
             '0x858024f64b04a9abc6622a61e2c823b78a43d219c502719d12a78fd6cad5daa31f80254b1803689a9433960c609f9b92', // index 0, hardened
@@ -58,8 +58,8 @@ provider.request({
         assetId: null,
         type: null,
         includedLocked: true,
-        startHeight: 0,
-        limit: 100
+        offset: 0,
+        limit: 500
     }
 }).then((rows) => {
     const expectedRows = [
@@ -84,8 +84,8 @@ provider.request({
         assetId: '6a27da5e9e178a1f42c003a4c25d9dbab4054eb0720e1b57edd367f26bf50e79',
         type: 'cat',
         includedLocked: true,
-        startHeight: 0,
-        limit: 100
+        offset: 0,
+        limit: 500
     }
 }).then((rows) => {
     const expectedRows = [
