@@ -52,9 +52,10 @@ And an addition to the NFT metadata, to allow obervers to figure out the royalty
 
 An example payout scheme could look like this
 
-| Recipient Address | Share in % |
-| xch18qt2ju2sj3k8w3290az6flkkc95fqcmcg7edl90ns0jrjav8xttsyuvkgj | 80 |
-| xch1p9e3l3ttl7qrrhy6zmmqmjm0v33fvrxhd494yv7at0ppd97hljnscmfrmx | 20 |
+| Recipient Address                                              | Share in % |
+|:---------------------------------------------------------------|:-----------|
+| xch18qt2ju2sj3k8w3290az6flkkc95fqcmcg7edl90ns0jrjav8xttsyuvkgj | 80         |
+| xch1p9e3l3ttl7qrrhy6zmmqmjm0v33fvrxhd494yv7at0ppd97hljnscmfrmx | 20         |
 
 ### Royalty Split Chialisp Puzzle
 
@@ -105,14 +106,14 @@ The proposed Chialisp puzzle looks like this.
 
 The royalty payout scheme `ROYALTY_LIST` is curried into this puzzle, to make it immutable. The only solution parameter needed on spend is the actual amount of the coin.
 
-On spend, the puzzle steps through the entries of the `ROYALTY_LIST` and creates a new coin per entry. The amount of the new coins will be a share of the total amount, determined by the share defined in the `ROYALTY_LIST`.
+On spend, the puzzle steps through the entries of the `ROYALTY_LIST` and creates a new coin per entry. The amount of the new coins will be a share of the total amount, determined by the share defined in the `ROYALTY_LIST`. The payout share is specified in the same format as NFT royalties, which is `int(percentage * 100)`.
 
 ### NFT Metadata
 
 The second part is an addition to the NFT metadata.
 In order to allow any observer to recreate the split royalty puzzle and trigger the split, the observer has to know the payout scheme.
 
-The suggested format is a list of 2-tuples, each containing an address and the percentage of the royalties it should receive, multiplied by 100
+The suggested format is a list of 2-tuples, each containing an address and the percentage of the royalties it should receive, multiplied by 100.
 
 ```typescript
 {
@@ -123,7 +124,7 @@ The suggested format is a list of 2-tuples, each containing an address and the p
 
 The royalty payout example from above would look like this:
 
-```json
+```typescript
 {
   //existing metadata
   "rs": [
