@@ -1,14 +1,14 @@
-| CHIP Number  |                                                                                 |
-| :----------- | :------------------------------------------------------------------------------ |
-| Title        | Split Royalties for NFT1                                                        |
-| Description  | A standard for splitting royalties for NFT1-compliant NFTs on Chia's blockchain |
-| Author       | [Andreas Greimel](https://github.com/greimela)                                  |
-| Comments-URI | < Creator must leave this blank. Editor will assign a URI.>                     |
-| Status       | < Creator must leave this blank. Editor will assign a status.>                  |
-| Category     | Process                                                                         |
-| Sub-Category | Procedural                                                                      |
-| Created      | 2022-09-03                                                                      |
-| Dependencies | None                                                                            |
+| CHIP Number  | < Creator must leave this blank. Editor will assign a number.>                                         |
+| :----------- | :----------------------------------------------------------------------------------------------------- |
+| Title        | Split Royalties for NFT1                                                                               |
+| Description  | A standard for splitting royalties for NFT1-compliant NFTs on Chia's blockchain                        |
+| Author       | [Andreas Greimel](https://github.com/greimela) ([@acevail\_](https://twitter.com/acevail_) on Twitter) |
+| Comments-URI | < Creator must leave this blank. Editor will assign a URI.>                                            |
+| Status       | < Creator must leave this blank. Editor will assign a status.>                                         |
+| Category     | Process                                                                                                |
+| Sub-Category | Procedural                                                                                             |
+| Created      | 2022-09-03                                                                                             |
+| Dependencies | None                                                                                                   |
 
 ## Abstract
 
