@@ -48,10 +48,10 @@ And an addition to the NFT metadata, to allow obervers to figure out the royalty
 
 An example payout scheme could look like this
 
-| Recipient Address                                              | Share in % |
+| Recipient Address                                              | Share      |
 | :------------------------------------------------------------- | :--------- |
-| xch18qt2ju2sj3k8w3290az6flkkc95fqcmcg7edl90ns0jrjav8xttsyuvkgj | 80         |
-| xch1p9e3l3ttl7qrrhy6zmmqmjm0v33fvrxhd494yv7at0ppd97hljnscmfrmx | 20         |
+| xch18qt2ju2sj3k8w3290az6flkkc95fqcmcg7edl90ns0jrjav8xttsfmtqfp | 80         |
+| xch1p9e3l3ttl7qrrhy6zmmqmjm0v33fvrxhd494yv7at0ppd97hljns4uw464 | 20         |
 
 ### Royalty Split Chialisp Puzzle
 
@@ -60,60 +60,77 @@ The proposed Chialisp puzzle looks like this.
 ```
 (mod (PAYOUT_SCHEME my_amount)
 
-  (defconstant TEN_THOUSAND 10000)
-
   (include condition_codes.clvm)
   (include curry-and-treehash.clinc)
 
-  (defun-inline calculate_percentage (amount percentage)
-      (f (divmod (* amount percentage) TEN_THOUSAND))
+  (defun-inline calculate_share (total_amount share total_shares)
+    (f (divmod (* total_amount share) total_shares))
   )
 
-  (defun-inline get_amount (payout_scheme_item my_amount)
-      (calculate_percentage my_amount (f (r payout_scheme_item)))
+  (defun-inline get_amount (payout_scheme_item total_amount total_shares)
+    (calculate_share total_amount (f (r payout_scheme_item)) total_shares)
   )
 
   (defun-inline get_puzhash (payout_scheme_item)
-      (f payout_scheme_item)
+    (f payout_scheme_item)
   )
 
    ; Loop through the royalty payout scheme and create coins
-  (defun split_amount_and_create_coins (PAYOUT_SCHEME my_amount)
-      (if PAYOUT_SCHEME
-          (c
-              (list
-                CREATE_COIN
-                (get_puzhash (f PAYOUT_SCHEME))
-                (get_amount (f PAYOUT_SCHEME) my_amount)
-              )
-              (split_amount_and_create_coins (r PAYOUT_SCHEME) my_amount)
-          )
-          ()
+  (defun split_amount_and_create_coins (PAYOUT_SCHEME total_amount total_shares)
+    (if PAYOUT_SCHEME
+      (c
+        (list
+          CREATE_COIN
+          (get_puzhash (f PAYOUT_SCHEME))
+          (get_amount (f PAYOUT_SCHEME) total_amount total_shares)
+        )
+        (split_amount_and_create_coins (r PAYOUT_SCHEME) total_amount total_shares)
       )
+      ()
+    )
+  )
+
+  (defun count_shares (PAYOUT_SCHEME)
+    (if PAYOUT_SCHEME
+      (+
+        (f (r (f PAYOUT_SCHEME)))
+        (count_shares (r PAYOUT_SCHEME))
+      )
+      0
+    )
   )
 
   ; main
   (c
-    (list ASSERT_MY_AMOUNT my_amount)
-    (split_amount_and_create_coins PAYOUT_SCHEME my_amount)
+    (list CREATE_COIN_ANNOUNCEMENT my_amount)
+    (c
+      (list ASSERT_MY_AMOUNT my_amount)
+      (split_amount_and_create_coins PAYOUT_SCHEME my_amount (count_shares PAYOUT_SCHEME))
+    )
   )
 )
 ```
 
-The royalty payout scheme `PAYOUT_SCHEME` is curried into this puzzle, to make it immutable. The only solution parameter needed on spend is the actual amount of the coin.
+The royalty payout scheme `PAYOUT_SCHEME` is curried into this puzzle, to make it immutable. 
+Using the above scheme as an example, it looks like this:
+```
+((0x3816a97150946c7745457f45a4fed6c16890637847b2df95f383e439758732d7 80) (0x09731fc56bff8031dc9a16f60dcb6f6462960cd76d4b5233dd5bc21697d7fca7 20)
+```
 
-On spend, the puzzle steps through the entries of the `PAYOUT_SCHEME` and creates a new coin per entry. The amount of the new coins will be a share of the total amount, determined by the share defined in the `PAYOUT_SCHEME`. The payout share is specified in the same format as NFT royalties, which is `int(percentage * 100)`.
+The only solution parameter needed on spend is the actual amount of the coin.
+
+On spend, the puzzle steps through the entries of the `PAYOUT_SCHEME` and creates a new coin per entry. The amount of the new coins will be a share of the total amount, determined by the share defined in the `PAYOUT_SCHEME`. The total number of shares is defined as the  sum of all individual shares in the scheme and will be calculated by the puzzle.
+
+This means the share distributions `(1,1)` and `(50,50)` and `(5000, 5000)` are equivalent.
 
 If the created coins do not use up the full coin amount, the rest is left for the farmer of the block. This difference is most likely very small and not worth the effort to construct a more complex puzzle to collect this rest.
-
-The royalty puzzle does not check whether the shares in the payout table add up to 100%, since it would be too late. This verification has to be done by the entity creating the NFT and the payout scheme.
 
 ### NFT Metadata
 
 The second part is an addition to the NFT metadata.
 In order to allow any observer to recreate the split royalty puzzle and trigger the split, the observer has to know the payout scheme.
 
-The suggested format is a list of 2-tuples, each containing an address and the percentage of the royalties it should receive, multiplied by 100.
+The suggested format is a list of 2-tuples, each containing an address and the share of the royalties it should receive. The total number of shares is the sum of all individual shares in the list.
 
 ```typescript
 {
@@ -128,13 +145,11 @@ The royalty payout example from above would look like this:
 {
   //existing metadata
   "rs": [
-    ["xch18qt2ju2sj3k8w3290az6flkkc95fqcmcg7edl90ns0jrjav8xttsyuvkgj", 8000], // 80%
-    ["xch1p9e3l3ttl7qrrhy6zmmqmjm0v33fvrxhd494yv7at0ppd97hljnscmfrmx", 2000] // 20%
+    ["xch18qt2ju2sj3k8w3290az6flkkc95fqcmcg7edl90ns0jrjav8xttsfmtqfp", 80],
+    ["xch1p9e3l3ttl7qrrhy6zmmqmjm0v33fvrxhd494yv7at0ppd97hljns4uw464", 20]
   ]
 }
 ```
-
-The wallet or tool accepting this payout scheme from a user and passing it into the NFT has to ensure the percentages add up to 100%.
 
 ## Test Cases
 
@@ -155,7 +170,7 @@ Potential risks:
 - Royalty recipient can be altered
   - The royalty recipients are curried into the puzzle and the only parameter in the solution is the amount. So the payout scheme can not be altered after it has been created.
 - Royalty payout can be stalled
-  - Since
+  - Since the royalty payment can be triggered by any party on a permissionless blockchain, nobody can stall or prevent this. 
 - Info to construct royalty puzzle can get lost
   - The payout scheme is added to the NFT on-chain metadata, so it can not get lost as long as the Chia blockchain lives.
 - Users can be deceived by a mismatch between the NFT metadata and the actual royalty puzzle
