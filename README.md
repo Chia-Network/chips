@@ -26,13 +26,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Living
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
-
 ### Draft
-* [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
 
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
+
+* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 
 ### Review
 * None
@@ -45,7 +45,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/pull/26)
 
 ### Last Call
-* None
+* [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
 
 ### Final
 * None
@@ -58,7 +58,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Obsolete
 * CAT1 -- This standard was replaced with CAT2
-
 
 ### Grandfathered
 The following standards were finalized before the CHIP process had been created:
