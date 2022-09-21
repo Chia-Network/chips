@@ -29,9 +29,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Draft
 
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
-
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
-
 * [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 
 ### Review
@@ -39,13 +37,11 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Review (Fast Track)
 * [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
-
-* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
-
 * [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/pull/26)
 
 ### Last Call
 * [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
+* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
 
 ### Final
 * None
