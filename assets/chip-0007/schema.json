@@ -128,7 +128,7 @@
         },
         "data": {
             "type": "object",
-            "description": "Any NFT data which is not suitable for the atrtributes array, such as non-human-readable data"
+            "description": "Any NFT data which is not suitable for the attributes array, such as non-human-readable data"
         }
     },
     "required": [
