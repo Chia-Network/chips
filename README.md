@@ -27,7 +27,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
@@ -40,15 +39,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Review (Fast Track)
 * [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
 
-* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
-
-* [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/pull/26)
-
 ### Last Call
 * [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
 
+* [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/pull/26)
+
 ### Final
-* None
+* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
 
 ### Stagnant
 * None
