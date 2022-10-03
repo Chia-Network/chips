@@ -42,10 +42,9 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Last Call
 * [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
 
-* [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/pull/26)
-
 ### Final
-* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
+* [5 - NFT1](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0005.md)
+* [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0007.md)
 
 ### Stagnant
 * None
