@@ -23,6 +23,10 @@ However, the ability for the owner for a NFT to update some or all of the metada
 
 Another simple use case is the addition of an editable "notes" attribute in an otherwise-normal NFT. The owner could update the notes with any personal information about the NFT, a story about where they got it, etc. The next owner could overwrite or append to these notes, but the full history will always be stored on-chain as an additional bit of provenance!
 
+Imagine some sort of digital board game in which the player gets to choose where to place their token(s). These positions could be managed by updating the X/Y metadata attributes of NFTs that represents these digital player tokens!
+
+Finally, these metadata values could themselves be Merkel tree hashes, allowing proofs-of-inclusion while using minimal on-chain storage space!
+
 This CHIP will explain one method of enabling this feature using existing NFT1 and CHIP-0007 standards with no required changes, including full backwards-compatibility.
 
 ## Backwards Compatibility
