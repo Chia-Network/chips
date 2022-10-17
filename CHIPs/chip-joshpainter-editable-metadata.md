@@ -37,10 +37,14 @@ Finally, this small addition to the work already done with CHIP-0007 is a good e
 
 ## Specification
 
-This CHIP proposes a new optional boolean property on the "trait" attribute defined in CHIP-0007 called "editable." Here is an example of an "editable" attribute (surrounding metadata removed for brevity):
+This CHIP proposes a single new optional boolean property on the "trait" attribute defined in CHIP-0007 called "editable." Here is an example of both a normal and an "editable" attribute (surrounding metadata removed for brevity):
 
 ```
 ...
+{
+    "trait_type": "Registered On",
+    "value": "{$registeredOn}"
+},
 {
     "trait_type": "Target",
     "value": "xch1v96m4cej23hpt4newv8hs9ejcsc760w3p8gh5p6989c7kyaq5juq9hzjgr",
@@ -49,21 +53,21 @@ This CHIP proposes a new optional boolean property on the "trait" attribute defi
 ...
 ```
 
-List the full technical design specification of any new feature you are proposing. This must include details of all syntax and semantics required to implement each new feature.
+Only the NFT attributes may include this optional property. The collection attributes mentioned in CHIP-0007 are meant to be the same for all NFTs in the collection and therefore should remain immutable.
 
-This section should be _detailed_. It needs to allow for competing interoperable implementations. When applicable, it may include technical diagrams to accompany your design.
+To edit this editable metadata, the owner of the NFT will add a new metadata URL to the NFT using the normal NFT1 standard. However, the URL will merely be a copy of the existing metadata URL with the addition of the editable names and values in the querystring.
+
+The querystring parameters will be ignored by the host that serves the metadata file and existing NFT viewers, including the official Chia Wallet, will continue to work because the hash has not changed.
+
+However, NFT viewers or applications with editing capability can now be supported. These new NFT viewers will recognize the "editable" property on metadata attributes and they will instead look to the latest metadata URL's querystring values first to resolve the metadata value. If these values don't exist as querystring values, the values from the metadata file will be used as normal.
 
 ## Test Cases
-  * Most Standards Track proposals will require a suite of test cases, which you may add to the `assets/chip-<CHIP>` folder.
-  * Some Process proposals will require test cases, depending on the significance of new features being added.
-  * Informational proposals typically will not require test cases.
 
-Your proposal will have a greater chance of success if you err on the side of including more test cases. Use your best judgment.
+Not applicable
 
 ## Reference Implementation
-Most Standards Track proposals, as well as some Process proposals, also will require a reference implementation to be included. It should be added to the same folder as your test cases, `assets/chip-<CHIP>`.
 
-Regardless of this proposal's category, the reference implementation does not need to be completed in order to move the CHIP into _Draft_. However, it must be provided before the CHIP can be moved into _Review_.
+go4me
 
 ## Security
 This section is mandatory for all CHIPs. List all considerations relevant to the security of this proposal if it is implemented. This section may be modified as the proposal moves toward consensus. Make sure to include:
