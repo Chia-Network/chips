@@ -26,13 +26,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Living
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
-
 ### Draft
-* [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
-
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
+
+* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 
 ### Review
 * None
@@ -40,13 +39,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Review (Fast Track)
 * [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
 
-* [5 - NFT1](https://github.com/Chia-Network/chips/pull/19)
-
 ### Last Call
-* None
+* [2 - dApp Protocol](https://github.com/Chia-Network/chips/pull/9)
 
 ### Final
-* None
+* [5 - NFT1](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0005.md)
+* [7 - Off-Chain metadata format for NFT1](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0007.md)
 
 ### Stagnant
 * None
@@ -55,14 +53,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Obsolete
-* None
-
+* CAT1 -- This standard was replaced with CAT2
 
 ### Grandfathered
 The following standards were finalized before the CHIP process had been created:
 * [Singletons](https://chialisp.com/docs/puzzles/singletons) -- A standard for creating puzzles with unique IDs
 * [Pooling](https://chialisp.com/docs/puzzles/pooling) -- Chia's decentralized pooling protocol
-* [CAT1](https://chialisp.com/docs/puzzles/cats) -- The first standard for Chia Asset Tokens
+* [CAT2](https://chialisp.com/docs/puzzles/cats) -- The second standard for Chia Asset Tokens
 * [Offers](https://chialisp.com/docs/puzzles/offers) -- The first standard for peer-to-peer asset exchange on Chia's blockchain
 
 -----
