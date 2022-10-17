@@ -57,9 +57,17 @@ Only the NFT attributes may include this optional property. The collection attri
 
 To edit this editable metadata, the owner of the NFT will add a new metadata URL to the NFT using the normal NFT1 standard. However, the URL will merely be a copy of the existing metadata URL with the addition of the editable names and values in the querystring.
 
-The querystring parameters will be ignored by the host that serves the metadata file and existing NFT viewers, including the official Chia Wallet, will continue to work because the hash has not changed.
+An example of a normal metadata URL:
+https://bafkreig7fmhptchs2gv2o2l3bilkxtddr7r5eo7nkpr26rnetmx5icahvm.ipfs.nftstorage.link/
+
+An example of a metadata URL that contains a new value for an editable attribute:
+https://bafkreig7fmhptchs2gv2o2l3bilkxtddr7r5eo7nkpr26rnetmx5icahvm.ipfs.nftstorage.link/?Target=xch16nvgtzv2dcs86hmk99kfp3q09vj2k66x0t0z0ttk9k5zcx3yxzaqz9xxaf
+
+Notice that the second example has an additional querystring value that is ignored by the server - both URLs serve the same file regardless of querystring values. The hash is therefore unchanged. Existing NFT viewers, including the official Chia Wallet, will continue to "just work" with these enhanced URLs.
 
 However, NFT viewers or applications with editing capability can now be supported. These new NFT viewers will recognize the "editable" property on metadata attributes and they will instead look to the latest metadata URL's querystring values first to resolve the metadata value. If these values don't exist as querystring values, the values from the metadata file will be used as normal.
+
+The same viewers could allow basic editing by directing the user to add a new URL via CLI or RPC. Perhaps they could even use a web wallet like Goby to sign the transaction that adds the new enhanced URL to the NFT!
 
 ## Test Cases
 
