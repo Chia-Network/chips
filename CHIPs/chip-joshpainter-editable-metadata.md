@@ -17,30 +17,25 @@ Superseded-By |
 The Chia NFT1 standard enables an off-chain metadata file to be referenced by Non-Fungible Tokens (NFTs) on chain, along with a hash of the file that ensures its immutability. The format and schema of this metadata file is described by [CHIP-0007](chip-0007.md). This CHIP describes an easy way to allow the owner of the NFT to update some or all of that metadata, depending on which attributes have been marked as editable by the creator. It is intended to supplement the metadata schema described in [CHIP-0007](chip-0007.md).
 
 ## Motivation
-Describe why you are creating this proposal. Make sure to include:
-  * What problem are you trying to solve?
-  * How would this proposal benefit Chia's overall ecosystem?
-  * What are the use cases for this proposal?
-  * How technically feasible will this be to implement?
+[CHIP-0007](chip-0007.md) specifies the format and schema of the off-chain metadata file. By design, this metadata file is immutable. If any user attempts to update any of the metadata attributes in the referenced metadata file, the hash of the metadata file will change. The NFT viewer program is responsible for checking this hash to make sure the metadata has not been tampered.
 
-This section is especially critical if you are proposing changes to Chia's core protocols. It should clearly answer all of the above, as well as explain exactly why the current protocol is inadequate.
+However, the ability for the owner for a NFT to update some or all of the metadata for the NFT has some very interesting use-cases. Of particular interest is a Chia Name Service (CNS) that uses NFTs to resolve records. By allowing the owner to update their own NFT "pointer records," a CNS could enable full self-custody and self-sovereignty of these pointer records.
+
+Another simple use case is the addition of an editable "notes" attribute in an otherwise-normal NFT. The owner could update the notes with any personal information about the NFT, a story about where they got it, etc. The next owner could overwrite or append to these notes, but the full history will always be stored on-chain as an additional bit of provenance!
+
+This CHIP will explain one method of enabling this feature using existing NFT1 and CHIP-0007 standards with no required changes, including full backwards-compatibility.
 
 ## Backwards Compatibility
-If your proposal has any backwards incompatibilities, you must list them here. Make sure to include:
-  * Which aspects of your proposal are not backwards compatible?
-  * Which alternatives did you consider, and why did you not propose them?
-  * How severe are the incompatibilities introduced?
-  * How does your proposal address these incompatibilities?
+This CHIP is fully backwards-compatible with CHIP-0007. In fact, it proposes to add just a single new attribute to the CHIP-0007 schema. NFT1 standard requires no changes whatsoever.
 
 ## Rationale
-Describe the reasons for designing your features in the way you have proposed. Make sure to include:
-  * Why did you choose your design?
-  * What design decisions did you make?
-  * What alternative designs did you consider?
-  * How have you achieved community consensus for your design? Provide links to discussions if available.
-  * What objections were raised during your discussions with the community, and how does your design address them?
+The method described below is possible today even if this CHIP is never published because it requires no changes to any existing standards. However, by standardizing the "editable" attribute schema, it is hoped that the Chia NFT viewer itself will be able to make use of these editable attributes, along with other future NFT viewers.
+
+Another possible method to accomplish a similar result would involve Chia Data Layer. Data Layer will no doubt be an important addition to these metadata standards in the future and will enable a much higher amount of data storage. However, Data Layer requires more user interaction and the user must opt-in to the data. By contrast, the method described below is much simpler and works with just a full node. For use cases involving small, rarely-updated data, the impact to the blockchain should be low.
 
 ## Specification
+
+
 List the full technical design specification of any new feature you are proposing. This must include details of all syntax and semantics required to implement each new feature.
 
 This section should be _detailed_. It needs to allow for competing interoperable implementations. When applicable, it may include technical diagrams to accompany your design.
