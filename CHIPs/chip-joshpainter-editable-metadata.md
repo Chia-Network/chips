@@ -33,8 +33,21 @@ The method described below is possible today even if this CHIP is never publishe
 
 Another possible method to accomplish a similar result would involve Chia Data Layer. Data Layer will no doubt be an important addition to these metadata standards in the future and will enable a much higher amount of data storage. However, Data Layer requires more user interaction and the user must opt-in to the data. By contrast, the method described below is much simpler and works with just a full node. For use cases involving small, rarely-updated data, the impact to the blockchain should be low.
 
+Finally, this small addition to the work already done with CHIP-0007 is a good example of [Lateral Thinking with Withered Technology](https://medium.com/@uczlwha/nintendos-philosophy-lateral-thinking-with-withered-technology-f188f371e670). While the Chia NFT1 standard and CHIP-0007 are certainly not already "withered" according to the normally-accepted definition, a big benefit of this standard is that it uses these existing standards in a new way without breaking them.
+
 ## Specification
 
+This CHIP proposes a new optional boolean property on the "trait" attribute defined in CHIP-0007 called "editable." Here is an example of an "editable" attribute (surrounding metadata removed for brevity):
+
+```
+...
+{
+    "trait_type": "Target",
+    "value": "xch1v96m4cej23hpt4newv8hs9ejcsc760w3p8gh5p6989c7kyaq5juq9hzjgr",
+    "editable": true
+},
+...
+```
 
 List the full technical design specification of any new feature you are proposing. This must include details of all syntax and semantics required to implement each new feature.
 
