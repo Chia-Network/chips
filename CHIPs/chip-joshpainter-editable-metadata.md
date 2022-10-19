@@ -21,9 +21,9 @@ The Chia NFT1 standard enables an off-chain metadata file to be referenced by No
 
 However, the ability for the owner for a NFT to update some or all of the metadata for the NFT has some very interesting use-cases. Of particular interest is a Chia Name Service (CNS) that uses NFTs to resolve records. By allowing the owner to update their own NFT "pointer records," a CNS could enable full self-custody and self-sovereignty of these pointer records.
 
-Another simple use case is the addition of an editable "notes" attribute in an otherwise-normal NFT. The owner could update the notes with any personal information about the NFT, a story about where they got it, etc. The next owner could overwrite or append to these notes, but the full history will always be stored on-chain as an additional bit of provenance!
+Another simple use case is the addition of an editable "notes" attribute in an otherwise-normal NFT. The owner could update the notes with any personal information about the NFT, a story about where they got it, etc. The next owner could overwrite or append to these notes, but the full history will always be stored on-chain as an additional bit of provenance.
 
-Imagine some sort of digital board game in which the player gets to choose where to place their token(s). These positions could be managed by updating the X/Y metadata attributes of NFTs that represents these digital player tokens!
+As another example, imagine some sort of digital board game in which the player gets to choose where to place their token(s). These positions could be managed by updating the X/Y metadata attributes of NFTs that represents these digital player tokens.
 
 Finally, these metadata values could themselves be Merkel tree hashes, allowing proofs-of-inclusion while using minimal on-chain storage space!
 
@@ -79,17 +79,15 @@ Not applicable
 
 ## Reference Implementation
 
-go4me
+The go4.me Chia Name Service (CNS) uses this standard for owner-editable pointer records. See <CHIP-????> for more details about CNS standards.
 
 ## Security
-This section is mandatory for all CHIPs. List all considerations relevant to the security of this proposal if it is implemented. This section may be modified as the proposal moves toward consensus. Make sure to include:
-  * Security-related design decisions
-  * Important discussions
-  * Any security-related guidance
-  * All threats and risks, as well as how you are addressing them
+
+No changes or security issues result from this CHIP. It uses the same rules as the NFT1 standard - only the current owner of the NFT can add a metadata URL to the NFT.
 
 ## Additional Assets
-Give a listing of files associated with this CHIP. This list will be added upon as the CHIP moves along the process of approval. All new files should be added to the `assets/chip-<CHIP>` folder. You should link to each individual file here, using relative links.
+
+Not applicable
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
