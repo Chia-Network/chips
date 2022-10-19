@@ -27,21 +27,21 @@ As another example, imagine some sort of digital board game in which the player 
 
 Finally, these metadata values could themselves be Merkel tree hashes, allowing proofs-of-inclusion while using minimal on-chain storage space!
 
-This CHIP will explain one method of enabling this feature using existing NFT1 and CHIP-0007 standards with no required changes, including full backwards-compatibility.
+This CHIP will explain one method of enabling this feature using existing NFT1 and [CHIP-0007](chip-0007.md) standards with no required changes, including full backwards-compatibility.
 
 ## Backwards Compatibility
-This CHIP is fully backwards-compatible with CHIP-0007. In fact, it proposes to add just a single new attribute to the CHIP-0007 schema. NFT1 standard requires no changes whatsoever.
+This CHIP is fully backwards-compatible with [CHIP-0007](chip-0007.md). In fact, it proposes to add just a single new attribute to the [CHIP-0007](chip-0007.md) schema. NFT1 standard requires no changes whatsoever.
 
 ## Rationale
 The method described below is possible today even if this CHIP is never published because it requires no changes to any existing standards. However, by standardizing the "editable" attribute schema, it is hoped that the Chia NFT viewer itself will be able to make use of these editable attributes, along with other future NFT viewers.
 
 Another possible method to accomplish a similar result would involve Chia Data Layer. Data Layer will no doubt be an important addition to these metadata standards in the future and will enable a much higher amount of data storage. However, Data Layer requires more user interaction and the user must opt-in to the data. By contrast, the method described below is much simpler and works with just a full node. For use cases involving small, rarely-updated data, the impact to the blockchain should be low.
 
-Finally, this small addition to the work already done with CHIP-0007 is a good example of [Lateral Thinking with Withered Technology](https://medium.com/@uczlwha/nintendos-philosophy-lateral-thinking-with-withered-technology-f188f371e670). While the Chia NFT1 standard and CHIP-0007 are certainly not already "withered" according to the normally-accepted definition, a big benefit of this standard is that it uses these existing standards in a new way without breaking them.
+Finally, this small addition to the work already done with CHIP-0007 is a good example of [Lateral Thinking with Withered Technology](https://medium.com/@uczlwha/nintendos-philosophy-lateral-thinking-with-withered-technology-f188f371e670). While the Chia NFT1 standard and [CHIP-0007](chip-0007.md) are certainly not already "withered" according to the normally-accepted definition, a big benefit of this standard is that it uses these existing standards in a new way without breaking them.
 
 ## Specification
 
-This CHIP proposes a single new optional boolean property on the "trait" attribute defined in CHIP-0007 called "editable." Here is an example of both a normal and an "editable" attribute (surrounding metadata removed for brevity):
+This CHIP proposes a single new optional boolean property on the "trait" attribute defined in [CHIP-0007](chip-0007.md) called "editable." Here is an example of both a normal and an "editable" attribute (surrounding metadata removed for brevity):
 
 ```
 ...
@@ -57,7 +57,7 @@ This CHIP proposes a single new optional boolean property on the "trait" attribu
 ...
 ```
 
-Only the NFT attributes may include this optional property. The collection attributes mentioned in CHIP-0007 are meant to be the same for all NFTs in the collection and therefore should remain immutable.
+Only the NFT attributes may include this optional property. The collection attributes mentioned in [CHIP-0007](chip-0007.md) are meant to be the same for all NFTs in the collection and therefore should remain immutable.
 
 To edit this editable metadata, the owner of the NFT will add a new metadata URL to the NFT using the normal NFT1 standard. However, the URL will merely be a copy of the existing metadata URL with the addition of the editable names and values in the querystring.
 
