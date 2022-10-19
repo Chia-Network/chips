@@ -1,0 +1,97 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Owner-Editable Metadata Format for NFT1
+Description   | A standard that allows NFT owners to update some or all of the metadata attributes and store those updates on-chain.
+Author        | [Josh Painter](https://github.com/joshpainter)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Process
+Sub-Category  | Informational
+Created       | 2022-10-17
+Requires      | 0007
+Replaces      | 
+Superseded-By | 
+
+## Abstract
+The Chia NFT1 standard enables an off-chain metadata file to be referenced by Non-Fungible Tokens (NFTs) on chain, along with a hash of the file that ensures its immutability. The format and schema of this metadata file is described by [CHIP-0007](chip-0007.md). This CHIP describes an easy way to allow the owner of the NFT to update some or all of that metadata, depending on which attributes have been marked as editable by the creator. It is intended to supplement the metadata schema described in [CHIP-0007](chip-0007.md).
+
+## Motivation
+[CHIP-0007](chip-0007.md) specifies the format and schema of the off-chain metadata file. By design, this metadata file is immutable. If any user attempts to update any of the metadata attributes in the referenced metadata file, the hash of the metadata file will change. The NFT viewer program is responsible for checking this hash to make sure the metadata has not been tampered.
+
+However, the ability for the owner for a NFT to update some or all of the metadata for the NFT has some very interesting use-cases. Of particular interest is a Chia Name Service (CNS) that uses NFTs to resolve records. By allowing the owner to update their own NFT "pointer records," a CNS could enable full self-custody and self-sovereignty of these pointer records.
+
+Another simple use case is the addition of an editable "notes" attribute in an otherwise-normal NFT. The owner could update the notes with any personal information about the NFT, a story about where they got it, etc. The next owner could overwrite or append to these notes, but the full history will always be stored on-chain as an additional bit of provenance.
+
+As another example, imagine some sort of digital board game in which the player gets to choose where to place their token(s). These positions could be managed by updating the X/Y metadata attributes of NFTs that represents these digital player tokens.
+
+Finally, these metadata values could themselves be Merkel tree hashes, allowing proofs-of-inclusion while using minimal on-chain storage space!
+
+This CHIP will explain one method of enabling this feature using existing NFT1 and [CHIP-0007](chip-0007.md) standards with no required changes, including full backwards-compatibility.
+
+## Backwards Compatibility
+This CHIP is fully backwards-compatible with [CHIP-0007](chip-0007.md). In fact, it proposes to add just a single new attribute to the [CHIP-0007](chip-0007.md) schema. NFT1 standard requires no changes whatsoever.
+
+## Rationale
+The method described below is possible today even if this CHIP is never published because it requires no changes to any existing standards. However, by standardizing the "editable" attribute schema, it is hoped that the Chia NFT viewer itself will be able to make use of these editable attributes, along with other future NFT viewers.
+
+Another possible method to accomplish a similar result would involve Chia Data Layer. Data Layer will no doubt be an important addition to these metadata standards in the future and will enable a much higher amount of data storage. However, Data Layer requires more user interaction and the user must opt-in to the data. By contrast, the method described below is much simpler and works with just a full node. For use cases involving small, rarely-updated data, the impact to the blockchain should be low.
+
+Finally, this small addition to the work already done with CHIP-0007 is a good example of [Lateral Thinking with Withered Technology](https://medium.com/@uczlwha/nintendos-philosophy-lateral-thinking-with-withered-technology-f188f371e670). While the Chia NFT1 standard and [CHIP-0007](chip-0007.md) are certainly not already "withered" according to the normally-accepted definition, a big benefit of this standard is that it uses these existing standards in a new way without breaking them.
+
+## Specification
+
+This CHIP proposes a single new optional boolean property on the "trait" attribute defined in [CHIP-0007](chip-0007.md) called "editable." Here is an example of both a normal and an "editable" attribute (surrounding metadata removed for brevity):
+
+```
+...
+{
+    "trait_type": "Registered On",
+    "value": "{$registeredOn}"
+},
+{
+    "trait_type": "Target",
+    "value": "xch1v96m4cej23hpt4newv8hs9ejcsc760w3p8gh5p6989c7kyaq5juq9hzjgr",
+    "editable": true
+},
+...
+```
+
+Only the NFT attributes may include this optional property. The collection attributes mentioned in [CHIP-0007](chip-0007.md) are meant to be the same for all NFTs in the collection and therefore should remain immutable.
+
+To edit this editable metadata, the owner of the NFT will add a new metadata URL to the NFT using the normal NFT1 standard. However, the URL will merely be a copy of the existing metadata URL with the addition of the editable names and values in the querystring.
+
+An example of a normal metadata URL:
+https://bafkreig7fmhptchs2gv2o2l3bilkxtddr7r5eo7nkpr26rnetmx5icahvm.ipfs.nftstorage.link/
+
+An example of a metadata URL that contains a new value for an editable attribute:
+https://bafkreig7fmhptchs2gv2o2l3bilkxtddr7r5eo7nkpr26rnetmx5icahvm.ipfs.nftstorage.link/?Target=xch16nvgtzv2dcs86hmk99kfp3q09vj2k66x0t0z0ttk9k5zcx3yxzaqz9xxaf
+
+Notice that the second example has an additional querystring value that is ignored by the server - both URLs serve the same file regardless of querystring values. The hash is therefore unchanged. Existing NFT viewers, including the official Chia Wallet, will continue to "just work" with these enhanced URLs.
+
+However, NFT viewers or applications with editing capability can now be supported. These new NFT viewers will recognize the "editable" property on metadata attributes and they will instead look to the latest metadata URL's querystring values first to resolve the metadata value. If these values don't exist as querystring values, the values from the metadata file will be used as normal.
+
+The same viewers could allow basic editing by directing the user to add a new URL via CLI or RPC. Perhaps they could even use a web wallet like Goby to sign the transaction that adds the new enhanced URL to the NFT!
+
+## Test Cases
+
+Not applicable
+
+## Reference Implementation
+
+The go4.me Chia Name Service (CNS) uses this standard for owner-editable pointer records. See <CHIP-????> for more details about CNS standards.
+
+## Security
+
+No changes or security issues result from this CHIP. It uses the same rules as the NFT1 standard - only the current owner of the NFT can add a metadata URL to the NFT.
+
+## Additional Assets
+
+Not applicable
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
+
