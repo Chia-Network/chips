@@ -28,8 +28,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
-* [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
 * [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
+* [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
 
 ### Review
 * None
@@ -49,7 +49,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Withdrawn
-* None
+* [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
 
 ### Obsolete
 * CAT1 -- This standard was replaced with CAT2
@@ -65,7 +65,6 @@ The following standards were finalized before the CHIP process had been created:
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
 * [Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
-* [Name Service Wallet Resolution](https://github.com/Chia-Network/chips/pull/34)
 
 -----
 
