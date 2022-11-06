@@ -30,6 +30,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 * [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
+* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 ### Review
 * None
@@ -56,10 +57,14 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Grandfathered
 The following standards were finalized before the CHIP process had been created:
-* [Singletons](https://chialisp.com/docs/puzzles/singletons) -- A standard for creating puzzles with unique IDs
-* [Pooling](https://chialisp.com/docs/puzzles/pooling) -- Chia's decentralized pooling protocol
-* [CAT2](https://chialisp.com/docs/puzzles/cats) -- The second standard for Chia Asset Tokens
-* [Offers](https://chialisp.com/docs/puzzles/offers) -- The first standard for peer-to-peer asset exchange on Chia's blockchain
+* [Singletons](https://chialisp.com/singletons) -- A standard for creating puzzles with unique IDs
+* [Pooling](https://chialisp.com/pooling) -- Chia's decentralized pooling protocol
+* [CAT2](https://chialisp.com/cats) -- The second standard for Chia Asset Tokens
+* [Offers](https://chialisp.com/offers) -- The first standard for peer-to-peer asset exchange on Chia's blockchain
+
+### Under Consideration
+The following Pull Requests have not yet been formalized as a CHIP:
+* [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
 
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
