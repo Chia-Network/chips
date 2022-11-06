@@ -66,6 +66,11 @@ The following standards were finalized before the CHIP process had been created:
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
 
+### Under Consideration
+The following Pull Requests have not yet been formalized as a CHIP:
+* [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
+* [Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+
 -----
 
 Take a look at [notes/TODO.md](/notes/TODO.md) to see CHIPs that still need to be created.
