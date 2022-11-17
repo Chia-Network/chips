@@ -1,0 +1,227 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | BLS Additions
+Description   | Add CLVM operators to increase on-chain BLS capabilities
+Author        | [Cameron Cooper](https://github.com/cameroncooper), [Dan Perry](https://github.com/danieljperry)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Chialisp
+Created       | 2022-11-17
+Requires      | None
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+This CHIP will add a set of new operators to the CLVM. These operators will enable complex BLS operations, as well as new functionality such as ZK proofs.
+
+## Definitions
+
+Throughout this document, we'll use the following terms:
+* **Chialisp** - The high-level [programming language](https://chialisp.com/) from which Chia coins are constructed
+* **CLVM** - [Chialisp Virtual Machine](https://chialisp.com/clvm), where the bytecode from compiled Chialisp is executed. Also commonly refers to the compiled bytecode itself
+* **BLS** - [Boneh–Lynn–Shacham](https://en.wikipedia.org/wiki/BLS_digital_signature), a digital signature scheme that supports aggregation. Chia has been using [BLS keys](https://docs.chia.net/bls-keys) since before the launch of mainnet
+* **G1** - The first group of points on a BLS elliptic curve; where public keys are held
+* **G2** - The second group of points on a BLS elliptic curve; where digital signatures are held
+* **Gt** - The target group of the G1 and G2 points, defined as `G1 x G2 → Gt`
+* **ZK proofs** - [Zero-knowledge proofs](https://en.wikipedia.org/wiki/Zero-knowledge_proof), a method by which one party (the prover) can prove to another party (the verifier) that a given statement is true while the prover avoids conveying any additional information apart from the fact that the statement is indeed true
+
+## Motivation
+
+CLVM currently includes a BLS operator called [point_add](https://chialisp.com/operators#bls12-381). This operator is used for G1 addition, and was needed to support synthetic keys. However, CLVM lacks the operators necessary to perform more complex operations, such as signature verification. 
+
+This CHIP will add a new set of operators to CLVM in order to utilize the full capabilities of BLS signatures. For example, the new operators will add the ability to verify signatures and to use ZK proofs.
+
+CLVM is an extensible on-chain programming language, so adding new operators is not a large technical challenge.
+
+## Backwards Compatibility
+
+The CLVM operators to be added are backwards compatible. In order for this CHIP to be adopted, extensive use of the [softfork](https://chialisp.com/operators/#softfork) operator will be required.
+
+This CHIP does not introduce any backwards incompatible changes to Chia. If adopted, this CHIP will not require a hard fork or a soft fork from Chia's blockchain.
+
+## Rationale
+
+This CHIP's design was primarily chosen for its standardized implementation. It includes consistent methods for adding, subtracting, multiplying and negating BLS points of every type. In keeping with this consistency, this proposal also includes a mapping from `point_add` to `bls_g1_add`.
+
+Another aspect of this CHIP's design is its enhanced cross-functionality between multiple BLS groupings. The design includes the ability to pair points from different groupings, as well the ability to add arbitrary data to G1 and G2 points.
+
+Each of the new operators will incur a CLVM cost, as detailed below. If this CHIP is adopted, the new operators will be optional when designing Chia coins.
+
+## Specification
+
+To support the complete set of available BLS operations within the CLVM, math primitives on G1, G2 and Gt points are required, along with functions for pairing and mapping those points. Therefore, the following operators will be added:
+
+### bls_g1_add
+ 
+Functionality: Add two or more G1 points
+
+Note: This operator is already implemented in CLVM as [`point_add`](https://chialisp.com/operators#bls12-381). For consistency and ease of use, a new compiler macro will be created to map `point_add` to `bls_g1_add` so either name can be used with full backward compatibility.
+
+Arguments: Two or more G1 points
+
+Usage: `(bls_g1_add point1 point2 … pointn)`
+
+CLVM Cost: `101 094` base, `1 343 980` per argument
+
+### bls_g1_subtract
+
+Functionality: Subtract one or more G1 points from a base G1 point
+
+Arguments: The base G1 point (point1), followed by one or more G1 points to subtract from the base G1 point
+
+Usage: `(bls_g1_subtract point1 point2 … pointn)`
+
+CLVM Cost: `132 332` base, `1 362 553` per argument
+
+### bls_g1_multiply
+
+Functionality: Multiply a G1 point by a scalar value
+
+Arguments: A single G1 point (point1) and a single scalar value (scalar)
+
+Usage: `(bls_g1_multiply point1 scalar)`
+
+CLVM Cost: `2 154 347` base, `12` per byte in the scalar 
+
+### bls_g1_negate
+
+Functionality: Negate a G1 point
+
+Arguments: A single G1 point
+
+Usage: `(bls_g1_negate point1)`
+
+CLVM Cost: `470 779`
+
+### bls_g2_add
+
+Functionality: Add two or more G2 points
+
+Arguments: Two or more G2 points
+
+Usage: `(bls_g2_add point1 point2 … pointn)`
+
+CLVM Cost: `45 440` base, `5 544 581` per argument
+
+### bls_g2_subtract
+
+Functionality: Subtract one or more G2 points from a base G2 point
+
+Arguments: The base G2 point (point1), followed by one or more G2 points to subtract from the base G2 point
+
+Usage: `(bls_g2_subtract point1 point2 … pointn)`
+
+CLVM Cost: `146 290` base, `5 495 272` per argument
+
+### bls_g2_multiply
+
+Functionality: Multiply a G2 point by a scalar value
+
+Arguments: A single G2 point (point1) and a single scalar value (scalar)
+
+Usage: `(bls_g2_multiply point1 scalar)`
+
+CLVM Cost: `10 078 145` base, `12` per byte in the scalar 
+
+### bls_g2_negate
+
+Functionality: Negate a G2 point
+
+Arguments: A single G2 point
+
+Usage: `(bls_g2_negate point1)`
+
+CLVM Cost: `1 881 699`
+
+### bls_gt_add
+
+Functionality: Add two or more Gt points
+
+Arguments: Two or more Gt points
+
+Usage: `(bls_gt_add point1 point2 … pointn)`
+
+CLVM Cost: `60 118` base, `62 655 353` per argument
+
+### bls_gt_subtract
+
+Functionality: Subtract one or more Gt points from a base Gt point
+
+Arguments: The base Gt point (point1), followed by one or more Gt points to subtract from the base Gt point
+
+Usage: `(bls_gt_subtract point1 point2 … pointn)`
+
+CLVM Cost: `42 927` base, `63 060 911` per argument
+
+### bls_gt_multiply
+
+Functionality: Multiply a Gt point by a scalar value
+
+Arguments: A single Gt point (point1) and a single scalar value (scalar)
+
+Usage: `(bls_gt_multiply point1 scalar)`
+
+CLVM Cost: `34 026 598` base, `12` per byte in the scalar 
+
+### bls_gt_negate
+
+Functionality: Negate a Gt point
+
+Arguments: A single Gt point
+
+Usage: `(bls_gt_negate point1)`
+
+CLVM Cost: `21 787 950`
+
+### bls_pairing
+
+Functionality: Perform pairings between G1 and G2 points; return a Gt value
+
+Arguments: To perform a single pairing, a single pair of G1 and G2 points. To perform multiple pairings, a list of tuples to perform multiple pairings
+
+Usage (single paring): `(bls_pairing g1point1 g2point1)`
+
+Usage (multiple parings): `(bls_pairing ((g1point1 g2point1) (g1point2 g2point2) … (g1pointn g2pointn))`
+
+CLVM Cost: `4 999 087` base, `4 515 438` per G1/G2 pair
+
+### bls_map_g1
+
+Functionality: Map arbitrary data to a G1 point. SSWU and SHA256 hashing are performed on the data 
+
+Arguments: The first argument (required) is the data; the second argument (optional) is a custom DST. If the second argument is not used, the default DST of `BLS_SIG_BLS12381G1_XMD:SHA-256_SSWU_RO_NUL_` will be used instead
+
+Usage: `(bls_map_g1 data dst)`
+
+CLVM Cost: `610 907` base, `122` per byte, `135` per DST byte
+
+### bls_map_g2
+
+Functionality: Map arbitrary data to a G2 point
+
+Arguments: The first argument (required) is the data; the second argument (optional) is a custom DST. If the second argument is not used, the default DST of `BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_NUL_` will be used instead
+
+Usage: `(bls_map_g2 data dst)`
+
+CLVM Cost: `3 380 023` base, `122` per byte, `135` per DST byte
+
+## Test Cases
+[todo]
+
+## Reference Implementation
+[todo]
+
+## Security
+[todo]
+
+## Additional Assets
+
+* Chia keys follow the [BLS-12-381](https://github.com/zkcrypto/bls12_381) standard
+* Chia plots use BLS keys that are compliant with the [IRTF CFRG BLS standard](https://datatracker.ietf.org/doc/draft-irtf-cfrg-bls-signature/)
+* Chia keys follow the [EIP-2333](https://eips.ethereum.org/EIPS/eip-2333) specification, with one [minor difference](https://docs.chia.net/bls-keys/#difference-between-chia-and-eip-2333)
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
