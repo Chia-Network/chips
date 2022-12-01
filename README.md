@@ -32,13 +32,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 ### Review
-* [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
+* None
 
 ### Review (Fast Track)
 * [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
 
 ### Last Call
-* None
+* [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
