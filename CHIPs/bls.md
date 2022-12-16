@@ -8,7 +8,7 @@ Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
 Status        | < Creator must leave this blank. Editor will assign a status.>
 Category      | Standards Track
 Sub-Category  | Chialisp
-Created       | 2022-11-17
+Created       | 2022-12-16
 Requires      | None
 Replaces      | None
 Superseded-By | None
@@ -38,9 +38,13 @@ CLVM is an extensible on-chain programming language, so adding new operators is 
 
 ## Backwards Compatibility
 
-The CLVM operators to be added are backwards compatible. In order for this CHIP to be adopted, extensive use of the [softfork](https://chialisp.com/operators/#softfork) operator will be required.
-
-This CHIP does not introduce any backwards incompatible changes to Chia. If adopted, this CHIP will not require a hard fork or a soft fork from Chia's blockchain.
+* This CHIP requires extensive use of the [softfork](https://chialisp.com/operators/#softfork) operator
+* The CLVM operators to be added are backwards compatible -- any calls that succeed after the CHIP has been implemented also would have succeeded beforehand
+* The CLVM operators to be added are not forward compatible -- some calls that succeed before the CHIP has been implemented will no longer succeed afterward
+* Because of the forward incompatibility of the operators to be added, this CHIP will require a soft fork of Chia's blockchain
+* The block height of the soft fork will need to be determined before this CHIP can be finalized
+* The operators to be added are unlikely to be contentious. However, as with all forks, there will be a risk of a chain split
+* The soft fork could also fail to be adopted. This might happen if an insufficient number of nodes have upgraded to include the changes introduced by this CHIP prior to the fork's block height
 
 ## Rationale
 
@@ -209,13 +213,16 @@ Usage: `(bls_map_g2 data dst)`
 CLVM Cost: `3 380 023` base, `122` per byte, `135` per DST byte
 
 ## Test Cases
-[todo]
+
+None so far. New test cases will be added here as they are created.
 
 ## Reference Implementation
-[todo]
+
+This functionality is currently being implemented in the [bls branch](https://github.com/Chia-Network/clvm_rs/tree/bls) of the `clvm_rs` repository on GitHub.
 
 ## Security
-[todo]
+
+Chia Network, Inc will need to conduct a full security audit before this CHIP can be finalized.
 
 ## Additional Assets
 
