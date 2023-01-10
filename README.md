@@ -28,6 +28,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+* [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/blob/bls_additions/CHIPs/bls.md)
 
 ### Review
 * [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
@@ -37,7 +38,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
 
 ### Last Call
-* None
+* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
