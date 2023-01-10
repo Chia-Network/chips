@@ -28,16 +28,16 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+* [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/blob/bls_additions/CHIPs/bls.md)
 
 ### Review
-* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 * [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
 
 ### Review (Fast Track)
 * [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
 
 ### Last Call
-* None
+* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -63,7 +63,6 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
-* [BLS Additions](https://github.com/Chia-Network/chips/blob/bls_additions/CHIPs/bls.md) -- a proposal to add new BLS operators to the CLVM in order to support ZK proofs, among other things
 
 -----
 
