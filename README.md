@@ -31,14 +31,14 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
 
 ### Review
-* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
 * [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
 
 ### Review (Fast Track)
-* [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
+* None
 
 ### Last Call
 * [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
+* [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
