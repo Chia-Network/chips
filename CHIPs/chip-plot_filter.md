@@ -1,0 +1,222 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Decrease Plot Filter
+Description   | Every two years, cut the plot filter in half until it reaches size 32.
+Author        | [JM Hands](https://github.com/jmhands)
+Editor        | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Core
+Created       | 2023-01-18
+Requires      | None
+Replaces      | None
+Superseded-By | None
+
+
+## Abstract
+
+In [Chia's consensus](https://docs.chia.net/consensus-intro), the plot filter is a constant, which each plot has a 1/plot filter probability of being eligible for a challenge for a given signage point. The plot filter's primary benefit is a reduction in disk I/O. Its primary tradeoff is an amplification of the effect of plot grinding. Plot grinding will be feasible with multiple GPUs, and if nothing is changed with Chia's consensus or plot structure, it may become economical with future changes in xch price and advances in computing technology. This proposal will mitigate the cost-effectiveness of plot grinding by reducing the size of the plot filter every two years, to `256`, `128`, `64`, and finally `32`.
+
+## Definitions
+
+Throughout this document, we'll use the following terms:
+
+* **signage point** -- In Chia's consensus, each ten-minute subslot is divided into 64 [signage points](https://docs.chia.net/signage-and-infusion-points), which occur (on average) every 9.375 seconds. Timelords broadcast a new proof each time they reach a signage point. On average, one valid Proof of Space is found on Chia's network for every two signage points.
+
+* **infusion point** -- The point at which a new block is infused into the blockchain. The infusion point must occur between three and four signage points after the initial signage point from which the proof was obtained.
+
+* **plot filter** -- A reduction of the number of plots eligible to participate in a challenge for a given signage point. At each signage point, the `plot filter bits` for each plot are calculated, first by concatenating the `plot ID`, the `subslot challenge`, and the `current signage point`, and then by calculating the sha256 hash of the result. Currently, if the first nine `plot filter bits` are each zero, the corresponding plot passes the filter and becomes eligible to participate in the challenge for that signage point. By requiring nine leading zeros, only one out of every 512 (2^9) plots are eligible to participate. The other 511 plots are filtered out.
+
+* **plot grinding** -- A process where a farmer creates a new plot after receiving a challenge for a given signage point, and deletes that plot after the corresponding infusion point. This allows the farmer to _mimic_ storing plots without actually storing them, effectively running a Proof of Work consensus, rather than the preferred Proof of Space and Time.
+
+* **k size** -- `k` is the parameter that controls the size of Chia plots. For each increase of `k`, the size of the corresponding plot is approximately doubled. Currently, the minimum `k` size for Chia plots to be eligible to create blocks is `32`, which corresponds to around 101.4 GiB per plot.
+
+* **harvester** -- In Chia's architecture, a [harvester](https://docs.chia.net/harvester-architecture) is a computer that fetches proofs from a disk. Large farms tend to have many harvesters in their network.
+
+* **ms** -- millisecond, or one thousandth of a second
+
+## Motivation
+
+Many constants and variables in Chia were chosen as tradeoffs to favor honest farmers and punish attackers. These constants include block time for rewards blocks, minimum `k` size of plots on the network, and the plot filter. Occasionally it becomes necessary to modify some of these values as technology improves.
+
+### The plot filter's effectiveness
+
+If the plot filter didn't exist, a harvester would need to perform a quality check on every plot in its control for every signage point. On a low-end spinning hard drive, a quality check requires 50-70 ms (benchmarked at 10 ms per disk seek), so a 20 TB disk filled with 183 plots of size `k=32` would require 9-13 seconds to perform the quality checks. This would be unacceptable in Chia's network because signage points occur (on average) every 9.375 seconds. In order to provide a safe buffer, as well as to account for overhead such as network latency, the quality checks should take no more than 5 seconds per signage point. Because of this discrepancy, the disk I/O would be too demanding for the harvester to keep up with the blockchain's progression.
+
+The plot filter was introduced to reduce the amount of disk I/O required by a harvester. The filter is currently set to `512`, which means that on average, the harvester will only need to perform a quality check on one out of every 512 plots per signage point. At this plot filter size, on average a single plot on the aforementioned 20 TB disk passes the filter every 2-3 signage points. For a farm with 50 disks of 20 TB each (1 PB total, or 9150 plots), 18 plots pass the filter for a typical signage point. The quality checks can easily be performed on these plots with plenty of time to spare before the next signage point. In fact, a typical hard drive that is farming Chia is 99.7% idle; this is mostly attributed to the plot filter.
+
+However, the plot filter does come with the tradeoff of making plot grinding more cost effective. We'll cover this in the next section.
+
+### Plot grinding
+
+#### Explanation
+
+In order to understand plot grinding, we'll first explain a bit about Chia's consensus and the structure of Chia's plots.
+
+Chia's consensus was designed to have 64 signage points per 600-second subslot. On average, each signage point occurs every `600 / 64 = 9.375` seconds. A minimum of 3 signage points must elapse before an infusion point, thus making the minimum time between transaction blocks `3 * 9.375 = 28.125` seconds.
+
+Chia's plots consist of seven tables filled with cryptographic data. The plots are constructed in four phases. The data is generated in Phase 1, and it is organized in Phases 2, 3, and 4. In theory, a plot that has only completed Phase 1 can be used for farming, even though this would be inefficient.
+
+Due to advancements in hardware and plotting techniques, it is possible to complete Phase 1 in less than 28.125 seconds. Once this is possible, a farmer could choose not to store any plots on disk, and instead opt to create Phase 1 of a new plot after a signage point has been broadcast. If Phase 1 can be completed and a full proof lookup can be performed and submitted to a timelord in less than 28.125 seconds, it will be possible to run a Chia farm without storing any plots. This is called "plot grinding".
+
+Plot grinding can create a plot that automatically passes the filter, gaining leverage proportional to the plot filter. This only becomes possible if phase 1 of a plot can be completed in less than 28 seconds (before the infusion), and the leverage ratios change depending on plot timing.
+
+With an example plot created in under 28 seconds. This would be the equivalent of having 1 * plot filter number of plots minus the two signage points missed. While the GPU is trying to grind the first one, it must ignore the other challenges. This gives a leverage factor of ⅓ * plot filter constant. The leverage factor is equivalent to the number of plots being spoofed, so we can easily calculate the amount of spoofed space in TiB or TB by multiplying by a k=32 plot size. There is no double dipping on compression because it doesn’t apply to phase 1, which is needed for plot grinding.
+
+The real leverage comes in when a plot is created in under 18.75 seconds (realistically, there are probably a few seconds of overhead for filter grinding and others, so in practice, it is probably more like 15 seconds). It would seem like this leverage is ⅔ * the plot filter, because you miss one out of the 3 signage points, but there is a trick. At the second signage point, a plot is generated that can pass both filters for the first and second challenges by creating a plotid (by creating many BLS keys) and then putting them into the SHA256 filter hash that meets both criteria for passing the filter. At time t[2] you start plotting something where the filter passes challenge 1 and 2 (c1 & c2) at time t[4] something that passes c3 and c4. This trick can be extended to getting a phase 1 under the signage point time of 9.375 seconds, where all three challenges can be attempted if a plot id is created that hashes meet the criteria of passing all three filters (today 512^3). Thankfully it requires a very large cluster of GPUs and a tremendous amount of power to perform something like this today, and it is not economical even with the extended leverage.
+
+| phase 1 time | plot filter | leverage factor (plots) | space spoofed (TiB)      |
+| ------------ | ----------- | ----------------------- | ------------------------ |
+|              |             |                         |                          |
+| 28.125       | 512         | 171                     | 16.9                     |
+| 18.75        | 512         | 512                     | 50.7                     |
+| 9.375        | 512         | 1536                    | 152.0                    |
+| t <  9.375   | 512         | 9.375 / t \* 3 or 3.5   | Plots \* 101.3GiB / 1024 |
+
+However, the plot filter amplifies the cost-effectiveness of plot grinding. This amplification occurs because the plot filter can easily be brute-forced. The following formula is used to determine whether a given plot passes the filter for a given signage point:
+
+`plot filter bits = sha256(plot ID + sub slot challenge + signage point)`
+
+The plot ID can be calculated in one of two ways, depending on how it will be used for farming:
+* **Farm to public key**: `sha256(pool public key + plot public key)`
+* **Farm to pool contract address**: `sha256(pool contract puzzle hash + plot public key)`
+
+In both cases, the plot ID depends on the plot public key, which is unique for each plot, and is created deterministically based on a root key.
+
+Because the plot IDs are created deterministically, they can be generated without creating the plots themselves. A farmer using plot grinding can continuously generate new plot IDs until one is created that passes the filter. On average this will require 512 plot IDs to be generated, which can be performed in less than 1 ms.
+
+A plot-grinding farmer can easily brute-force the filter to create a plot that always passes it, whereas an honest farmer must store 512 plots to achieve the same effect. 
+
+Note that this is _not_ an attack on Chia's consensus. A farmer who is plot grinding must still generate the plot in order to do a full proof lookup. This plot will have the same probability of producing a valid proof as every other plot of the same `k`-size that passes the filter on the network. However, even though it is not an attack, it still is an unintended way to use Chia's network. It consumes significantly more electricity than storing the plots, thus making plot grinding resemble Proof of Work (PoW).
+
+#### Cost effectiveness
+
+Recent improvements in GPU plotting have dramatically reduced the time it takes to create a plot. We have already observed proof of a phase 1 completed in under 28 seconds today. However, it will not be cost-effective yet.
+
+Like Chia farming, and other cryptocurrency mining, a total cost of ownership (TCO) model can help you understand the costs. The equipment required to attempt plot grinding would be a workstation platform, 256GB of DRAM, and multiple PCIe 4.0 GPUs, and the cost can be estimated easily. The speed of the plot creation determines how much space can be spoofed, and then the Netspace and xch price can provide the profitability.
+
+If the GPUs are already owned, then power costs (operational expenditures) are the only cost. The profitability of spoofing capacity has to be greater than the cost of the electricity to run.
+
+Plot grinding really gets concerning for Chia if it can be profitably performed on a single GPU, because a desktop with a PCIe x16 slot is readily and cheaply available. Servers and workstations that support PCIe 4.0 are still fairly expensive compared to a desktop. Most GPU miners for other coins don’t have these setups readily available.
+
+Plot grinding can theoretically be attempted with either two PCIe 4.0 x16 GPUs at full bandwidth, or one PCIe 5.0 GPU. The latter is not yet available from AMD or NVIDIA. We recommend changing the plot filter to stop plot grinding from ever becoming economically viable.
+
+Even though plot grinding can be attempted at under 28 seconds, it doesn't really start to look economical until the phase 1 is under 18 seconds and can be performed on a relatively inexpensive machine at a reasonably low power.
+
+#### Benefit
+
+Reducing the filter provides a proportional reduction in spoofed space for plot grinding, quickly making it not economical. This plot filter was set on the conservative side to ensure farming was extremely energy efficient. Reducing the plot filter over time ensures future hard forks will not be required.
+
+
+### Proposal
+
+This CHIP is a proposal to decrease the economic benefit of plot grinding. One year after a pre-determined hard fork activation, the size of the plot filter will be reduced to `256`, thereby cutting in half the number of plots a plot grinding computer can mimic. This proposal will continue to cut the filter in half every two years, until the filter size is `32`.
+
+If this proposal is accepted and is successful, plot grinding will not be economical for the foreseeable future of computing devices. By using this economic incentive to encourage farmers to store their plots, Chia's PoST consensus will continue to be significantly more energy-efficient than blockchains that use PoW.
+
+The specific block heights at which the plot filter will be reduced are as follows:
+
+| Block height | Year (approx) | Filter size |
+|:-----------: | :-----------: | :---------: |
+| [todo]       | 2024          | 256         |
+| [todo]       | 2026          | 128         |
+| [todo]       | 2028          |  64         |
+| [todo]       | 2030          |  32         |
+
+## Backwards Compatibility
+
+This proposal is not backwards compatible with the status quo because it makes something valid that previously would have been invalid. For example, currently an average of 18 plots pass the filter for each signage point on a 1-PB farm. After this change, the same farm would see an average of 36 plots passing the filter. This broadening of the rules will necessitate a hard fork of Chia's network.
+
+## Rationale
+
+We considered several options to reduce the possibility and/or benefit of plot grinding on Chia's blockchain.
+
+### Option 1: filter reduction
+
+Summary:
+
+Cut the plot filter's threshold in half, thereby doubling the number of plots that pass the filter.
+
+Pro:
+
+* The economic viability of plot grinding is cut in half with each reduction of the plot filter
+* No need to replot; least disruptive to the farming community
+* Minimal environmental impact due to replotting not being needed
+* Easy to implement; a single constant will need to be changed
+
+Con:
+
+* Each reduction of the plot filter comes with an increase in disk I/O
+  * Note that disk I/O is already quite low, at 5-7 disk seeks per plot that passes the filter; disks are currently 99.7% idle
+* Each reduction of the plot filter also will increase CPU/GPU cycles on the harvester used for plot decompression. Depending on the level of compression, this could impact some farmers
+* This change requires a hard fork
+
+### Option 2: increase `k` size
+
+Summary:
+
+Increase the minimum `k` size for a plot to be eligible to submit a proof. Increment this number by 1 every 2-3 years.
+
+Pro:
+
+* The minimum size of the plots doubles with each `k` increment. This therefore necessitates twice as much time for plot creation, as well as double the system resources, thereby increasing the threshold to making plot grinding a viable option (regardless of cost)
+
+Con:
+
+* Approximately 97% of the network consists of `k=32` plots, so 97% of the network would need to replot. This would be highly disruptive to the farming community
+* Increased hardware requirements for plotting. A `k=34` plot would be very difficult to create in RAM without using a high-end server
+* Increased environmental impact. Plotting is energy-intensive, and the entire network would need to be replotted every 2-3 years. The increased hardware requirements would also add to the environmental impact of replotting
+
+### Option 3: change the Proof of Space format
+
+Summary: 
+
+Create a new plot format that either discourages GPU plotting, requires proofs of space to come in pairs, or increases the number of tables per plot.
+
+Pro:
+
+* Could eliminate the possibility of plot grinding
+
+Con:
+
+* Not currently possible. Chia's plot format represents two years of research into Proof of Space. A method to eliminate GPU plotting has yet to be devised.
+
+* Not impactful enough. Increasing the number of tables would delay the advent of GPU plotting by a few years, but it wouldn't eliminate it. Options 1 and 2 are more impactful.
+
+* Highly disruptive. Any changes to the plot format would require 100% of the netspace to replot. In addition, the new plot format would not be usable in conjunction with the old format, so farmers would not be financially motivated to replot until the fork point was reached, which could severely impact Chia's netspace.
+
+### Decision: filter reduction
+
+We decided to propose a reduction of the plot filter every two years until the size reaches `32`. An important consideration was whether harvesters could keep up with the network. As demonstrated previously, if the size of the plot filter were set to `1`, spinning disks would not be viable. However, when the plot filter reaches its final level proposed in this CHIP of `32` in 2030, farmers will be able to keep up with the network using minimum spec hardware.
+
+## Specification
+
+[todo]
+
+## Test Cases
+
+[todo]
+
+## Reference Implementation
+
+[todo]
+
+## Security
+
+At each fork point block height specified in this CHIP, the filter size will be cut in half. Because of this, twice as many plots will pass the filter, and twice as many proofs of space will be found. The effect will be a temporary doubling in the speed of the network, which could cause a temporary outage of some nodes.
+
+The best mitigation for this is to set each fork point to a block height that occurs midway through an epoch. The second half of the epoch will be completed in around one-half of the baseline time, so the entire epoch will be completed in around three-quarters of the baseline time. At this point, the network's difficulty will automatically be increased by one-third. The next epoch will also be completed in less than the baseline time, after which the difficulty will again automatically be increased. At this point (1.5 epochs after the fork point block height) the network will once again run at its baseline speed.
+
+## Additional Assets
+
+- [Chia's architecture](https://docs.chia.net/architecture-overview "An overview of Chia's architecture")
+- [Chia's green paper](https://www.chia.net/assets/ChiaGreenPaper.pdf "Chia's Green Paper") -- showcases Proofs of Space and Time
+- [Proofs of Space specification](https://www.chia.net/assets/Chia_Proof_of_Space_Construction_v1.1.pdf)
+- [Binary Quadratic Forms](https://github.com/Chia-Network/vdf-competition/blob/main/classgroups.pdf 'Binary quadratic forms white paper, by Lipa Long') -- a white paper by Lipa Long
+- [Chia's power consumption](https://chiapower.org "Chia's energy consumption statistics")
+- [Beyond Hellman](https://eprint.iacr.org/2017/893.pdf "Beyond Hellman's Time-Memory Trade Offs with Applications to Proofs of Space"), by Hamza Abusalah, Jo ̈el Alwen, Bram Cohen, Danylo Khilko, Krzysztof Pietrzak, and Leonid Reyzin
+
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
