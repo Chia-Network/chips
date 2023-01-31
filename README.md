@@ -43,7 +43,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
 * [5 - NFT1](/CHIPs/chip-0005.md)
 * [7 - Off-Chain metadata format for NFT1](/CHIPs/chip-0007.md)
-* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
+* [8 - Split Royalties for NFT1](/CHIPs/chip-0008.md)
 
 ### Stagnant
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
