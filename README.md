@@ -37,10 +37,11 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
+* [4 - DID1](/CHIPs/chip-0004.md)
 * [5 - NFT1](/CHIPs/chip-0005.md)
 * [7 - Off-Chain metadata format for NFT1](/CHIPs/chip-0007.md)
 * [8 - Split Royalties for NFT1](/CHIPs/chip-0008.md)
@@ -64,6 +65,7 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
+* [Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
 
 -----
 
