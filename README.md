@@ -31,7 +31,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
 
 ### Review
-* [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
+* None
 
 ### Review (Fast Track)
 * None
@@ -45,11 +45,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [5 - NFT1](/CHIPs/chip-0005.md)
 * [7 - Off-Chain metadata format for NFT1](/CHIPs/chip-0007.md)
 * [8 - Split Royalties for NFT1](/CHIPs/chip-0008.md)
+* [9 - Name Service Wallet Address Resolution](/CHIPs/chip-0009.md)
 
 ### Stagnant
-* [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
+* None
 
 ### Withdrawn
+* [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
 
 ### Obsolete
