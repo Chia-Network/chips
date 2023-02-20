@@ -1,0 +1,133 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Tighten plot filter rules
+Description   | Disallow plots from passing the plot filter for more than one out of any four consecutive signage points.
+Author        | [JM Hands](https://github.com/jmhands)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Core
+Created       | 2022-02-16
+Requires      | None
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+Currently when a plot passes the plot filter, there are no restrictions regarding when it can pass the filter again. This allows a plot grinder to brute-force a plot ID that will pass the filter for multiple consecutive signage points, thereby gaining additional leverage over honest farmers. This CHIP adds a new restriction that if a plot passes the filter for a given signage point, then it is not allowed to pass the filter for any of the next three signage points.
+
+## Definitions
+
+Throughout this document, we'll use the following terms:
+
+* **plot** -- A file that contains billions of _Proofs of Space_. Plots are the minimum unit of disk space required to participate in Chia farming.
+* **phase 1** -- The first phase in the plot creation process called forward propagation for creating the plotting tables, involving hashing, sorting, and matching. It is possible to farm with a plot that has only completed phase 1 even though the final output is not the most compressed form of a plot.
+* **challenge** -- A sha256 hash created at the beginning of a 10-minute period called a _subslot_. Each signage point also includes its own challenge, which is based off of the subslot's challenge.
+* **signage point (SP)** -- An intermediate point in a subslot. There are 64 signage points per subslot, thus a new signage point is targeted to be reached every 9.375 seconds. As each signage point is reached, it is broadcast to the network, and certain plots are deemed eligible to participate in the challenge for that signage point.
+* **plot filter** -- A reduction in the number of plots eligible to participate in a challenge for a given signage point. Currently, one out of every 512 plots is eligible to participate. The other 511 plots are filtered out. This is a fair system for honest farmers because it affects all plots equally.
+* **quality check** -- When a plot passes the plot filter, the farmer first determines if the plot contains a valid proof. This is called a _quality check_. It involves fetching the quality string, which is a hash derived from a full proof. This process requires 5-7 disk seeks.
+* **full proof** -- A Proof of Space. If a quality string's value is sufficiently small, then the corresponding Proof of Space is eligible for inclusion in the blockchain. In this case, the farmer fetches the full proof from the plot. This process requires 64 disk seeks.
+* **plot grinding** -- A process where a farmer creates phase 1 of a new plot after receiving a challenge for a given signage point, and deletes the plot after the corresponding infusion point. This allows the farmer to _mimic_ storing plots without actually storing them, effectively running a Proof of Work consensus, rather than the preferred Proof of Space and Time.
+* **timelord** -- A computer whose primary functions involve running the network's three Verifiable Delay Function (VDF) chains in parallel, keeping a cache of future blocks to infuse, broadcasting signage points when they are reached, and infusing blocks at their infusion points.
+
+## Motivation
+
+In Chia's [Proof of Space](https://docs.chia.net/proof-of-space) consensus, in order to ensure that a valid proof is accepted, it must be submitted to the network before its corresponding infusion point. This point will occur anywhere from three to four signage points (28.125 to 37.5 seconds) after the signage point against which the proof was obtained. Typically, farmers only create their plots once. They then store their plots on disk long-term, only accessing them to fetch quality strings and full proofs. However, if phase 1 of a plot can be completed in less than three signage points, the farmer can instead create phase 1 on the fly, fetch any valid proofs, delete the plot, and start over again at the next available signage point. This is known as _plot grinding_, as defined above.
+
+The formula to determine whether a plot passes the filter is:
+
+`plot filter bits` = `sha256(plot_id + challenge_hash + sp_hash)`
+
+Currently, the plot filter is set to `512`, so if the first nine `plot filter bits` are each zeroes, the plot passes the filter. Each plot has a 1 in 512 chance of passing the filter for a single signage point, a 1 in 512^2 (`262 144`) chance of passing the filter for two consecutive signage points, a 1 in 512^3 (`134 217 728`) chance of passing the filter for three consecutive signage points, and so on. 
+
+A plot ID is a sha256 hash. However, several steps must be taken to generate this hash, so its creation requires around one order of magnitude more time than it would take to generate a single hash. Nonetheless, a plot grinder could quickly brute-force a plot ID that will pass the filter for three consecutive signage points.
+
+The economics of plot grinding are laid out in the [plot filter reduction CHIP](https://github.com/Chia-Network/chips/pull/53). The leverage gained from plot grinding increases as the time required to create phase 1 decreases. For example, if phase 1 can be created in slightly less than 1 signage point (9.375 seconds), a 3x multiplier takes effect.
+
+To illustrate this, the following table shows a hypothetical timeline, organized by signage points (SP), where:
+* A plot grinder can complete Phase 1 in slightly less than one signage point.
+* The plot ID has been brute-forced such that it will pass the filter for three consecutive signage points.
+* Brute-forcing the plot ID requires a negligible amount of time.
+* The plot grinder will delete each plot after performing the quality/full lookups, such that each plot will only be stored for a few seconds after being created.
+
+| SP | Quality<br/>Checks  | Notes                                                                                                                                                                                         |
+|:---|:--------------------| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1  | 0                   | - The challenge for SP 1 is received. <br/> - The plot grinder brute-forces a plot ID for plot `A`, which will pass the filter from SP 1. <br/> - The plot grinder begins to create plot `A`. |
+| 2  | 1                   | - The challenge for SP 2 is received. <br/> - Phase 1 of plot `A` has been created; a quality check is performed for the challenge from SP 1. <br/> - The plot grinder brute-forces a plot ID for plot `B`, which will pass the filter from SP 1 and 2. <br/> - The plot grinder deletes plot `A` and begins to create plot `B`. |
+| 3  | 2                   | - The challenge for SP 3 is received. <br/> - Phase 1 of plot `B` has been created; a quality check is performed for the challenge from SP 1 and 2. <br/> - The plot grinder brute-forces a plot ID for plot `C`, which will pass the filter from SP 1, 2, and 3. <br/> - The plot grinder deletes plot `B` and begins to create plot `C`. |
+| 4  | 3                   | - The challenge for SP 4 is received. <br/> - Phase 1 of plot `C` has been created; a quality check is performed for the challenge from SP 1, 2, and 3. <br/> - The plot grinder brute-forces a plot ID for plot `D`, which will pass the filter from SP 2, 3 and 4. <br/> - The infusion point for SP 1 will be reached before plot `D` can be completed, so the plot grinder does not consider SP 1 when brute-forcing the plot ID for `D`. <br/> - The plot grinder deletes plot `C` and begins to create plot `D`. |
+| 5  | 3                   | - The challenge for SP 5 is received. <br/> - Phase 1 of plot `D` has been created; a quality check is performed for the challenge from SP 2, 3, and 4. <br/> - The plot grinder brute-forces a plot ID for plot `E`, which will pass the filter from SP 3, 4 and 5. <br/> - The infusion point for SP 2 will be reached before plot `E` can be completed, so the plot grinder does not consider SP 2 when brute-forcing the plot ID for `E`. <br/> - The plot grinder deletes plot `D` and begins to create plot `E`. |
+
+This process can be continued indefinitely, where the plot grinder brute-forces a plot ID that will pass the filter for the current signage point, as well as the previous two signage points, and then creates the plot. The result is that the plot grinder can perform three quality checks for each signage point.
+
+In fact, if plots can be completed in slightly less time, the plot grinder could even brute-force a plot ID that will pass the plot filter for _four_ consecutive signage points, thereby occassionally performing four quality checks. This is possible because for a given signage point, the corresponding infusion point could occur anywhere from three to four signage points later.
+
+If an honest farmer is storing `plot filter` plots (currently 512), then on average, one of those plots will pass the filter for each signage point, and one quality check will be performed. The honest farmer would therefore need to store 3x `plot filter` plots (currently 3*512 = 1536) to have the same probability of finding a valid proof as the plot grinder. In other words, the plot grinder is able to mimic storing 1536 plots in this example.
+
+This CHIP will disallow a plot from passing more than one in every four consecutive signage points. This would reduce the number of plots the same plot grinder could mimic to 512, as illustrated in the following table:
+
+| SP | Quality<br/>Checks  | Notes                                                                                                                                                                                         |
+|:---|:--------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1  | 0                   | - The challenge for SP 1 is received. <br/> - The plot grinder brute-forces a plot ID for plot `A`, which will pass the filter from SP 1. <br/> - The plot grinder begins to create plot `A`. |
+| 2  | 1                   | - The challenge for SP 2 is received. <br/> - Phase 1 of plot `A` has been created; a quality check is performed for the challenge from SP 1. <br/> - The plot grinder brute-forces a plot ID for plot `B`, which will (prior to this CHIP) pass the filter from SP 1 and 2. <br/> - The plot grinder deletes plot `A` and begins to create plot `B`. |
+| 3  | 1                   | - The challenge for SP 3 is received. <br/> - Phase 1 of plot `B` has been created; a quality check is performed for the challenge from SP 1. <br/> - Due to this CHIP, because the plot passed the filter for the challenge from SP 1, it is disallowed from passing the filter for the challenge from SP 2. <br/> - The plot grinder brute-forces a plot ID for plot `C`, which will  (prior to this CHIP) pass the filter from SP 1, 2, and 3. <br/> - The plot grinder deletes plot `B` and begins to create plot `C`. |
+| 4  | 1                   | - The challenge for SP 4 is received. <br/> - Phase 1 of plot `C` has been created; a quality check is performed for the challenge from SP 1. <br/> - Due to this CHIP, because the plot passed the filter for the challenge from SP 1, it is disallowed from passing the filter for the challenge from SP 2 and 3. <br/> - The plot grinder brute-forces a plot ID for plot `D`, which will (prior to this CHIP) pass the filter from SP 2, 3, and 4. <br/> - The plot grinder deletes plot `C` and begins to create plot `D`. |
+| 5  | 1                   | - The challenge for SP 5 is received. <br/> - Phase 1 of plot `D` has been created; a quality check is performed for the challenge from SP 2. <br/> - Due to this CHIP, because the plot passed the filter for the challenge from SP 2, it is disallowed from passing the filter for the challenge from SP 3 and 4. <br/> - The plot grinder brute-forces a plot ID for plot `E`, which will  (prior to this CHIP) pass the filter from SP 3, 4, and 5. <br/> - The plot grinder deletes plot `D` and begins to create plot `E`. |
+
+In this case, the honest farmer would need to store `plot filter` plots (currently 512) to have the same chance as the plot grinder of finding a valid proof. In other words, the plot grinder is able to mimic storing 512 plots, a 2/3 reduction from the status quo. This CHIP will therefore limit the economic viability of plot grinding by 2/3 in this example.
+
+The following table contains formulas to calculate the leverage a plot grinder can gain before this CHIP is implemented (the second column), as well as afterward (the third column):
+
+| Phase 1 time<br/>(seconds) | Leverage equation<br/>(current consensus) | Leverage equation<br/>(after this CHIP) |
+| :------------------------- | :---------------------------------------- | :-------------------------------------- |
+| 28.125 <= t <= 37.5	     | ((37.5 - t) / t) * filter                 | ((37.5 - t) / t) * filter               |
+| 18.75 <= t <= 28.125       | 9.375 / t * filter	                     | 9.375 / t * filter                      |
+| 9.375 <= t <= 18.75        | 9.375 / t * 2 * filter                    | 9.375 / t * filter                      |
+| 9.375 >= t > 0             | 9.375 / t * (3.5 - ((t / 18.75)) * filter | 9.375 / t * filter                      |
+
+Note that this CHIP only reduces the leverage gained when phase 1 can be completed in less than two signage points (18.75 seconds), and its greatest benefits are seen when phase 1 can be completed in less than one signage point (9.375 seconds).
+
+Honest farmers would also see fewer plots passing the filter due to this proposal, but it would hurt each of them equally. The reduction also would be nowhere near as severe as it would be for plot grinders. For example, if a plot passes the filter for one signage point, it has a 1/512 (0.195%) chance of passing the filter for the next signage point. However, in the example above, the grinded plots have a 100% chance of passing the same filter.
+
+This proposal will be trivial to implement from a technical standpoint. Currently the network accepts a proof if the plot from which it was obtained passes the filter for the signage point that corresponds to the current infusion point. This proposal would tighten the consensus such that the same plot would need to pass the filter for the same signage point, and _not_ pass the filter for any of the three preceding signage points.
+
+## Backwards Compatibility
+
+This CHIP is backwards compatible -- if a proof is valid after the CHIP has been implemented, then it also would have been valid beforehand.
+
+However, this CHIP is not forward compatible -- after this CHIP is implemented, some proofs will not be valid that would have been valid previously.
+
+Because of its forward incompatibility, this CHIP will require a soft fork of Chia's blockchain. As with all forks, there will be a risk of a chain split. The soft fork could also fail to be adopted. This might happen if an insufficient number of nodes have upgraded to include the changes introduced by this CHIP prior to the fork's block height.
+
+## Rationale
+
+This CHIP's design was chosen because it reduces the economic viability of plot grinding. It does come with the downside of punishing honest farmers, but this punishment is both minimal and equal for all honest farmers. The probability of a plot passing multiple filters in a row in the real world is small (1/512^2 for two challenges, 1/512^3 for three challenges). The proposal was crafted as a result of calculating the math behind plot grinding. We realized that it would be possible to multiply the effects of plot grinding by brute-forcing plot IDs that pass the filter for multiple consecutive signage points. This proposal would simply eliminate this economic multiplier.
+
+While we had options for making it more difficult to plot grind (such as increasing the minimum `k` size), and we had other options for decreasing the economic viability of plot grinding (such as decreasing the plot filter size), this CHIP does not have any alternatives, other than doing nothing.
+
+This CHIP has significant upside and little downside, so we don't expect much resistance from the community.
+
+## Specification
+
+[todo]
+
+## Test Cases
+
+[todo]
+
+## Reference Implementation
+
+[todo]
+
+## Security
+
+Because this CHIP requires a soft fork, the majority of nodes will need to be updated in order for the proposal to be accepted. This CHIP also will require a significant amount of testing before it can be implemented. However, even though the impact on the security of the network will be high, the risk of issues will be low. This proposal amounts to adding one check to ensure that a plot did not pass the plot filter for any of the previous three signage points.
+
+## Additional Assets
+
+None
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
