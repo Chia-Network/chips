@@ -27,11 +27,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 * [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
+* [12 - Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
+* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Review
-* None
+* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 ### Review (Fast Track)
 * None
@@ -67,7 +68,6 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
-* [Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
 
 -----
 
