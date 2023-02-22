@@ -1,0 +1,110 @@
+HIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | New Chialisp ASSERT Conditions
+Description   | Add new ASSERT conditions to Chialisp, and update mempool logic accordingly
+Author        | [Arvid Norberg](https://github.com/arvidn)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Chialisp
+Created       | 2023-02-22
+Requires      | None
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+The Chialisp language currently includes [conditions](https://docs.chia.net/conditions/ "Chialisp conditions") to assert that a block height or timestamp has been reached. 
+This CHIP introduces the opposite conditions, which assert that a block height or timestamp has _not_ been reached. 
+It also includes conditions to assert that another spend occurs in the same block or spendbundle. Finally, this CHIP introduces new mempool logic that will eject a pending coin spend if that spend is no longer valid.
+
+## Motivation
+
+Chialisp's current implementation contains four conditions that prevent a coin from being spent _before_ a certain block height or timestamp:
+
+| Condition                      | Format                     | Description                                                                                |
+|:------------------------------ |:-------------------------- |:------------------------------------------------------------------------------------------ |
+| ASSERT_SECONDS_RELATIVE        | `(80 seconds_passed)`      | Requires at least `seconds_passed` seconds to have passed since this coin's creation.      |
+| ASSERT_SECONDS_ABSOLUTE        | `(81 seconds)`             | Requires the current block's timestamp to be at least `seconds`.                           |
+| ASSERT_HEIGHT_RELATIVE         | `(82 block_height_passed)` | Requires more than `block_height_passed` blocks to have passed since this coin's creation. |
+| ASSERT_HEIGHT_ABSOLUTE         | `(83 block_height)`        | Requires the current block's height to be at least `block_height`.                         |
+
+However, the opposite conditions do not exist. This CHIP presents a clean way to prevent a coin spend from being executed _after_ a block height or timestamp.
+
+The primary benefit of the conditions introduced in this CHIP is that they enable expiring [Offers](https://chialisp.com/offers "Description of Chia Offers"), which obviates the need for users to cancel their Offers manually, e.g. due to price slippage. The current coin spend would no longer be allowed after a certain block height or timestamp, and the mempool would reject this spend. A new spend of the same coin could later be created with a new set of conditions in the solution.
+
+The CLVM already allows the condition codes from this proposal to be used, but there are currently no mappings thereof. These condition codes are therefore currently treated as no-ops, which always pass. The primary technical challenge of this CHIP is to add logic to the mempool to reject any coin spends that use expired conditions.
+
+## Backwards Compatibility
+
+The new Chialisp conditions introduced in this CHIP are backwards compatible -- any calls that succeed after the CHIP has been implemented also would have been successful no-ops beforehand.
+
+However, the Chialisp conditions to be added are not forward compatible -- before this CHIP has been implemented, the CLVM operators could have been called in an attempt to do something not specified in this CHIP. These calls would have been successful no-ops beforehand, but they will no longer succeed afterward.
+
+Because of the forward incompatibility of the conditions to be added, this CHIP will require a soft fork of Chia's blockchain. As with all forks, there will be a risk of a chain split. The soft fork could also fail to be adopted. This might happen if an insufficient number of nodes have upgraded to include the changes introduced by this CHIP prior to the fork's block height.
+
+## Rationale
+
+Our previous recommendation to enable expiring Offers was to create a singleton that uses the `CREATE_COIN_ANNOUNCEMENT` condition each time it is spent. Any coins that were to be involved in an expiring offer would then use the `ASSERT_COIN_ANNOUNCEMENT` condition to assert that the singleton was being spent in the same block. After the singleton was spent, the Offer coins would automatically be invalidated.
+
+However, we have since realized that this technique is inadequate in cases where high frequency trading is desired because it would require a coin spend to make Offers expire. It is also an inelegant solution because it requires multiple coins to be spent simultaneously when an Offer is accepted.
+
+The design laid out in this CHIP does not rely on any coin spends in order to invalidate an Offer. It also only requires a single coin to be spent in order for an Offer to be accepted.
+
+Chia's [standard transactions](https://chialisp.com/standard-transactions) use a delegated puzzle, which allows the solver to specify the puzzle and solution they would like to run when the coin is _spent_, rather than when it is _created_. The new conditions introduced in this CHIP are recommended to be used in the solution for a delegated puzzle. In cases where the new conditions are no longer valid, the coins can still be spent with a new solution.
+
+## Specification
+
+The soft fork will be activated at block 3830000. It will add the following conditions to Chialisp:
+
+| Condition                      | Format                     | Description                                                                                             |
+|:------------------------------ |:-------------------------- |:------------------------------------------------------------------------------------------------------- |
+| ASSERT_CONCURRENT_SPEND        | `(64 coin_id)`             | Requires the coin with the specified `coin_id` to be spent in the same block as this coin.              |
+| ASSERT_CONCURRENT_PUZZLE       | `(65 puzzle_hash)`         | Requires at least one coin with the specified `puzzle_hash` to be spent in the same block as this coin. |
+| ASSERT_BEFORE_SECONDS_RELATIVE | `(84 seconds_passed)`      | Requires fewer than `seconds_passed` seconds to have passed since this coin's creation.                 |
+| ASSERT_BEFORE_SECONDS_ABSOLUTE | `(85 seconds)`             | Requires the current block's timestamp to be less than `seconds`.                                       |
+| ASSERT_BEFORE_HEIGHT_RELATIVE  | `(86 block_height_passed)` | Requires at most `block_height_passed` blocks to have passed since this coin's creation.             |
+| ASSERT_BEFORE_HEIGHT_ABSOLUTE  | `(87 block_height)`        | Requires the current block's height to be less than `block_height`.                                     |
+
+## Test Cases
+
+[todo]
+
+## Reference Implementation
+
+The following pull requests have been merged to the [Chia-Network/chia_rs](https://github.com/Chia-Network/chia_rs) GitHub repository as part of this CHIP:
+* [131](https://github.com/Chia-Network/chia_rs/pull/131) - add a new `ENABLE_ASSERT_BEFORE` flag to enable support for the new `ASSERT` conditions
+* [135](https://github.com/Chia-Network/chia_rs/pull/135) - add a precheck that validates the most strict conditions in certain cases where multiple conditions are used
+* [133](https://github.com/Chia-Network/chia_rs/pull/133) - add support for `ASSERT_CONCURRENT_SPEND`
+* [134](https://github.com/Chia-Network/chia_rs/pull/134) - add support for `ASSERT_CONCURRENT_PUZZLE`
+
+## Security
+
+This CHIP comes with several security risks, all of which we feel are outweighed by the value added:
+
+1. Chia's blockchain may already contain unspent coins with puzzles that contain one or more of the conditions from this CHIP. Any such coins will need to be spent before the fork point is reached, or they will become permanently unspendable. However, we feel that the risk of this happening is low, for to reasons:
+    * Before the fork point is reached, the conditions from this CHIP will be interpreted as no-ops, so they will always pass. Therefore, there is no reason for an existing coin to use any of these conditions, so it is unlikely that they exist.
+    * If such a coin does exist, it will still be spendable until the fork point. Developers of these coins will be given ample warning to spend them.
+
+2. The mempool will require additional logic to remove any coin spends that are no longer valid. This means that the mempool will need to be re-calculated with each transaction block, thereby adding complexity. This new mempool logic will require extensive testing before it can be implemented on Chia's mainnet.
+
+3. The new Chialisp conditions could be used in a coin's puzzle, rather than in its solution as intended. Any coins with puzzles that contain one of these new conditions will need to be spent while the condition is still valid. If the condition becomes invalid, the coin will be rendered unspendable. This could happen for any number of unintended reasons, including:
+    * If a coin will only be valid for one more block, a farmer could choose not to include that coin, thus permanently censoring it.
+    * A coin spend must include a sufficient blockchain fee for inclusion. If the provided fee is insufficient, the coin could become unspendable if one of the conditions from the puzzle expires.
+    * After a coin has been included in the blockchain, it could be removed in a re-org. In the case where a coin was spent on the final block where it remained valid, the re-org would then cause the coin to become unspendable.
+
+    In addition, coins that use the conditions from this CHIP in their puzzles could be created such that they are always invalid. For example:
+    * If the current block height is `100` and a coin is created with `(ASSERT_BEFORE_HEIGHT_ABSOLUTE 100)` in its puzzle, then at the time of the coin's creation, its last valid block height has already passed, so it will never be able to be spent.
+    * If a coin is created with a puzzle that contains contradicting conditions, such as `(ASSERT_BEFORE_HEIGHT_ABSOLUTE 100)` and `(ASSERT_HEIGHT_ABSOLUTE 100)`, then it can never be spent.
+
+    In order to mitigate this risk, we will strongly recommend all Chialisp developers not to create any coins that include any of the conditions from this CHIP in their puzzles. The correct way to use these conditions is in the solution of a delegated puzzle. In this case, only the current spend of the coin could expire, but the coin itself would remain valid.
+
+4. A coin spend that has expired could become spendable in a re-org. This could lead to unintended consequences for anyone monitoring the blockchain to determine when the coin spend becomes invalid. However, because re-orgs are rare in Chia, this is unlikely to lead to any security issues.
+
+## Additional Assets
+
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
