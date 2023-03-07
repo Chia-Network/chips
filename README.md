@@ -35,7 +35,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 ### Review (Fast Track)
-* None
+* [14 - Chialisp ASSERT_BEFORE_* conditions](https://github.com/Chia-Network/chips/pull/59)
 
 ### Last Call
 * None
