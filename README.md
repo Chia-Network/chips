@@ -30,12 +30,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
 * [12 - Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
 * [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
+* [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
 
 ### Review
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 ### Review (Fast Track)
-* [14 - Chialisp ASSERT_BEFORE_* conditions](https://github.com/Chia-Network/chips/pull/59)
+* None
 
 ### Last Call
 * None
