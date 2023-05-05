@@ -1,17 +1,18 @@
-| CHIP Number   | < Creator must leave this blank. Editor will assign a number.>                          |
+| CHIP Number   | 0015                                                                                    |
 |:--------------|:----------------------------------------------------------------------------------------|
 | Title         | Extension of Off-chain metadata format for NFT1                                         |
 | Description   | An extension to the offchain metadata standard (CHIP0007) to include schema.org schemas |
 | Author        | [Brandt Holmes](https://github.com/BrandtH22) (BrandtH22/ClydeWallace22)                |
-| Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>                             |
-| Status        | < Creator must leave this blank. Editor will assign a status.>                          |
+| Editor        | [Dan Perry](https://github.com/danieljperry)                                            |
+| Comments-URI  | [CHIPs repo, PR #62](https://github.com/Chia-Network/chips/pull/62)                     |
+| Status        | Draft                                                                                   |
 | Category      | Process                                                                                 |
-| Sub-Category  | Tooling or Environment                                                                  |
+| Sub-Category  | Tooling                                                                                 |
 | Created       | 2023-05-01                                                                              |
-| Requires      | CHIP0007                                                                                |
+| Requires      | [0007](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0007.md)              |
 | Replaces      | NA                                                                                      |
 | Superseded-By | NA                                                                                      |
-| Extends       | CHIP0007                                                                                |
+| Extends       | [0007](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0007.md)              |
 
 ## Abstract
 **NOTE: This proposal is currently in draft while awaiting the next release of schema.org which includes a pr that ensures the thumbnail property can be used on all creativeWorks: https://github.com/schemaorg/schemaorg/commit/02b4fb73082b7f4e7f0b02bb1e0f684f4da2def8**
