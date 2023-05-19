@@ -1,0 +1,68 @@
+{
+    "$id": "https://raw.githubusercontent.com/Chia-Network/chips/main/assets/chip-0017/schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "CHIP-0017",
+    "description": "Chia Verifiable Credentials Structure",
+    "type": "object",
+    "properties": {
+        "credentialSchema": {
+            "@context": {
+                "@version": 1.1,
+                "@protected": true,
+
+                "id": "@id",
+                "type": "@type",
+
+                "cred": "https://www.w3.org/2018/credentials#",
+
+                "JsonSchemaValidator2018": "cred:JsonSchemaValidator2018"
+            },
+            "@id": "cred:credentialSchema",
+            "format": "CHIP-xxxxxxx",
+            "@type": "@id",
+            "credentialSubject": {"@id": "cred:credentialSubject", "@type": "@id"},
+            "issuer": {"@id": "cred:issuer", "@type": "@id"},
+            "issuanceDate": {"@id": "cred:issuanceDate", "@type": "xsd:dateTime"},
+        
+            "proof": {
+                "@type": "@vocab",
+                "created": {"@id": "cred:created", "@type": "xsd:dateTime"},
+                "verificationMethod": {"@id": "sec:verificationMethod", "@type": "@id"},
+                "proofPurpose": {
+                    "@id": "sec:proofPurpose",
+                    "@type": "@vocab",
+                    "@context": {
+                        "@version": 1.1,
+                        "@protected": true,
+          
+                        "id": "@id",
+                        "type": "@type",
+          
+                        "sec": "https://w3id.org/security#",
+          
+                        "assertionMethod": {"@id": "sec:assertionMethod", "@type": "@id", "@container": "@set"},
+                        "authentication": {"@id": "sec:authenticationMethod", "@type": "@id", "@container": "@set"}
+                    }
+                },
+                "proofValue": "sec:proofValue",
+                "values": {
+                    "type": [
+                        "string",
+                        "string"
+                    ]
+                }
+            },
+            "expirationDate": {
+                "@id": "cred:expires", 
+                "@type": "xsd:dateTime"}
+        },
+        "credentialStatus": {
+            "@id": "@id",
+            "@type": "@type"
+        },   
+        "termsOfUse": {
+            "@id": "cred:termsOfUse", 
+            "@type": "@id"
+        }
+    }
+}

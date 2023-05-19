@@ -1,0 +1,45 @@
+{
+    "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://www.w3.org/2018/credentials/examples/v1"
+    ],
+    "id": "http://example.edu/credentials/3732",
+    "format": "CHIP-xxxx",
+    "type": [
+        "VerifiableCredential",
+        "KYCCredential"
+    ],
+    "credentialSubject": {
+        "id": "did:chia:1dqpypv6ysru7czlm6vy4vestcjh2ajevp76lgq45yuxsmyw7u5yqxv8fzy"
+    },
+    "issuer": "https://example.com/",
+    "issuanceDate": "2023-01-01T12:00:00Z",
+    "proof": {
+        "type": "Signature",
+        "created": "2023-03-03T12:00:00Z",
+        "verificationMethod": "https://example.edu/issuers/14#key-1",
+        "proofPurpose": "KYCCredential",
+        "proofValue": "0xa61c48269f197a391472791dc409e71e5a8ccd419eb66007699346cd29f7f665691485c63333d88778e2bb37751ec33717c14ffe8b0b8291ce961e0652921a335ada6bf375e7c5d4ae646140646323de893623ccca04d66ce5023217b4ecff43",
+        "values": {
+            "over_18": "true",
+            "nationality": "US",
+            "residency": "FR"
+        }
+    },
+    "expirationDate": "2028-03-03T12:00:00Z",
+    "credentialStatus": {
+        "id": "https://example.edu/status/24",
+        "type": "KYCCredential"
+    },
+    "termsOfUse": [{
+        "type": "IssuerPolicy",
+        "id": "http://example.com/policies/credential/4",
+        "profile": "http://example.com/profiles/credential",
+        "prohibition": [{
+            "assigner": "https://example.edu/issuers/14",
+            "assignee": "AllVerifiers",
+            "target": "http://example.edu/credentials/3732",
+            "action": ["Archival"]
+        }]
+    }]
+}
