@@ -56,7 +56,7 @@
             "@type": "ImageObject",
             "encodingFormat": "image/png",
             "name": "Pikachu Thumbnail",
-            "url": "www.fakeurl.com/pikachu_thumbnail.png",
+            "url": "https://www.fakeurl.com/pikachu_thumbnail.png",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         },
         "creator": {
@@ -82,14 +82,14 @@
             "@type": "ImageObject",
             "encodingFormat": "image/png",
             "name": "Pikachu Tail",
-            "url": "www.fakeurl.com/pikachu_tail.png",
+            "url": "https://www.fakeurl.com/pikachu_tail.png",
             "sha256": "9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131"
         },
         "associatedMedia": {
             "@type": "3DModel",
             "encodingFormat": "model/gltf-binary",
             "name": "Pikachu 3D Model",
-            "url": "www.fakeurl.com/pikachu_3dmodel.png",
+            "url": "https://www.fakeurl.com/pikachu_3dmodel.png",
             "sha256": "e87v0oi3h497vsoij40t98hae4oiu5y08f4hoq34t5j094834qht09jq34g08qu7"
         }
     }
