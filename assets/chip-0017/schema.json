@@ -18,7 +18,7 @@
                 "JsonSchemaValidator2018": "cred:JsonSchemaValidator2018"
             },
             "@id": "cred:credentialSchema",
-            "format": "CHIP-xxxxxxx",
+            "format": "CHIP-0017",
             "@type": "@id",
             "credentialSubject": {"@id": "cred:credentialSubject", "@type": "@id"},
             "issuer": {"@id": "cred:issuer", "@type": "@id"},
