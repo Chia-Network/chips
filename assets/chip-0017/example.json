@@ -1,7 +1,7 @@
 {
     "@context": [
         "https://www.w3.org/2018/credentials/v1",
-        "https://www.w3.org/2018/credentials/examples/v1"
+        "https://raw.githubusercontent.com/Chia-Network/chips/main/assets/chip-0017/schema.json"
     ],
     "id": "http://example.edu/credentials/3732",
     "format": "CHIP-0017",
