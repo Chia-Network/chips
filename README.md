@@ -27,8 +27,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [12 - Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
-* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 * [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
 * [17 - VC metadata structure](https://github.com/Chia-Network/chips/pull/66)
@@ -38,6 +36,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Review
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 * [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
+* [12 - Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
+* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Review (Fast Track)
 * None
