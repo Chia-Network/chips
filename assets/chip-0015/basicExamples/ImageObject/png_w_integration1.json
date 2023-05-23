@@ -1,0 +1,63 @@
+{
+    "format": "CHIP-0015",
+    "name": "Pikachu Tail Image",
+    "description": "Electric-type Pokémon's tail",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 22,
+    "series_total": 1000,
+    "attributes": [
+        {
+            "trait_type": "Shape",
+            "value": "Lightning Bolt"
+        },
+        {
+            "trait_type": "Color",
+            "value": "Yellow"
+        },
+        {
+            "trait_type": "Power",
+            "value": 145,
+            "min_value": 0,
+            "max_value": 255
+        }
+    ],
+    "collection": {
+        "name": "Example Pokémon Collection",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Example Pokémon Collection is the best Pokémon collection. Get yours today!"
+            },
+            {
+                "type": "icon",
+                "value": "https://examplepokemoncollection.com/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://examplepokemoncollection.com/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ExamplePokemonCollection"
+            },
+            {
+                "type": "website",
+                "value": "https://examplepokemoncollection.com/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org/",
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "thumbnail": {
+            "@type": "ImageObject",
+            "encodingFormat": "image/png",
+            "name": "Pikachu Tail Thumbnail",
+            "url": "https://www.fakeurl.com/example1_thumbnail.png",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+    }
+}
