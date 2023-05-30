@@ -1,0 +1,273 @@
+{
+    "format": "CHIP-0015",
+    "name": "Rope",
+    "description": "Rope, the first track on the Foo Fighters Wasting Light Album",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 1,
+    "series_total": 8,
+    "attributes": [
+    ],
+    "collection": {
+        "name": "Wasting Light Album",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Wasting Light is the seventh studio album by American rock band Foo Fighters, released on April 12, 2011"
+            },
+            {
+                "type": "icon",
+                "value": "https://www.examplemusic.com/foo-fighters/images/wasting-light.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://www.examplemusic.com/foo-fighters/images/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "FooFighters"
+            },
+            {
+                "type": "website",
+                "value": "https://www.examplemusic.com/foo-fighters/wasting-light"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org",
+        "@type": "MusicRecording",
+        "encodingFormat": "audio/mp4",
+        "image": {
+            "@type": "ImageObject",
+            "encodingFormat": "image/png",
+            "name": "Rope Thumbnail",
+            "url": "https://www.examplemusic.com/foo-fighters/rope-thumbnail.png",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "identifier": {
+                "@type": "PropertyValue",
+                "propertyID": "NFTid",
+                "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hoai37f020jmp92q4a7nra"
+            }
+        },
+        "duration": "PT4M5S",
+        "interactionStatistic": {
+            "@type": "InteractionCounter",
+            "interactionType": "https://schema.org/CommentAction",
+            "url": "https://www.examplemusic.com/foo-fighters/rope/comments"
+        },
+        "name": "Rope",
+        "offers": "https://www.examplemusic.listen/foo-fighters/rope/offers",
+        "url": "https://www.examplemusic.com/foo-fighters/rope.mp4",
+        "hasPart": [
+            {
+                "@type": "AudioObject",
+                "encodingFormat": "audio/mp4",
+                "url": "https://www.examplemusic.com/foo-fighters/rope/drum-stem.mp4",
+                "duration": "PT1M0S",
+                "startTime": "PT0M25S",
+                "endTime": "PT1M25S",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "NFTid",
+                    "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+                }
+            },
+            {
+                "@type": "AudioObject",
+                "encodingFormat": "audio/mp4",
+                "url": "https://www.examplemusic.com/foo-fighters/rope/vocals-stem.mp4",
+                "duration": "PT2M0S",
+                "startTime": "PT0M0S",
+                "endTime": "PT2M0S",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "NFTid",
+                    "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+                }
+            },
+            {
+                "@type": "AudioObject",
+                "encodingFormat": "audio/mp4",
+                "url": "https://www.examplemusic.com/foo-fighters/rope/guitar-stem.mp4",
+                "duration": "PT1M0S",
+                "startTime": "PT2M5S",
+                "endTime": "PT3M5S",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "NFTid",
+                    "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+                }
+            }
+        ],
+        "inAlbum": {
+            "@type": "MusicAlbum",
+            "genre": "Rock",
+            "image": "https://www.examplemusic.com/foo-fighters/images/wasting-light.png",
+            "name": "Wasting Light",
+            "numTracks": "8",
+            "identifier": {
+                "@type": "PropertyValue",
+                "propertyID": "NFTid",
+                "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+            },
+            "producer": {
+                "@type": "Person",
+                "name": "Butch Vig",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "DID",
+                    "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                }
+            },
+            "byArtist": {
+                "@type": "MusicGroup",
+                "name": "Foo Fighters",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "DID",
+                    "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                },
+                "member": [
+                    {
+                        "@type": "Person",
+                        "name": "Dave Grohl",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    },
+                    {
+                        "@type": "Person",
+                        "name": "Nate Mendel",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    },
+                    {
+                        "@type": "Person",
+                        "name": "Pat Smear",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    },
+                    {
+                        "@type": "Person",
+                        "name": "Chris Shiflett",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    },
+                    {
+                        "@type": "Person",
+                        "name": "Rami Jaffee",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    },
+                    {
+                        "@type": "Person",
+                        "name": "Josh Freese",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    }
+                ]
+            }
+        },
+        "isPartOf": [
+            {
+                "@type": "MusicVideoObject",
+                "encodingFormat": "video/mp4",
+                "name": "Rope Music Video - Foo Fighters",
+                "url": "https://www.examplemusic.listen/foo-fighters/rope/music-video.mp4",
+                "sha256": "9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "NFTid",
+                    "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+                },
+                "producer": {
+                    "@type": "Person",
+                    "name": "James Moll",
+                    "identifier": {
+                        "@type": "PropertyValue",
+                        "propertyID": "DID",
+                        "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                    }
+                }
+            },
+            {
+                "@type": "Movie",
+                "encodingFormat": "video/mp4",
+                "name": "Back and Forth",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "NFTid",
+                    "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+                },
+                "director": {
+                    "@type": "Person",
+                    "name": "James Moll",
+                    "identifier": {
+                        "@type": "PropertyValue",
+                        "propertyID": "DID",
+                        "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                    }
+                },
+                "producer": [
+                    {
+                        "@type": "Person",
+                        "name": "James Moll",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    },
+                    {
+                        "@type": "Person",
+                        "name": "Nigel Sinclair",
+                        "identifier": {
+                            "@type": "PropertyValue",
+                            "propertyID": "DID",
+                            "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+                        }
+                    }
+                ],
+                "image": {
+                    "@type": "ImageObject",
+                    "encodingFormat": "image/png",
+                    "name": "Back and Forth Thumbnail",
+                    "url": "https://www.examplemusic.com/foo-fighters/back-and-forth-thumbnail.png",
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "identifier": {
+                        "@type": "PropertyValue",
+                        "propertyID": "NFTid",
+                        "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hoai37f020jmp92q4a7nra"
+                    }
+                },
+                "trailer": {
+                    "@type": "VideoObject",
+                    "name": "Back and Forth Trailer",
+                    "identifier": {
+                        "@type": "PropertyValue",
+                        "propertyID": "NFTid",
+                        "value": "nft1mdaqr8q4azmhs3vdwqunua2ysjj06w9hayn5hattnpkwr0jmp92q4a7nra"
+                    }
+                }
+            }
+        ]
+    }
+}

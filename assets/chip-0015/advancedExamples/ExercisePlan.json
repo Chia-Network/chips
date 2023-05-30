@@ -1,0 +1,62 @@
+{
+    "format": "CHIP-0015",
+    "name": "Pikachu Video",
+    "description": "Electric-type Pokémon with stretchy cheeks",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 1,
+    "series_total": 3,
+    "attributes": [
+        {
+            "trait_type": "Exercise Number",
+            "value": "1",
+            "min_value": 1,
+            "max_value": 3
+        },
+        {
+            "trait_type": "Duration",
+            "value": "30 Minutes"
+        }
+    ],
+    "collection": {
+        "name": "Example Workout Plan",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "In this plan you will learn how to exercise your entire body with 3 easy workouts!"
+            },
+            {
+                "type": "icon",
+                "value": "https://clydeworksout.com/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://clydeworksout.com/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ClydeWorksOut"
+            },
+            {
+                "type": "website",
+                "value": "https://clydeworksout.com/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org/",
+        "@type": "ExercisePlan",
+        "@encodingFormat": "application/pdf",
+        "name": "Clyde's Full Body Exercise 1",
+        "description": "In this exercise you will learn how to exercise your entire body in under 30 minutes!",
+        "activityDuration": "PT30M",
+        "activityFrequency": "Once per day",
+        "exerciseType": "strength training",
+        "provider": {
+            "@type": "Person",
+            "name": "ClydeWallace",
+            "url": "https://clydeworksout.com/"
+        }
+    }
+}

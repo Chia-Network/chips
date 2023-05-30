@@ -1,0 +1,52 @@
+{
+    "format": "CHIP-0015",
+    "name": "ACME Racing Bike in black (2008)",
+    "description": "ACME Racing Bike, bought 8/2008, almost new, with a signature of Eddy Merckx on the frame.",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 1,
+    "series_total": 0,
+    "attributes": [
+        {
+            "trait_type": "Signature",
+            "value": "Eddy Merckx"
+        },
+        {
+            "trait_type": "Manufacturer",
+            "value": "ACME"
+        }
+    ],
+    "collection": {
+        "name": "My ACME Bike Collection",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Selling my ACME bike collection with true digital provenance secured by the Chia blockchain"
+            },
+            {
+                "type": "icon",
+                "value": "https://www.productexamples.org/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://www.productexamples.org/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ExamplePokemonCollection"
+            },
+            {
+                "type": "website",
+                "value": "https://www.productexamples.org/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org",
+        "@type": "IndividualProduct",
+        "additionalType": "http://www.productontology.org/id/Racing_bicycle",
+        "description": "ACME Racing Bike, bought 8/2008, almost new, with a signature of Eddy Merckx on the frame.",
+        "name": "ACME Racing Bike in black (2008)"
+    }
+}

@@ -1,25 +1,23 @@
 {
     "format": "CHIP-0015",
-    "name": "Pikachu Video",
-    "description": "Electric-type Pokémon with stretchy cheeks",
+    "name": "Physics: F100",
+    "description": "In this course you will get an introduction to Physics",
     "minting_tool": "SuperMinter/2.5.2",
     "sensitive_content": false,
     "series_number": 22,
     "series_total": 1000,
     "attributes": [
         {
-            "trait_type": "Species",
-            "value": "Mouse"
+            "trait_type": "Course Name",
+            "value": "Physics"
         },
         {
-            "trait_type": "Color",
-            "value": "Yellow"
+            "trait_type": "Course Code",
+            "value": "F300"
         },
         {
-            "trait_type": "Friendship",
-            "value": 50,
-            "min_value": 0,
-            "max_value": 255
+            "trait_type": "Course Mode",
+            "value": "Online"
         }
     ],
     "collection": {
@@ -50,14 +48,18 @@
     },
     "data": {
         "@context": "https://schema.org/",
-        "@type": "VideoObject",
-        "encodingFormat": "video/mp4",
-        "thumbnail": {
-            "@type": "ImageObject",
-            "encodingFormat": "image/png",
-            "name": "Pikachu Thumbnail",
-            "url": "https://www.fakeurl.com/example1_thumbnail.png",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "@type": "Course",
+        "courseCode": "F100",
+        "name": "Physics",
+        "description": "In this course you will get an introduction to Physics",
+        "hasCourseInstance": {
+            "@type": "CourseInstance",
+            "courseMode": "online"
+        },
+        "provider": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Bristol",
+            "url": "https://universityofbristol.com/"
         }
     }
 }

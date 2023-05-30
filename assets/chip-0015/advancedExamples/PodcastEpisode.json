@@ -1,0 +1,74 @@
+{
+    "format": "CHIP-0015",
+    "name": "Inquisitive #27: Behind the App #1: History",
+    "description": "In the first episode of “Behind the App”, a special series of Inquisitive, we take a look at the beginnings of iOS app development, by focusing on the introduction of the iPhone and the App Store.",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 1,
+    "series_total": 0,
+    "attributes": [
+        {
+            "trait_type": "Species",
+            "value": "Mouse"
+        },
+        {
+            "trait_type": "Color",
+            "value": "Yellow"
+        },
+        {
+            "trait_type": "Friendship",
+            "value": 50,
+            "min_value": 0,
+            "max_value": 255
+        }
+    ],
+    "collection": {
+        "name": "Behind the App Collection",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Example Podcast Collection is the best Podcast collection. Get yours today!"
+            },
+            {
+                "type": "icon",
+                "value": "http://www.relay.fm/inquisitive/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "http://www.relay.fm/inquisitive/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ExamplePodcastCollection"
+            },
+            {
+                "type": "website",
+                "value": "http://www.relay.fm/inquisitive/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org/",
+        "@type": "PodcastEpisode",
+        "url": "http://www.relay.fm/inquisitive/27",
+        "name": "Inquisitive #27: Behind the App #1: History",
+        "datePublished": "2015-02-18",
+        "timeRequired": "PT37M",
+        "description": "In the first episode of “Behind the App”, a special series of Inquisitive, we take a look at the beginnings of iOS app development, by focusing on the introduction of the iPhone and the App Store.",
+        "associatedMedia": {
+            "@type": "MediaObject",
+            "contentUrl": "http://www.relay.fm/inquisitive/Inquisitive_027.mp3"
+        },
+        "partOfSeries": {
+            "@type": "PodcastSeries",
+            "name": "Inquisitive",
+            "url": "http://www.relay.fm/inquisitive"
+        },
+        "partOfSeason": {
+            "@type": "CreativeWorkSeason",
+            "name": "Behind the App",
+            "url": "http://www.relay.fm/behind_the_app"
+        }
+    }
+}
