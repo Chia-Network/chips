@@ -24,6 +24,11 @@
             "issuer": {"@id": "cred:issuer", "@type": "@id"},
             "issuanceDate": {"@id": "cred:issuanceDate", "@type": "xsd:dateTime"},
         
+            "evidence": {
+                "@id": "cred:evidence", 
+                "@type": "@id"
+            },
+
             "proof": {
                 "@type": "@vocab",
                 "created": {"@id": "cred:created", "@type": "xsd:dateTime"},

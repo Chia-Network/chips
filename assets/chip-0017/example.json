@@ -14,6 +14,14 @@
     },
     "issuer": "https://example.com/",
     "issuanceDate": "2023-01-01T12:00:00Z",
+    "evidence": [{
+        "id": "https://example.edu/evidence/f2aeec97-fc0d-42bf-8ca7-0548192d4231",
+        "type": ["DocumentVerification"],
+        "verifier": "https://example.edu/issuers/14",
+        "evidenceDocument": "DriversLicense",
+        "subjectPresence": "Remote",
+        "documentPresence": "Photocopy"
+      }],
     "proof": {
         "type": "Signature",
         "created": "2023-03-03T12:00:00Z",
