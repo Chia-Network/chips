@@ -27,8 +27,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-
-* [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
 * [17 - VC metadata structure](https://github.com/Chia-Network/chips/pull/66)
 * [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
@@ -44,7 +42,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* None
+* [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
