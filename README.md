@@ -27,29 +27,37 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
-* [8 - Split Royalties for NFT1](https://github.com/Chia-Network/chips/pull/30)
-* [9 - Name Service Wallet Address Resolution](https://github.com/Chia-Network/chips/pull/35)
-* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+* [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
+* [17 - VC metadata structure](https://github.com/Chia-Network/chips/pull/66)
+* [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
+* [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 
 ### Review
-* None
+* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+* [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
+* [12 - Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
+* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Review (Fast Track)
-* [4 - DID1](https://github.com/Chia-Network/chips/pull/18)
+* None
 
 ### Last Call
-* None
+* [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
+* [4 - DID1](/CHIPs/chip-0004.md)
 * [5 - NFT1](/CHIPs/chip-0005.md)
 * [7 - Off-Chain metadata format for NFT1](/CHIPs/chip-0007.md)
+* [8 - Split Royalties for NFT1](/CHIPs/chip-0008.md)
+* [9 - Name Service Wallet Address Resolution](/CHIPs/chip-0009.md)
+* [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 
 ### Stagnant
 * None
 
 ### Withdrawn
+* [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
 
 ### Obsolete
@@ -65,11 +73,6 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
-
-### Under Consideration
-The following Pull Requests have not yet been formalized as a CHIP:
-* [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
-* [Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 -----
 
