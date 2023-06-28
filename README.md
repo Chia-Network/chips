@@ -42,7 +42,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -52,6 +52,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [8 - Split Royalties for NFT1](/CHIPs/chip-0008.md)
 * [9 - Name Service Wallet Address Resolution](/CHIPs/chip-0009.md)
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
+* [15 - NFT1 metadata extension](https://github.com/Chia-Network/chips/pull/62)
 
 ### Stagnant
 * None
