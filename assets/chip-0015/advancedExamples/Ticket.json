@@ -1,0 +1,98 @@
+{
+    "format": "CHIP-0015",
+    "name": "Shostakovich Leningrad Ticket",
+    "description": "Ticket for Shostakovich Leningrad at the Chicago Symphony Center",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 22,
+    "series_total": 1000,
+    "attributes": [
+    ],
+    "collection": {
+        "name": "Shostakovich Leningrad Tour Tickets",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Example Music Ticket Collection is the best Music Ticket collection. Get yours today!"
+            },
+            {
+                "type": "icon",
+                "value": "https://www.exampleticket.com/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://www.exampleticket.com/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ExampleMusicTicketCollection"
+            },
+            {
+                "type": "website",
+                "value": "https://www.exampleticket.com/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org",
+        "@type": "Ticket",
+        "underName": "ClydeWallace22",
+        "priceCurrency": "xch",
+        "totalPrice": "1",
+        "image": "https://www.exampleticket.com/thumbnail.png",
+        "ticketNumber": "abc123",
+        "ticketToken": "qrCode:AB34",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatRow": "A",
+            "seatNumber": "12",
+            "seatSection": "101"
+        },
+        "subjectOf": {
+            "@type": "MusicEvent",
+            "location": {
+                "@type": "MusicVenue",
+                "name": "Chicago Symphony Center",
+                "address": "220 S. Michigan Ave, Chicago, Illinois, USA"
+            },
+            "name": "Shostakovich Leningrad",
+            "offers": {
+                "@type": "Offer",
+                "url": "https://www.exampleticket.com/examples/ticket/12341234",
+                "price": "40",
+                "priceCurrency": "USD",
+                "availability": "https://www.exampleticket.com/InStock"
+            },
+            "performer": [
+                {
+                    "@type": "MusicGroup",
+                    "name": "Chicago Symphony Orchestra",
+                    "sameAs": [
+                        "http://cso.org/",
+                        "http://en.wikipedia.org/wiki/Chicago_Symphony_Orchestra"
+                    ]
+                },
+                {
+                    "@type": "Person",
+                    "image": "/examples/jvanzweden_s.jpg",
+                    "name": "Jaap van Zweden",
+                    "sameAs": "http://www.jaapvanzweden.com/"
+                }
+            ],
+            "startDate": "2014-05-23T20:00",
+            "workPerformed": [
+                {
+                    "@type": "CreativeWork",
+                    "name": "Britten Four Sea Interludes and Passacaglia from Peter Grimes",
+                    "sameAs": "http://en.wikipedia.org/wiki/Peter_Grimes"
+                },
+                {
+                    "@type": "CreativeWork",
+                    "name": "Shostakovich Symphony No. 7 (Leningrad)",
+                    "sameAs": "http://en.wikipedia.org/wiki/Symphony_No._7_(Shostakovich)"
+                }
+            ]
+        }
+    }
+}

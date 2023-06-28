@@ -1,0 +1,63 @@
+{
+    "format": "CHIP-0015",
+    "name": "Le concerto",
+    "description": "This book is a digital reissue of a book published in the twentieth century, now unavailable in its original format.",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 22,
+    "series_total": 1000,
+    "attributes": [
+        {
+            "trait_type": "Serial Number",
+            "value": "CONC91000937"
+        },
+        {
+            "trait_type": "SKU",
+            "value": "780 R2"
+        }
+    ],
+    "collection": {
+        "name": "Example Book with Connected Offer Link",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Guy Ferchault digital reissues."
+            },
+            {
+                "type": "icon",
+                "value": "http://library.anytown.gov.uk/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "http://library.anytown.gov.uk/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "AnytownCityLibrary"
+            },
+            {
+                "type": "website",
+                "value": "http://library.anytown.gov.uk"
+            }
+        ]
+    },
+    "data": {
+        "@context":  "https://schema.org/",
+        "@type": "Book",
+        "additionalType": "Product",
+        "name": "Le concerto",
+        "author": "Ferchault, Guy",
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "serialNumber": "CONC91000937",
+            "sku": "780 R2",
+            "offeredBy": {
+                "@type": "Library",
+                "@id": "http://library.anytown.gov.uk",
+                "name": "Anytown City Library"
+            }
+        }
+    }
+}

@@ -1,0 +1,96 @@
+{
+    "format": "CHIP-0015",
+    "name": "Pikachu Video",
+    "description": "Electric-type Pokémon with stretchy cheeks",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 22,
+    "series_total": 1000,
+    "attributes": [
+        {
+            "trait_type": "Species",
+            "value": "Mouse"
+        },
+        {
+            "trait_type": "Color",
+            "value": "Yellow"
+        },
+        {
+            "trait_type": "Friendship",
+            "value": 50,
+            "min_value": 0,
+            "max_value": 255
+        }
+    ],
+    "collection": {
+        "name": "Example Pokémon Collection",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "Example Pokémon Collection is the best Pokémon collection. Get yours today!"
+            },
+            {
+                "type": "icon",
+                "value": "https://examplepokemoncollection.com/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://examplepokemoncollection.com/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ExamplePokemonCollection"
+            },
+            {
+                "type": "website",
+                "value": "https://examplepokemoncollection.com/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org/",
+        "@type": "VideoObject",
+        "encodingFormat": "video/mp4",
+        "thumbnail": {
+            "@type": "ImageObject",
+            "encodingFormat": "image/png",
+            "name": "Pikachu Thumbnail",
+            "url": "https://www.fakeurl.com/pikachu_thumbnail.png",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name":  "The Pokemon Company",
+            "url": "https://www.pokemon.com/us",
+            "identifier": {
+                "@type": "PropertyValue",
+                "propertyID": "Twitter",
+                "value": "@Pokemon"
+            }
+        },
+        "contributor": {
+            "@type": "Person",
+            "name": "Satoshi Tajiri",
+            "identifier": {
+                "@type": "PropertyValue",
+                "propertyID": "DID",
+                "value": "did:chia:1cmxxr9snwz8rv084p2fhpa7je4z8sc9dapwtqxdwghcg53my3slsp902fe"
+            }
+        },
+        "encodesCreativeWork": {
+            "@type": "ImageObject",
+            "encodingFormat": "image/png",
+            "name": "Pikachu Tail",
+            "url": "https://www.fakeurl.com/pikachu_tail.png",
+            "sha256": "9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131"
+        },
+        "associatedMedia": {
+            "@type": "3DModel",
+            "encodingFormat": "model/gltf-binary",
+            "name": "Pikachu 3D Model",
+            "url": "https://www.fakeurl.com/pikachu_3dmodel.png",
+            "sha256": "e87v0oi3h497vsoij40t98hae4oiu5y08f4hoq34t5j094834qht09jq34g08qu7"
+        }
+    }
+}

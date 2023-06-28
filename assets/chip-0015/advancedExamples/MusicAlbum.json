@@ -1,0 +1,73 @@
+{
+    "format": "CHIP-0015",
+    "name": "King of Limbs",
+    "description": "King of Limbs Radiohead Album",
+    "minting_tool": "SuperMinter/2.5.2",
+    "sensitive_content": false,
+    "series_number": 1,
+    "series_total": 1,
+    "attributes": [
+        {
+            "trait_type": "Number of Songs",
+            "value": 8
+        },
+        {
+            "trait_type": "Artist",
+            "value": "RadioHead"
+        }
+    ],
+    "collection": {
+        "name": "King of Limbs",
+        "id": "e43fcfe6-1d5c-4d6e-82da-5de3aa8b3b57",
+        "attributes": [
+            {
+                "type": "description",
+                "value": "King of Limbs Radiohead Album"
+            },
+            {
+                "type": "icon",
+                "value": "https://examplemusic.com/image/icon.png"
+            },
+            {
+                "type": "banner",
+                "value": "https://examplemusic.com/image/banner.png"
+            },
+            {
+                "type": "twitter",
+                "value": "ExamplePokemonCollection"
+            },
+            {
+                "type": "website",
+                "value": "https://examplemusic.com/"
+            }
+        ]
+    },
+    "data": {
+        "@context": "https://schema.org",
+        "@type": "MusicAlbum",
+        "encodingFormat": "application/gzip",
+        "byArtist": {
+            "@type": "MusicGroup",
+            "name": "Radiohead"
+        },
+        "genre": "Alt/Punk",
+        "image": "king-of-limbs.jpg",
+        "name": "King of Limbs",
+        "numTracks": "8",
+        "track": [
+            {
+                "@type": "MusicRecording",
+                "duration": "PT5M14S",
+                "name": "Bloom",
+                "url": "https://examplemusic.com/artist/radiohead/album/the-king-of-limbs/track/bloom"
+            },
+            {
+                "@type": "MusicRecording",
+                "duration": "PT4M40S",
+                "name": "Morning Mr Magpie",
+                "url": "https://examplemusic.com/artist/radiohead/album/the-king-of-limbs/track/morning-mr-magpie"
+            }
+        ],
+        "url": "https://examplemusic.com/artist/radiohead/album/the-king-of-limbs"
+    }
+}
