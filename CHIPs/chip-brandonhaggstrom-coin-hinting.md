@@ -1,0 +1,106 @@
+| CHIP Number   | < Creator must leave this blank. Editor will assign a number.>                                 |
+| :------------ | :--------------------------------------------------------------------------------------------- |
+| Title         | Wallet Hinted Coin Discovery                                                                   |
+| Description   | Standardizes the method of discovering coins whose puzzles contain the wallet's inner puzzles. |
+| Author        | [Brandon Haggstrom](https://github.com/Rigidity)                                               |
+| Editor        | < Creator must leave this blank. Editor will be assigned.>                                     |
+| Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>                                    |
+| Status        | < Creator must leave this blank. Editor will assign a status.>                                 |
+| Category      | Informational                                                                                  |
+| Sub-Category  | Guideline                                                                                      |
+| Created       | 2023-08-XX                                                                                     |
+| Requires      | None                                                                                           |
+| Replaces      | None                                                                                           |
+| Superseded-By | None                                                                                           |
+
+## Abstract
+
+Chia's [coin set model](https://docs.chia.net/coin-set-intro) can sometimes make it difficult for wallets to know which coins they have the ability to spend. The innermost puzzle of these coins is typically the [standard transaction](https://chialisp.com/standard-transactions). Coins which use the standard transaction puzzle itself rather than an outer puzzle are easy to find and spend, since you can calculate the puzzle hashes directly for each key.
+
+More complicated assets wrap the aforementioned inner puzzles with additional behavior. To sync the wallet, you need to curry the outer puzzle of each asset with each inner puzzle until you find all of the unspent coins. The number of combinations increases exponentially the more assets you have to check for. If there is additional state or data curried into the asset puzzles that is unknown to the wallet, it can become infeasible to check for every possible puzzle.
+
+By using the memos field of the `CREATE_COIN` condition, you can indicate to the wallet that the coin belongs to a given inner puzzle hash, which makes it easy to look up. This implementation pre-dates the CHIP process and is already part of the Chia blockchain and reference wallet. The purpose of this CHIP is to document this process and standardize its use in other wallets going forward.
+
+## Motivation
+
+The original reason hints were implemented is to make it possible for wallets to discover assets that were previously unknown to it. As an example, different CATs each have their own unique TAIL, and you wouldn't know to look for coins with that TAIL unless you already knew about one. With hints, full nodes can notify you of coins that belong to your wallet that you are not explicitly looking for. You can check at the puzzle reveal of the parent coin to find information about the TAIL. The same applies to any other coin with an outer puzzle.
+
+As well as this, it's important to standardize how coins are discovered so that different wallet implementations are compatible with one another and can find coins created elsewhere. If every wallet used its own puzzles or coin discovery methods, coins would essentially be lost when switching between different apps.
+
+## Backwards Compatibility
+
+Wallets which do not support hints will not be affected by the introduction of hints. The created coins are the same, and there is no change to the puzzles used. However, any coins that are created without hints will not be visible to wallets which require them instead of manually calculating puzzle hashes.
+
+Versions of the full node prior to 1.2.8 do not track hints, and wallets which are connected to older nodes will not find hinted coins.
+
+In versions of Chia prior to [1.8.2](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.2), coin change produced as a result of CAT spends were not hinted. Because of this, in order to find those coins you must find them in one of two other ways:
+
+- Request the children of every hinted CAT coin that has been spent, to find any potential change.
+- Manually calculate each CAT puzzle hash by currying in all of the derived inner puzzle hashes, then fetch the coin records matching these puzzle hashes.
+
+Since the release of 1.8.2, all created CAT coins are hinted in the Chia reference wallet. However, the reference wallet will still find coins that were not previously hinted, in order to preserve backwards compatibility.
+
+## Rationale
+
+The `CREATE_COIN` condition denotes the puzzle hash and amount of created coins. As such, it is a convenient place to store metadata about the coin, such as the hint. By using a list to store this value, it leaves the potential both for adding other memos and adding additional arguments to the condition in the future if needed.
+
+This information could be stored off-chain instead, but this would create a dependency on a centralized external service and a single point of failure. Even though this information doesn't need to be trusted and can be validated on-chain, relying on a server to remain online in order to find hinted coins isn't ideal.
+
+## Specification
+
+When a coin is spent, its puzzle is executed with a given solution as its input. The output is a list of [conditions](https://docs.chia.net/conditions/), which must be satisfied in order for the spend to succeed. Of these, the `CREATE_COIN` condition is used to represent new coins created as a result of the spend.
+
+The `CREATE_COIN` condition is defined as a list containing the opcode `51` and the following arguments:
+
+```lisp
+; The third parameter is optional.
+(51 puzzle_hash amount (maybe_hint . memos))
+```
+
+- The first `puzzle_hash` parameter is the hash of the puzzle with which the new coin must be spent.
+- The second `amount` parameter is the value locked up in the coin, in mojos.
+- The third `memos` parameter is an optional list, which must be null terminated.
+
+If the `memos` parameter is present and the first value is exactly 32 bytes in length, it is used as the hint and the rest of the list are memos. Otherwise, values in the entire list are memos.
+
+As an example, the following inner solution for the standard transaction would create an unhinted coin:
+
+```lisp
+(() (q . ((51 target_puzzle_hash amount))) ())
+```
+
+The following solution would instead create a coin with the hint matching the inner puzzle hash:
+
+```lisp
+(() (q . ((51 target_puzzle_hash amount (target_puzzle_hash)))) ())
+```
+
+This `CREATE_COIN` condition creates the same coin as before, but now it specifies the hint with which the receiving wallet can look up to find this coin.
+
+Hints are only necessary for outer puzzles, of which the inner puzzle hash matches the hint. As an example, the coin using the standard transaction itself with no outer puzzle does not need a hint.
+
+## Test Cases
+
+[Implementation of conditions, which includes tests for hinting.](https://github.com/Chia-Network/chia_rs/blob/main/src/gen/conditions.rs)
+
+## Reference Implementation
+
+The official [Chia reference wallet](https://github.com/Chia-Network/chia-blockchain/tree/main/chia/wallet) implements coin hinting for CATs, NFTs, DIDs, and various other primitives.
+
+## Security
+
+Including a hint in the memo field of new coins affects how they can be looked up. It means that you no longer know that the coin's puzzle actually belongs to your wallet beforehand. Instead of knowing what kind of coin it is, or whether the hint is valid, you need to check this yourself using the following steps:
+
+- Uncurry the puzzle reveal of the parent coin to find the outer puzzle type.
+- Repeat this process for additional puzzle layers as needed until you reach the inner puzzle.
+- Check that the inner puzzle hash matches the hint, or at least belongs to your wallet.
+
+It is worth noting that a full node which keeps track of hints is technically using resources that are not strictly required by the blockchain. A hint is essentially 32 bytes of additional storage in the blockchain database that is only paid for once in the CLVM program, upsetting the carefully calculated resource usage to clvm cost ratio, which leads to slightly larger database sizes in the long term.
+
+## Additional Assets
+
+None
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
