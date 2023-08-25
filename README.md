@@ -37,11 +37,10 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Review (Fast Track)
-* None
+* [20 - Wallet Hinted Coin Discovery](https://github.com/Chia-Network/chips/pull/81)
 
 ### Last Call
-* [11 - CLVM BLS Additions](https://github.com/Chia-Network/chips/pull/46)
-* [12 - Plot Filter Reduction](https://github.com/Chia-Network/chips/pull/53)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -50,6 +49,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [7 - Off-Chain metadata format for NFT1](/CHIPs/chip-0007.md)
 * [8 - Split Royalties for NFT1](/CHIPs/chip-0008.md)
 * [9 - Name Service Wallet Address Resolution](/CHIPs/chip-0009.md)
+* [11 - CLVM BLS Additions](/CHIPs/chip-0011.md)
+* [12 - Plot Filter Reduction](/CHIPs/chip-0012.md)
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
 
