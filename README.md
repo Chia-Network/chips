@@ -34,13 +34,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Review
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
-* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Review (Fast Track)
-* [20 - Wallet Hinted Coin Discovery](https://github.com/Chia-Network/chips/pull/81)
+* None
 
 ### Last Call
-* None
+* [20 - Wallet Hinted Coin Discovery](https://github.com/Chia-Network/chips/pull/81)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -60,6 +59,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
+* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Obsolete
 * CAT1 -- This standard was replaced with CAT2
