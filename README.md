@@ -52,7 +52,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [12 - Plot Filter Reduction](/CHIPs/chip-0012.md)
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
-* [20 - Wallet Hinted Coin Discovery](https://github.com/Chia-Network/chips/pull/81)
+* [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
 
 ### Stagnant
 * None
