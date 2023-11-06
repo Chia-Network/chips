@@ -36,26 +36,26 @@ The use of CHIP 15 metadata aids display services (marketplaces, explorers, wall
 ## Rationale
 Describe the reasons for designing your features in the way you have proposed. Make sure to include:
   * Why did you choose your design?
-    * 
+    * Inclusion of chip15 metadata ensures ease of integration and future-proofing.
+    * Use of offer files enhances the user experience.
+    * Use of a singleton ensures state changes can be identified and contracts can be easily identified on-chain.
+    * Onchain puzzle ensures true decentralization post creation.
   * What design decisions did you make?
     * The use of a smart puzzle to enable on-chain provenance and immutability.
     * The use of offer files for a user-friendly experience.
     * The ability to reverse the puzzle enabling upgrading/downgrading.
     * The ability to use one or more NFTs on either side of the puzzle.
     * Not to have any overrides or master keysets involved in the puzzle.
-    * 
   * What alternative designs did you consider?
     * Performing everything offline in a trusted manner (users send NFTs to a project creator to have the upgraded NFT returned), this requires trusting the project and severely limits future interactions such as defusing or downgrading.
     * The use of custom spend bundles requiring the user to download and run custom scripts as this would have simplified development.
     * Creating a 1-way only puzzle as this simplified development but drastically limits functionality.
     * Limiting the puzzle to single NFTs again simplified development but drastically limits functionality.
     * Including an escape spend that would enable the puzzle creator to remove NFTs from the puzzles. This was initially intended to be a security feature to ensure NFTs would not be bricked by the incorrect creation of contracts but was deemed too much of a security risk when the project is not known.
-    * 
   * How have you achieved community consensus for your design?
     * Over the period of 1-year, we have discussed and reviewed the design and integration plans with display services, chialisp developers, community members, and more.
     * We have drastically upgrading the initial design of the puzzle to enable the use of offer files rather than custom spend bundle logic.
     * We have developed a full implementation for the [MonkeyZoo project](www.fusionzoo.net).
-    * 
   * What objections were raised during your discussions with the community, and how does your design address them?
     * Backwards compatibility - The ability to use this puzzle with any and all NFTs that currently exist on-chain ensures full backwards compatibility. Also, using CHIP15 metadata ensures display services already have the tools they need to display the intricacies of the puzzles.
     * Future compatibility - The ability to reverse the puzzle ensures that even future owners can claim back the original NFT(s) locked in the puzzle. Also, the ability to use cascading puzzles ensures ever-increasing functionality.
@@ -63,8 +63,32 @@ Describe the reasons for designing your features in the way you have proposed. M
     * Purpose of integration - Expanding the current functionality of chia NFTs in a way that enables ever-increasing functionality and expandability.
 
 ## Specification
-TODO: INSERT CLSP STUFF HERE
+The clsp codebase that supports this puzzle can be found [here](https://github.com/trgarrett/fusion-clsp).
+The puzzle has two sides; side A is considered the new, fused, or upgraded nft(s) while side B is considered the old, components, or outdated nft(s).
+The process flow below includes teh commands used to demonstrate the fusion puzzle deployment and interactions for a fusion (combining multiple nfts) and defusion (separating previously combined nfts).
 
+Process flow of the fusion puzzle:
+
+1. NFTs are minted or NFT IDs are determined.
+`PREFIX=txch FINGERPRINT=<WALLET_FINGERPINT> python3 -m fusion.fusion mint 3`
+2. NFT ids are used to create and deploy the singleton managing the puzzle with 1 mojo and any added fees (note the nfts in this command accept a comma separated and are order side A side B).
+`PREFIX=txch FINGERPRINT=<WALLET_FINGERPINT> python3 -m fusion.fusion deploy nft13xchuymhuknmc27v478h6kymd2s6s46ux7sye05xkrwtzusax25srzpz7m nft1k065498d9qa398tt8x9sulv40gqy8yeqgzvr5zfj6c9uflxh5c5sezljp2,nft1cjp70ajuhfmy3dtqn0s0ft06wspef6m7ut5dx9w0740p92mlj9tslcgln7`
+3. The state of the fusion puzzle is verified.
+`PREFIX=txch FINGERPRINT=<WALLET_FINGERPINT> python3 -m fusion.fusion check 0xa89bdfcb028133ca149058b88c3de1f6a03de64e9b65554aef0c90081081ae86`
+4. The side A NFT(s) are sent to the fusion puzzle.
+`chia wallet nft transfer -i 80 -ni nft13xchuymhuknmc27v478h6kymd2s6s46ux7sye05xkrwtzusax25srzpz7m -ta `
+5. The fusion offer file is created.
+`chia wallet make_offer -o nft1k065498d9qa398tt8x9sulv40gqy8yeqgzvr5zfj6c9uflxh5c5sezljp2:1 -o nft1cjp70ajuhfmy3dtqn0s0ft06wspef6m7ut5dx9w0740p92mlj9tslcgln7:1 -r nft13xchuymhuknmc27v478h6kymd2s6s46ux7sye05xkrwtzusax25srzpz7m:1 -p offer.txt`
+6. The fusion offer is pushed to the chain.
+`PREFIX=txch FINGERPRINT=<WALLET_FINGERPINT> python3 -m fusion.fusion swap 0xa89bdfcb028133ca149058b88c3de1f6a03de64e9b65554aef0c90081081ae86 <offer.txt contents>`
+7. The status of the fusion puzzle is verified (should not contain side B with side A being returned to the user).
+`PREFIX=txch FINGERPRINT=<WALLET_FINGERPINT> python3 -m fusion.fusion check 0xa89bdfcb028133ca149058b88c3de1f6a03de64e9b65554aef0c90081081ae86`
+8. The defusion offer files is created.
+`chia wallet make_offer -r nft1k065498d9qa398tt8x9sulv40gqy8yeqgzvr5zfj6c9uflxh5c5sezljp2:1 -r nft1cjp70ajuhfmy3dtqn0s0ft06wspef6m7ut5dx9w0740p92mlj9tslcgln7:1 -o nft13xchuymhuknmc27v478h6kymd2s6s46ux7sye05xkrwtzusax25srzpz7m:1 -p offer.txt`
+9. The defusion offer is pushed to the chain.
+`PREFIX=txch FINGERPRINT=<WALLET_FINGERPINT> python3 -m fusion.fusion swap 0xa89bdfcb028133ca149058b88c3de1f6a03de64e9b65554aef0c90081081ae86 <offer.txt contents>`
+
+   
 ### Integrating the Fusion Puzzle
 Each ecosystem member will have a different role to play in the adoption of this proposal:
 
@@ -311,19 +335,19 @@ Use Cases:
  ```
 
 ### Verifying Data
-1. TODO: UPDATE
+TODO: UPDATE
 
 ## Test Cases
   * TODO: UPDATE
 
 ## Reference Implementation
-  * TODO: INSERT CLSP STUFF HERE
+The clsp codebase that supports this puzzle can be found [here](https://github.com/trgarrett/fusion-clsp).
 
 ## Security
 TODO: UPDATE
 
 ## Additional Assets
-  * TODO: UPDATE
+NA
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
