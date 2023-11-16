@@ -37,7 +37,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 
 ### Review (Fast Track)
-* None
+* [22 - Enhanced Harvester Protocol](https://github.com/Chia-Network/chips/pull/88)
 
 ### Last Call
 * None
