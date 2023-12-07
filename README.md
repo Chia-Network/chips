@@ -32,6 +32,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
 * [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
+* [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/88)
 
 ### Review
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
