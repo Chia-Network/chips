@@ -84,7 +84,7 @@ Similar to CHIP-0012, this proposal is not backwards compatible and will constit
 ## Rationale
 The various options for reducing plot grinding economics are discussed in the [Rationale section of CHIP-0012](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0012.md#rationale).
 
-For the same reasons discussed, a plot format change or minimum k-size increase is not desireable due to the impact to a vast majority of the netspace. Instead, k-size increase will be indirectly motivated by the eventual of the plot filter as a means of reducing disk seeks for even uncompressed plots.
+For the same reasons discussed, a plot format change or minimum k-size increase is not desireable due to the impact to a vast majority of the netspace. Instead, k-size increase will be indirectly motivated by the eventual removal of the plot filter as a means of reducing disk seeks for even uncompressed plots.
 
 Technical implementation is also a consideration in only leveraging plot filter reductions as this is a well-tested and understood implementation that is already supported by ecosystem tools (such as max farm size estimators, farming calculators etc.)
 
