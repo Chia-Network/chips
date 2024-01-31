@@ -30,6 +30,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 * [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
+* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
 
 ### Review
 * None
