@@ -27,16 +27,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
-* [17 - VC metadata structure](https://github.com/Chia-Network/chips/pull/66)
-* [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
-* [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 * [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
+* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
 
 ### Review
-* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+* None
 
 ### Review (Fast Track)
 * [22 - Enhanced Harvester Protocol](https://github.com/Chia-Network/chips/pull/88)
@@ -58,7 +55,11 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
 
 ### Stagnant
-* None
+* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
+* [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
+* [17 - VC metadata structure](https://github.com/Chia-Network/chips/pull/66)
+* [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
+* [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
@@ -78,6 +79,7 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
+* [Accelerated plot filter reduction](https://github.com/Chia-Network/chips/pull/95)
 
 -----
 
