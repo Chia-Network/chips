@@ -1,0 +1,138 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Chialisp Message Conditions
+Description   | Add a set of new MESSAGE conditions to Chialisp
+Author        | [Cameron Cooper](https://github.com/cameroncooper)
+Editor        | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Chialisp
+Created       | 2024-01-30
+Requires      | None
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+The Chialisp language currently includes conditions to create and assert coin announcements. These conditions are often necessary, but not sufficient, for keeping coins secure. In fact, if coin announcements are used improperly, they might provide the illusion of security, even while the coins being spent remain vulnerable to attacks. This CHIP attempts to mitigate this issue by introducing a new set of conditions to ensure that an exact set of coins is spent together.
+
+
+## Motivation
+
+When forming a Chia transaction that includes multiple coin spends, it is vital to ensure that nobody (mempool watchers, Chia farmers, etc) can either separate those spends, or add any unwanted spends. Prior to this CHIP, there existed recommendations to prevent both of these scenarios, as described in the following paragraphs.
+
+The recommended technique to ensure against the separation of spends is to use coin announcements. If each coin makes and asserts the correct announcements, then all coin spends must be included for any of them to be valid. For more information, see the section on [coin announcements](https://docs.chia.net/conditions/#announcements) in the Chialisp documentation.
+
+The recommended technique to ensure against the addition of unwanted spends is to add the ID of the coin being spent to the announcement's message. If this ID is included, the announcement can only be asserted once. However, if the ID is omitted from an announcement's message, then multiple coins can assert the announcement from within the same block. For more details, see the section on [unprotected announcements](https://chialisp.com/common_issues/#unprotected-announcements) in the Chialisp documentation.
+
+When applied correctly to a spend bundle, the preceding recommendations will ensure that nobody can separate the coin spends from the bundle, or add any unwanted spends to it. However, it is possible to apply these recommendations incorrectly, which could leave coin spends vulnerable to attacks.
+
+This CHIP introduces a new set of message conditions that will make it more difficult to create inadvertently insecure spends. These new conditions will require a soft fork, which will occur at block [todo].
+
+
+## Backwards Compatibility
+
+The Chialisp conditions introduced in this CHIP are backwards compatible -- any calls that succeed after the CHIP has been implemented also would have been successful no-ops beforehand.
+
+However, the Chialisp conditions to be added are not forward compatible -- before this CHIP has been implemented, the CLVM operators could have been called in an attempt to do something not specified in this CHIP. These calls would have been successful no-ops beforehand, but they will no longer succeed afterward.
+
+Because of the forward incompatibility of the conditions to be added, this CHIP will require a soft fork of Chia's blockchain. As with all forks, there will be a risk of a chain split. The soft fork could also fail to be adopted. This might happen if an insufficient number of nodes have been upgraded to include the changes introduced by this CHIP prior to the fork's block height.
+
+## Rationale
+
+Part of Chialisp's design includes the ability to map new operators to CLVM opcodes. This allows for a standardized method of adding new Chialisp operators with a soft fork, as is the case in this CHIP. In fact, it is likely that the only alternative implementation for adding new Chialisp operators would be with a hard fork, which would come with the additional risks associated with all hard forks, with no upside versus this CHIP's implementation.
+
+As the operators introduced in this CHIP are optional, the primary risk associated with this CHIP's implementation would occur if the soft fork were to fail to be adopted. In this case, the operators would succeed, but they might not protect coins as intended.
+
+## Specification
+
+### Note about CLVM costs
+
+Just as with existing announcement and assertion conditions, none of the conditions listed in this CHIP carry a CLVM cost. To prevent spam, there is a combined limit of 1024 announcements and assertions per spend. This limit will apply to the new conditions from this CHIP as well.
+
+---
+
+This CHIP introduces the following new conditions:
+
+### CREATE_MESSAGE_FOR_COIN
+Opcode: [todo]
+
+Functionality: Creates a `message` targeted for a specific coin. The target `coin_id` must be provided as well as the message.
+
+Usage: `(CREATE_MESSAGE_FOR_COIN coin_id message)`
+
+---
+
+### ASSERT_MESSAGE_FROM_COIN
+Opcode: [todo]
+
+Functionality: Asserts that this coin was sent the given `message` from the coin whose ID matches `sender_coin_id`.
+
+Usage: `(ASSERT_MESSAGE_FROM_COIN sender_coin_id message)`
+
+---
+
+### ASSERT_MESSAGE_FROM_COIN_WITH_PARENT
+Opcode: [todo]
+
+Functionality: Asserts that this coin was sent the given `message` from the coin whose parent ID matches `sender_parent_id`.
+
+Usage: `(ASSERT_MESSAGE_FROM_COIN_WITH_PARENT sender_parent_id message)`
+
+---
+
+## ASSERT_MESSAGE_FROM_COIN_WITH_PUZZLE
+Opcode: [todo]
+
+Functionality: Asserts that this coin was sent the given `message` from the coin whose puzzle hash matches `sender_puzzle`.
+
+Usage: `(ASSERT_MESSAGE_FROM_COIN_WITH_PUZZLE sender_puzzle message)`
+
+---
+
+## ASSERT_MESSAGE_FROM_COIN_WITH_PARENT_AND_PUZZLE
+Opcode: [todo]
+
+Functionality: Asserts that this coin was sent the given `message` from the coin whose parent ID matches `sender_parent` and whose puzzle hash matches `sender_puzzle`.
+
+Usage: `(ASSERT_MESSAGE_FROM_COIN_WITH_PARENT_AND_PUZZLE sender_parent sender_puzzle message)`
+
+---
+
+## ASSERT_MESSAGE_FROM_COIN_WITH_PARENT_AND_AMOUNT
+Opcode: [todo]
+
+Functionality: Asserts that this coin was sent the given `message` from the coin whose parent ID matches `sender_parent` and whose amount matches `sender_amount`.
+
+Usage: `(ASSERT_MESSAGE_FROM_COIN_WITH_PARENT_AND_AMOUNT sender_parent sender_amount message)`
+
+---
+
+## ASSERT_MESSAGE_FROM_COIN_WITH_PUZZLE_AND_AMOUNT
+Opcode: [todo]
+
+Functionality: Asserts that this coin was sent the given `message` from the coin whose puzzle hash matches `sender_puzzle` and whose amount matches `sender_amount`.
+
+Usage: `(ASSERT_MESSAGE_FROM_COIN_WITH_PUZZLE_AND_AMOUNT sender_puzzle sender_amount message)`
+
+---
+
+## Test Cases
+[todo]
+
+## Reference Implementation
+[todo]
+
+## Security
+[todo]
+
+## Additional Assets
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
+
