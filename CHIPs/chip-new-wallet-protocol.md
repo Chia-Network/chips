@@ -1,0 +1,254 @@
+| CHIP Number   | < Creator must leave this blank. Editor will assign a number.>           |
+| :------------ | :----------------------------------------------------------------------- |
+| Title         | New Wallet Sync and Mempool Update Protocol                              |
+| Description   | Wallet protocol messages for syncing coins and transactions from a node. |
+| Author        | [Brandon Haggstrom](https://github.com/Rigidity)                         |
+| Editor        | < Creator must leave this blank. Editor will be assigned.>               |
+| Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>              |
+| Status        | < Creator must leave this blank. Editor will assign a status.>           |
+| Category      | Standards Track                                                          |
+| Sub-Category  | Network                                                                  |
+| Created       | 2024-03-05                                                               |
+| Requires      | None                                                                     |
+| Replaces      | None                                                                     |
+| Superseded-By | None                                                                     |
+
+## Abstract
+
+This CHIP proposes a new set of protocol messages for syncing a light wallet against a full node. It solves many pain points with the current protocol, prevents DoS (Denial of Service) issues for certain use cases, and enables certain optimizations while syncing. In addition, this protocol will enable wallets to subscribe to transactions in the mempool.
+
+## Motivation
+
+Currently the wallet protocol enables you to register for updates for a set of coin ids or puzzle hashes. The initial coin states will be included in the response, and further coin state updates will be sent to you as new blocks are farmed or whenever a reorg occurs. This does a good job at keeping the wallet informed about the current state of its coins, but it has a few shortcomings. This protocol is an attempt to address these issues and make light wallets more stable and efficient.
+
+First of all, if you subscribe to a set of puzzle hashes and there are more coins than would fit in a response, it will be truncated. This makes it impossible to download the full set of coins if it exceeds a certain size. This protocol solves this by paginating the response, sending coin data grouped by block height in each batch. This way you can sync up to the peak eventually, regardless of how many coins you are downloading.
+
+There is also currently no way to request the current state of coins without subscribing to them. Additionally, subscriptions cannot be removed later either, meaning you will eventually hit the subscription limit through normal use, even if you only need the coin information one time (for example when constructing a CAT spend). The new protocol allows you to do both of these things, preventing unnecessary subscriptions where possible.
+
+The new wallet sync protocol also forces you to handle reorgs, by rejecting the request if the claimed header hash does not match the height provided. Reorgs can occur both while you while you are syncing a set of puzzle hashes (if there is a lot of data to be synced), and after you reconnect your wallet to the network (if a reorg happened to occur right after you went offline). If a wallet does not handle reorgs properly, it can result in incorrect coin state data being stored in its database.
+
+You will also be able to opt in to receiving updates for relevant transactions as they enter or leave the mempool.
+
+## Backwards Compatibility
+
+The changes to the wallet protocol are fully backwards compatible.
+
+## Rationale
+
+Another way to accomplish the goals for syncing outlined above would be to stream coin states from the node to the wallet until you have reached the peak. This way you can receive a consistent snapshot of the blockchain database and apply updates as needed from there. However, this forces the node to spend an arbitrarily long amount of time sending data to the wallet until complete, which is a major concern for both performance and opening up the potential for DoS attacks.
+
+The reasoning for doing it this way, by requesting coin state in batches, is that you can rate limit the requests consistently, preventing wallets from easily overloading the node with expensive operations. The wallet can handle reorgs on the fly by backtracking (or finding a common fork point), and can ask the node to automatically subscribe it to future updates once the initial coin state is synced. This solves both the performance concern and the requirement to have consistent data.
+
+Instead of syncing from a starting height, the new protocol uses a previous height and header hash to sync off of. The reasoning here is that you can use the last known peak when reconnecting to the network to start from (assuming no reorg has occurred). As well as this, and to prevent reorg issues, the header hash is now required. If the wallet does not know the header hash, it can sync from genesis instead.
+
+The protocol update PR has been shared with the community a couple times, and though it hasn't reached community consensus, feedback thus far has seemed positive. This CHIP is to facilitate feedback on both the protocol and its implementation, and to ensure that it solves various developer and user concerns with the current light wallet protocol.
+
+## Specification
+
+### Add Puzzle Subscriptions
+
+```py
+class RequestAddPuzzleSubscriptions:
+    puzzle_hashes: List[bytes32]
+
+class RespondAddPuzzleSubscriptions:
+    puzzle_hashes: List[bytes32]
+    height: uint32
+    header_hash: bytes32
+```
+
+Adds puzzle hashes to the subscription list until the limit has been reached, returning the hashes that were actually added.
+If the limit is exceeded, the wallet can either bail or subscribe with other nodes instead.
+Also gives the current peak height and header hash.
+
+Note that unlike `RegisterForPhUpdates`, this does not return any coin states.
+There is a `RequestPuzzleState` message which fetches the current coin states instead.
+The idea of this is to enable you to subscribe only, request current state only, or do both at the same time.
+
+### Add Coin Subscriptions
+
+```py
+class RequestAddCoinSubscriptions:
+    coin_ids: List[bytes32]
+
+class RespondAddCoinSubscriptions:
+    coin_ids: List[bytes32]
+    height: uint32
+    header_hash: bytes32
+```
+
+Adds coin ids to the subscription list until the limit has been reached, returning the ids that were actually added.
+If the limit is exceeded, the wallet can either bail or subscribe with other nodes instead.
+Also gives the current peak height and header hash.
+
+Note that unlike `RegisterForCoinUpdates`, this does not return any coin states.
+There is a `RequestCoinState` message which fetches the current coin states instead.
+The idea of this is to enable you to subscribe only, request current state only, or do both at the same time.
+
+### Remove Puzzle Subscriptions
+
+```py
+class RequestRemovePuzzleSubscriptions:
+    puzzle_hashes: Optional[List[bytes32]]
+
+class RespondRemovePuzzleSubscriptions:
+    puzzle_hashes: List[bytes32]
+```
+
+Removes puzzle hashes from the subscription list (or all of them if `None`), returning the hashes that were actually removed.
+
+### Remove Coin Subscriptions
+
+```py
+class RequestRemoveCoinSubscriptions:
+    coin_ids: Optional[List[bytes32]]
+
+class RespondRemoveCoinSubscriptions:
+    coin_ids: List[bytes32]
+```
+
+Removes coin ids from the subscription list (or all of them if `None`), returning the ids that were actually removed.
+
+### Request Puzzle State
+
+```py
+class RequestPuzzleState:
+    puzzle_hashes: List[bytes32]
+    previous_height: Optional[uint32]
+    header_hash: bytes32
+    filters: CoinStateFilters
+    subscribe_when_finished: bool
+
+class RespondPuzzleState:
+    puzzle_hashes: List[bytes32]
+    height: uint32
+    header_hash: bytes32
+    is_finished: bool
+    coin_states: List[CoinState]
+
+class RejectPuzzleState:
+    pass
+
+class CoinStateFilters:
+    include_spent: bool
+    include_unspent: bool
+    include_hinted: bool
+    min_amount: uint64
+```
+
+Requests coin states that match the given puzzle hashes (or hints).
+
+Unlike `RegisterForPhUpdates`, this does not add subscriptions for the puzzle hashes automatically.
+When `subscribe_when_finished` is set to `True`, it will add subscriptions, but only once the last batch has been requested.
+
+As well as this, previously it was impossible to get all coin records if the number of items exceeded the limit.
+This implementation allows you to continue where you left off with `previous_height` and `header_hash`.
+
+If a reorg of relevant blocks occurs while doing so, `previous_height` will no longer match `header_hash`.
+This can be handled by a wallet by simply backtracking a bit, or restarting the sync from genesis. It could be inconvenient, but at least you can detect it.
+In the event that a reorg is detected by a node, `RejectPuzzleState` will be returned. This is the only scenario it will be rejected directly like this.
+
+Additionally, it is now possible to filter out spent, unspent, or hinted coins, as well as coins below a minimum amount.
+This can reduce the risk of spamming or DoS of a wallet in some cases, and improve performance.
+
+If `previous_height` is `None`, you are syncing from genesis. The `header_hash` should match the genesis challenge of the network you are connected to.
+
+### Request Coin State
+
+```py
+class RequestCoinState:
+    coin_ids: List[bytes32]
+    previous_height: Optional[uint32]
+    header_hash: bytes32
+    subscribe: bool
+
+class RespondCoinState:
+    coin_ids: List[bytes32]
+    coin_states: List[CoinState]
+
+class RejectCoinState:
+    pass
+```
+
+Request coin states that match the given coin ids.
+
+Unlike `RegisterForCoinUpdates`, this does not add subscriptions for the coin ids automatically.
+When `subscribe` is set to `True`, it will add and return as many coin ids to the subscriptions list as possible.
+
+Unlike the new `RequestPuzzleState` message, this does not implement batching for simplicity. The order is also not guaranteed.
+However, you can still specify the `previous_height` and `header_hash` to start from.
+
+If a reorg of relevant blocks has occurred, `previous_height` will no longer match `header_hash`.
+This can be handled by a wallet depending on the use case (for example by restarting from zero). It could be inconvenient, but at least you can detect it.
+In the event that a reorg is detected by a node, `RejectCoinState` will be returned. This is the only scenario it will be rejected directly like this.
+
+If `previous_height` is `None`, you are syncing from genesis. The `header_hash` should match the genesis challenge of the network you are connected to.
+
+### Request Transactions
+
+```py
+class RequestTransactions:
+    pass
+
+class RespondTransactions:
+    transaction_ids: List[bytes32]
+```
+
+Provides a list of every transaction in the mempool that matches one of your coin id or puzzle hash subscriptions.
+
+### Transaction Updates Capability
+
+A new `TRANSACTION_UPDATES` capability, with a value of `5`. This opts in to receiving the below transaction update messages.
+
+### Transaction Added
+
+```py
+class TransactionAdded:
+    transaction_id: bytes32
+    cost: uint64
+    fees: uint64
+```
+
+By enabling the new transaction update capability, you are opting in to receiving this message. It is sent whenever a new validated transaction enters the mempool, as long as it matches one or more of your subscriptions.
+
+### Transaction Added
+
+```py
+class TransactionsRemoved:
+    transaction_ids: List[bytes32]
+    reason: uint8 # MempoolRemoveReason
+
+class MempoolRemoveReason(Enum):
+    CONFLICT = 1
+    BLOCK_INCLUSION = 2
+    POOL_FULL = 3
+    EXPIRED = 4
+```
+
+By enabling the new transaction update capability, you are opting in to receiving this message. It is sent whenever transactions leave the mempool, as long as they match one or more of your subscriptions.
+
+## Test Cases
+
+There are various test cases for syncing and subscribing to coin state updates in [test_new_wallet_protocol.py](https://github.com/Chia-Network/chia-blockchain/blob/8cbde05d05d9c447300c9faac21cade9acc6d7db/tests/wallet/test_new_wallet_protocol.py).
+
+## Reference Implementation
+
+The new wallet sync and subscription protocol is [implemented in this PR](https://github.com/Chia-Network/chia-blockchain/pull/17340).
+
+Transaction updates have not yet been implemented, and will likely be in a followup PR.
+
+## Security
+
+This wallet protocol update is not an attempt to improve, nor should it have any effect on, validation against untrusted full nodes. You should always keep multiple peers connected so that you can detect whether or not a peer is giving you bad data, and prevent omission.
+
+## Additional Assets
+
+None
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+```
+
+```
