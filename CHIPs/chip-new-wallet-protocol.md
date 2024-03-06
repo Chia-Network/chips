@@ -1,6 +1,6 @@
 | CHIP Number   | < Creator must leave this blank. Editor will assign a number.>           |
 | :------------ | :----------------------------------------------------------------------- |
-| Title         | New Wallet Sync and Mempool Update Protocol                              |
+| Title         | New Wallet Sync Protocol                                                 |
 | Description   | Wallet protocol messages for syncing coins and transactions from a node. |
 | Author        | [Brandon Haggstrom](https://github.com/Rigidity)                         |
 | Editor        | < Creator must leave this blank. Editor will be assigned.>               |
