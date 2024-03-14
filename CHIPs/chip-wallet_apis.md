@@ -1,0 +1,287 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Signer Protocol Wallet APIs
+Description   | The maximum set of APIs for the wallet signer protocol
+Author    	  | [Matt Hauff](https://github.com/Quexington)
+Editor    	  | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status     	  | < Creator must leave this blank. Editor will assign a status.>
+Category   	  | Process
+Sub-Category  | Tooling
+Created     	| 2024-03-14
+Requires   	  | None
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+This CHIP provides the maximum set of APIs that can be used with the wallet signer protocol.
+
+## Motivation
+
+In order to use the wallet signer protocol, a standard set of APIs is needed. These APIs will be presented in human-readable JSON. Any wallet that wishes to implement the wallet signer protocol will need to serialize the APIs from this CHIP, for example by using the standard from CHIP-<todo>.
+
+## Backwards Compatibility
+
+This CHIP does not introduce any backwards incompatibilities. The APIs from this CHIP were created for the new wallet signer protocol. They do not modify any existing APIs. In addition, no code forks are necessary for this CHIP's implementation.
+
+## Rationale
+
+The specific APIs from this CHIP were created to be as simple as possible, while enabling the required functionality for communication with the wallet signer protocol.
+
+## Specification
+
+The specification for this CHIP consists of two parts:
+
+1. The types used in the APIs
+2. The APIs themselves
+
+### Types
+
+For brevity in the API descriptions, we will first define the following types:
+
+#### `coin`
+
+```json
+{
+  "parent_coin_id": ...
+  "puzzle_hash": ...
+  "amount": ...
+}
+```
+
+---
+
+#### `spend`
+
+```json
+{
+  "coin": <coin>
+  "puzzle": ...
+  "solution": ...
+}
+```
+
+---
+
+#### `transaction_info`
+
+```json
+{
+  "spends": [<spend>]
+}
+```
+
+---
+
+#### `signing_target`
+
+```json
+{
+  "pubkey": ...
+  "message": ...
+  "hook": ...
+}
+```
+
+---
+
+#### `sum_hint`
+
+```json
+{
+  "fingerprints": [...]
+  "synthetic_offset": ...
+  "final_pubkey": ...
+}
+```
+* Note 1: `synthetic_offset` is an optional parameter
+* Note 2: `final_pubkey` indicates the resulting pubkey of the sum of the others
+
+---
+
+#### `path_hint`
+
+```json
+{
+  "root_fingerprint": ...
+  "path": [...]
+}
+```
+
+---
+
+#### `key_hints`
+
+```json
+{
+  "sum_hints": [<sum_hint>]
+  "path_hints": [<path_hint>]
+}
+```
+
+---
+
+#### `signing_instructions`
+
+```json
+{
+  "key_hints": <key_hints>
+  "targets": [<signing_target>]
+}
+```
+
+---
+
+#### `unsigned_transaction`
+
+```json
+{
+  "transaction_info": <transaction_info>
+  "signing_instructions": <signing_instructions>
+}
+```
+
+---
+
+#### `signing_response`
+
+```json
+{
+  "signature": <signature>
+  "hook": ...
+}
+```
+
+---
+
+#### `signature`
+
+```json
+{
+  "signature_type": <signature_type>
+  "signature": <signature>
+}
+```
+
+Where valid options for `<signature_type>` include:
+* `bls_12381_aug_scheme`
+
+---
+
+#### `signed_transaction`
+
+```json
+{
+  "transaction_info": <transaction_info>
+  "signatures": [<signature>]
+}
+```
+
+---
+
+### APIs
+
+This section contains a list of optional RPC APIs to be used with the wallet signer protocol.
+
+#### Note on serialization
+
+Each specific implementation will have the option for how to handle the serialization of the keys in this section.
+
+For example, the return values for wallet RPC APIs typically are in JSON format, so the client code may send something like:
+
+`response["unsigned_transactions"]`
+
+This will send a list of BLOBs that are serialized according to the specified translation/serialization CHIPS, but the whole response will not be serialized in this way.
+
+---
+
+#### `create_transactions`
+
+Note: In current practice this will come from many RPCs, though this may not necessarily always be true.
+
+**ARGUMENTS**
+```
+Defined on a case-by-case basis.
+```
+
+**RETURNS**
+```json
+{
+  "unsigned_transactions": [<unsigned_transaction>]
+}
+```
+
+---
+
+#### `gather_signing_info`
+
+**ARGUMENTS**
+```json
+{
+  "spends": [<spend>]
+}
+```
+
+**RETURNS**
+```json
+{
+  "signing_instructions": <signing_instructions>
+}
+```
+
+---
+
+#### `apply_signatures`
+
+**ARGUMENTS**
+```json
+{
+  "spends": [<spend>]
+  "signing_responses": [<signing_response>]
+}
+```
+
+**RETURNS**
+```json
+{
+  "signed_transactions": [<signed_transaction>]
+}
+```
+
+---
+
+#### `submit_transactions`
+
+**ARGUMENTS**
+```json
+{
+  "signed_transactions": [<signed_transaction>]
+}
+```
+
+**RETURNS**
+```json
+{
+  "mempool_ids": [...],
+}
+```
+
+## Test Cases
+
+[todo]
+
+## Reference Implementation
+
+[todo]
+
+## Security
+
+CNI plans to conduct an internal audit of this code when it is ready.
+
+## Additional Assets
+
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
