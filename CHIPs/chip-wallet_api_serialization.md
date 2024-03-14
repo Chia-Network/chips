@@ -1,0 +1,61 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title     	  | Signer Protocol Serialization
+Description   | A JSON-CLVM-binary serialization technique for the wallet signer protocol
+Author    	  | [Matt Hauff](https://github.com/Quexington)
+Editor    	  | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status    	  | < Creator must leave this blank. Editor will assign a status.>
+Category  	  | Process
+Sub-Category  | Tooling
+Created   	  | 2024-03-14
+Requires      | [0027](https://github.com/Chia-Network/chips/pull/102)
+Replaces      | None
+Superseded-By | None
+
+
+## Abstract
+
+This CHIP provides a standard method for serializing the APIs presented in `CHIP-0027` from JSON to binary.
+
+## Motivation
+
+The APIs from `CHIP-0027` are listed in JSON, but the wallet signer protocol only recognizes binary large objects (BLOBs). Therefore, this CHIP is needed as a standard method for serializing the APIS from JSON into bytes.
+
+## Backwards Compatibility
+
+This CHIP does not introduce any backwards incompatibilities.
+
+## Rationale
+
+This CHIP creates a standard method of converting JSON to CLVM, and later to binary. The reason to implement serialization in this way is to minimize the number of required dependencies. By definition, every type of signer (with the exception of blind signers) must examine the spends it is signing. Therefore, CLVM is required. With the design of this CHIP, JSON libraries become extra dependencies. Effectively, this design keeps the potential attack surface as small as possible.
+
+## Specification
+
+Prior to serialization, the JSON will be converted to CLVM according to the following rules:
+1. Each dictionary (which the top layer of JSON must be) will be converted to a nil-terminated CLVM list of key/value pairs, where:
+	* The keys must be strings
+	* The values will be serialized recursively
+2. Each list will be converted to a nil-terminated CLVM list. The elements of the list will be serialized recursively.
+3. Anything that is neither a dictionary, nor a list, must be a string. The string will be interpreted using conventional CLVM syntax (`0x` for bytes, an additional pair of quote marks for strings, etc).
+
+At this point, the JSON will have been converted into a CLVM tree. That tree will then be serialized in the consensus format specified in the [Chialisp documentation](https://chialisp.com/clvm#serialization).
+
+## Test Cases
+
+[todo]
+
+## Reference Implementation
+
+[todo]
+
+## Security
+
+CNI plans to conduct an internal audit of this code when it is ready.
+
+## Additional Assets
+
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
