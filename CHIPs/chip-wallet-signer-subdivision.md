@@ -1,0 +1,62 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title     	  | Wallet signer BLOB subdivision
+Description   | A standard technique for subdividing (chunking) BLOB data used in the wallet signer protocol
+Author    	  | [Matt Hauff](https://github.com/Quexington)
+Editor        | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Process
+Sub-Category  | Tooling
+Created   	  | 2024-03-14
+Requires  	  | [0027](https://github.com/Chia-Network/chips/pull/102)
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+[CHIP-0029](https://github.com/Chia-Network/chips/pull/104) provides a method for serializing JSON data from the APIs laid out in [CHIP-0027](https://github.com/Chia-Network/chips/pull/102) into binary large object (BLOB) data. This CHIP provides a method for subdividing BLOB data into multiple chunks.
+
+## Motivation
+
+BLOBs used in the Chia wallet signer protocol can be too large to send in one piece. Therefore, a method is needed to subdivide, or "chunk" the data into multiple pieces. For now, this method is only used with QR codes, but in the future it could be applied more broadly to other types of BLOBs.
+
+## Backwards Compatibility
+
+This CHIP does not introduce any backwards incompatibilities.
+
+## Specification
+
+The primary method is called `create_chunks_for_blob`:
+
+**ARGUMENTS**
+```py
+blob: bytes
+bytes_per_chunk: int
+```
+
+**RETURNS**
+The `blob`, broken into chunks of size `bytes_per_chunk`.
+
+Each chunk is appended with [`x`, `y`], where `x` is the current chunk number, and `y` is the total number of chunks.
+
+---
+
+## Test Cases
+
+[todo]
+
+## Reference Implementation
+
+This CHIP is implemented in the `hsms` GitHub repository, under [byte_chunks.py](https://github.com/Chia-Network/hsms/blob/a0e6ef2752800195d61336fb0c5e6074ee394728/hsms/util/byte_chunks.py)
+
+## Security
+
+CNI has conducted an internal security audit of the code from this CHIP's reference implementation.
+
+## Additional Assets
+
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
