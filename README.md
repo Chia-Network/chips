@@ -42,10 +42,10 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Review (Fast Track)
-* [22 - Enhanced Harvester Protocol](https://github.com/Chia-Network/chips/pull/88)
+* None
 
 ### Last Call
-* None
+* [22 - Enhanced Harvester Protocol](https://github.com/Chia-Network/chips/pull/88)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
