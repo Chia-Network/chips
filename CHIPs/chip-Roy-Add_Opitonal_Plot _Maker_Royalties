@@ -1,0 +1,58 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Add Optional Plot Maker Royalties
+Description   | In addition to the farmer payout address add a Royalites address option with adjustible fees.
+Author        | Roy
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Core
+Created       | 2024-03-16
+Requires      | <CHIP number(s), (optional)>
+Replaces      | <CHIP number, (optional)>
+Superseded-By | <CHIP number (only allowed for Obsolete CHIPs)>
+
+This is the template for all CHIPs to use. Please fill it out according to the guidelines laid out in [chip001](/CHIPs/chip-0001.md). All media associated with this CHIP should be added to the `assets/chip-<CHIP>` folder, which you may create after you receive your CHIP number.
+
+Copy the template file to the `chips` folder, rename it to `chip-<your name>-<your proposal>`, fill it out, and submit it as a pull request.
+
+## Abstract
+
+This request is for adding a feature during the hardfork.
+When making a new plot the option to add to the plot a 2nd or more payout address and percentage for plot maker royalties or other uses.
+
+## Motivation
+
+This can lead to a 1 click plotting setup and incentives.
+* Tring to solve farmers with extra space but no GPU/CPU power/plotting knowledge from being restricted.
+* New Chia Farmers can start farming without plotting. All plotmakers are going to end up with extra GPUs when done plotting.
+* Feasible when hardforking
+
+This section is especially critical if you are proposing changes to Chia's core protocols. It should clearly answer all of the above, as well as explain exactly why the current protocol is inadequate.
+
+## Backwards Compatibility
+
+
+## Rationale
+
+
+## Specification
+
+
+## Test Cases
+
+
+## Reference Implementation
+
+
+## Security
+This section is mandatory for all CHIPs. List all considerations relevant to the security of this proposal if it is implemented. This section may be modified as the proposal moves toward consensus. Make sure to include:
+  None
+
+## Additional Assets
+
+## Copyright
+
+
+
