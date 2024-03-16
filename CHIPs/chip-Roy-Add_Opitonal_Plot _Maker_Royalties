@@ -19,7 +19,7 @@ Copy the template file to the `chips` folder, rename it to `chip-<your name>-<yo
 
 ## Abstract
 
-This request is for adding a feature during the hardfork.
+This request is for adding a feature during the new plot format.
 When making a new plot the option to add to the plot a 2nd or more payout address and percentage for plot maker royalties or other uses.
 
 ## Motivation
@@ -27,7 +27,7 @@ When making a new plot the option to add to the plot a 2nd or more payout addres
 This can lead to a 1 click plotting setup and incentives.
 * Tring to solve farmers with extra space but no GPU/CPU power/plotting knowledge from being restricted.
 * New Chia Farmers can start farming without plotting. All plotmakers are going to end up with extra GPUs when done plotting.
-* Feasible when hardforking
+* Feasible when making new plot format
 
 This section is especially critical if you are proposing changes to Chia's core protocols. It should clearly answer all of the above, as well as explain exactly why the current protocol is inadequate.
 
