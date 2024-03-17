@@ -1,17 +1,17 @@
-CHIP Number   | 
+CHIP Number   | <>
 :-------------|:----
-Title         | Ban NoSSD
-Description   | Take back our Nakamoto Coefficient and enforce CHIP-0022 by blocking NoSSD from creating blocks from it's address.
-Author        | Dylan Rose, evergreendrose
-Editor        | 
-Comments-URI  |
-Status        | 
-Category      | Standards Track 
-Sub-Category  | Core
-Created       | 2024-04-16
-Requires      | None
-Replaces      | None
-Superseded-By | None
+Title         | <Ban NoSSD>
+Description   | <Take back our Nakamoto Coefficient and enforce CHIP-0022 by blocking NoSSD from creating blocks from it's address.>
+Author        | <Dylan Rose, evergreendrose>
+Editor        | <>
+Comments-URI  | <>
+Status        | <>
+Category      | Standards Track >
+Sub-Category  | Core >
+Created       | 2024-04-16 >
+Requires      | None >
+Replaces      | None >
+Superseded-By | None >
 
 
 ## Abstract
