@@ -65,6 +65,7 @@ We are not setting a precedent that any developer can be censored. We are settin
 
 # Specification
 There is a simple change to prevent block production from NoSSD going forward. Changing the node to no longer accept blocks signed by NoSSDs address will mean that the primary chain will no longer recognize NoSSD in its current implementation.
+TODO Implement change to full node to prevent nodes from accepting blocks created by NoSSD
 
 If NoSSD were to change their address, farmers would still need to replot, and would have to consider that plotting to NoSSD leaves them vulnerable to getting forked out in the future if they chose to plot to a non-compliant plot format.
 
