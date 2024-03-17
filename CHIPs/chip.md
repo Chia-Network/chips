@@ -19,32 +19,35 @@ Over the last 12 months, the Nakamoto Coefficient (NC) of Chia has rapidly decre
 
 ## Definitions
 There are some key concepts we must understand first.
-* Nakamoto Coefficient
+Nakamoto Coefficient
 The Nakamoto Coefficient is a measure of how decentralized a blockchain is by examining the distribution of unique block producers. Chia’s revolutionary pooling protocol enabled Chia to become the most decentralized chain with a NC of over 100, which is now down to 7 due to NoSSD not following the pooling protocol. 
 You can monitor Chia’s NC here https://dashboard.chia.net/d/6S16D9AVk/nakamoto-coefficient?orgId=1&var-adjusted_nc=_adjusted%7B
-* Block Production
+
+Block Production
 Per Chia’s core principles, farmers, not pools, sign blocks. Centralized block production like in BTC creates opportunities for censorship and concentration of power. Decentralized block production, such as in Chia, is a cornerstone of creating a network that will operate beyond the will of a small group of individuals.
-* Pooling
+
+Pooling
 Pools are central to widely distributed consensus mechanisms as they allow farmers of all sizes to get consistent rewards by working together. While this typically leads centralization, Chia’s pooling protocol enables farmers to sign blocks and was the primary contributor to its >100 Nakamoto Coefficient .
-* Censorship Resistance
+
+Censorship Resistance
 Censorship Resistance is a factor if how easy it is for any one entity, such as a government, to control the contents of blocks. It is almost directly correlated with Nakamato Coefficient and is safe to assume that a high NC translates to high Censorship resistance.
   
 ## Motivation
 This section will discuss why patching NoSSD is needed. First it will discuss proprietary Chia Pools, the risks of NoSSD, and nature of censorship resistance on Chia.
 
-* Proprietary Chia pools (copied from Chip 22 credits to Harold Barnes)
+Proprietary Chia pools (copied from Chip 22 credits to Harold Barnes)
 
 In the time since Chia's mainnet launch, multiple closed-source proprietary pools have been introduced. These pools do not conform to Chia's official pooling protocol. In certain cases, the pools require proprietary plots, thus disallowing users to change pools without replotting. In other cases, the pools create and sign the blocks, while allowing the use of official plots. The thing these pools have in common is that they require a proprietary farmer, which can change the farmer reward address in order to charge a developer fee.
 
 While these proprietary pools do not violate Chia's consensus (they create valid blocks), they are a step backwards in terms of security and decentralization. For example, if a centralized pool stopped creating blocks (due to a number of potential reasons, including simply going out of business), then that pool's portion of the netspace would be taken offline until its users could replot their space (for pools that require proprietary plots), or change to another pool (for pools that allow official plots).
 
-* NoSSD's lack of compliance
+NoSSD's lack of compliance
 NoSSD has failed to communicate their motivations around adoption Chip-22. NoSSD is not a doxxed entity and has sparingly communicated with the community. Many farmers of NoSSD have been warned that due to its centralized nature, their plots are not secure, and at any time NoSSD could render their plots worthless. As we approach a network wide replot with the upcoming compression resistant hard fork, we must consider weather NoSSD will comply, or continue to create software that centralizes block production and leaves Chia vulnerable. If NoSSD has failed to comply with Chip 22, and will not comply after this chip is implemented, it is clear they are not serving the interests of the chain and must be avoided at all costs.
 
-* Improving Censorship Resistance
+Improving Censorship Resistance
 The Chia pooling protocol is central in preventing censorship on chain, and NoSSD’s plot format has directly deteriorated it. It may seem draconian to enforce compliance through censorship, but consider this as a patch to a bug in consensus rather than a targeted attack to limit speech. By centralizing their plot format, NoSSD has left themselves vulnerable to censorship, and by extension the rest of the network. Patching this bug by preventing their plots from creating blocks actually brings more censorship resistance to the chain, and dissuades entities from creating centralized plot formats in the future.
 
-* Proposed solution
+Proposed solution
 This CHIP will add a single change to the node to prevent future block production from the NoSSD address xch1n777zmsr74wgtm8efjezvzplel38xl2wv2dfs8jak04qawvs0t6q6dhf2x.  
 If this CHIP is accepted, NoSSD farmers will have to replot and NoSSD will have to create a new plot format, ideally one that is compliant with Chip-22.
 
