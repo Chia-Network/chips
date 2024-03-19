@@ -37,7 +37,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-* [32 - Block NoSSD](https://github.com/Chia-Network/chips/pull/111)
 
 ### Review
 * None
@@ -72,6 +71,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
 * [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
+* [32 - Block NoSSD](https://github.com/Chia-Network/chips/pull/111)
 
 ### Obsolete
 * CAT1 -- This standard was replaced with CAT2
