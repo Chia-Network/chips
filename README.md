@@ -30,7 +30,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 * [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
-* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
 * [26 - New Wallet Sync Protocol](https://github.com/Chia-Network/chips/pull/100)
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
 * [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
@@ -39,7 +38,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
 
 ### Review
-* None
+* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
 
 ### Review (Fast Track)
 * None
