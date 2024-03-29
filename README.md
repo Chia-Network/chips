@@ -44,7 +44,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [22 - Enhanced Harvester Protocol](https://github.com/Chia-Network/chips/pull/88)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -58,6 +58,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
+* [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 
 ### Stagnant
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
