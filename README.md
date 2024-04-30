@@ -40,13 +40,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [34 - Keccak and base64 operators](https://github.com/Chia-Network/chips/pull/116)
 
 ### Review
-* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
+* None
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* None
+* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
