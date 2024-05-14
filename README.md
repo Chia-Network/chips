@@ -36,17 +36,16 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)
 * [34 - Keccak and base64 operators](https://github.com/Chia-Network/chips/pull/116)
 
 ### Review
-* None
+* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)s
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* [25 - Chialisp Message Conditions](https://github.com/Chia-Network/chips/pull/98)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -61,6 +60,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
+* [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
 
 ### Stagnant
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
