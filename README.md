@@ -28,9 +28,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
-* [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 * [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
-* [26 - New Wallet Sync Protocol](https://github.com/Chia-Network/chips/pull/100)
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
 * [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
@@ -38,14 +36,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
 
 ### Review
-* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)
-* [34 - Keccak and base64 operators](https://github.com/Chia-Network/chips/pull/116)
+* [26 - New Wallet Sync Protocol](https://github.com/Chia-Network/chips/pull/100)
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* None
+* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -63,17 +60,19 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
 
 ### Stagnant
-* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
 * [17 - VC metadata structure](https://github.com/Chia-Network/chips/pull/66)
 * [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
 * [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
+* [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
+* [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
 * [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 * [32 - Block NoSSD](https://github.com/Chia-Network/chips/pull/111)
+* [34 - Keccak and base64 operators](https://github.com/Chia-Network/chips/pull/116)
 
 ### Obsolete
 * CAT1 -- This standard was replaced with CAT2
