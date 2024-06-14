@@ -1,0 +1,281 @@
+{
+  "format": "CHIP-0015",
+  "name": "Monkeyzoo Fused #example",
+  "description": "FusionZoo Monkey, a custom designed and fused character. A Self gifting NFT that gifts you Monkeyzoo token, just hold it in your wallet and await your gifts daily!",
+  "minting_tool": "FuzionZoo by NFTr",
+  "sensitive_content": false,
+  "attributes": [
+    {
+      "trait_type": "Shorts",
+      "value": "Red Shorts 1"
+    },
+    {
+      "trait_type": "Objects",
+      "value": "Flaming halo 3"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Brown eyes smoked 2"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Base layer"
+    },
+    {
+      "trait_type": "Backgrounds",
+      "value": "Turquiose cloud background 3"
+    },
+    {
+      "trait_type": "MZ Total",
+      "value": 9
+    }
+  ],
+  "collection": {
+    "name": "The FusionZoo",
+    "id": "19d77d9d-d66b-4bbf-b08a-cae50873cd7f",
+    "attributes": [
+      {
+        "type": "description",
+        "value": "Monkeyzoo presents the FusionZoo, NFTs today for tomorrows metaverse"
+      },
+      {
+        "type": "icon",
+        "value": "https://pbs.twimg.com/profile_images/1542615309969985536/wK9gfnMV_400x400.png"
+      },
+      {
+        "type": "banner",
+        "value": "https://pbs.twimg.com/profile_banners/14711228/1656623125/600x200"
+      },
+      {
+        "type": "twitter",
+        "value": "https://twitter.com/monkeyzoo"
+      },
+      {
+        "type": "website",
+        "value": "https://www.monkeyzoo.net"
+      }
+    ]
+  },
+  "data": {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "encodingFormat": "image/png",
+    "contentSize": "4.1722 MB",
+    "width": 575,
+    "height": 575,
+    "duration": "PT0M12S",
+    "subjectOf": {
+      "@type": "PropertyValue",
+      "propertyID": "Fusion Puzzle",
+      "value": "xchxr9snwz8rv084p2fhpa7je4z8sc9dapqxdwghcg53my3slsp902fe"
+    },
+    "thumbnail": [
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "575",
+        "width": "575",
+        "name": "Monkeyzoo Fused #example.png",
+        "size": "4.1722 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "9dec1cd2c094bb5e2897fc6f4584732bd78abb514b3a7080f078067901fb879f",
+        "height": "150",
+        "width": "150",
+        "name": "Monkeyzoo Fused #example.png",
+        "size": "766.484 KB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "fdd3c5cfd4d21ec8f162b94f6b591a8d6d54c874e800f49e0739e068b4810c4d",
+        "height": "100",
+        "width": "100",
+        "name": "Monkeyzoo Fused #example.png",
+        "size": "417.402 KB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      }
+    ],
+    "encodesCreativeWork": [
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "73d422df1c9e7fe6a966b2ad697a3aa28ac42a2bf5c42c048636ff44c4070bf9",
+        "height": "2000",
+        "width": "2000",
+        "name": "Monkeyzoo Fused #example.png",
+        "size": "4.1040 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/svg",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "name": "Monkeyzoo Fused #example.svg",
+        "size": "24.1722 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.svg",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.svg"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/webp",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "2000",
+        "width": "2000",
+        "name": "Monkeyzoo Fused #example.webp",
+        "size": "4.1040 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.webp",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.webp"
+        ]
+      }
+    ],
+    "hasPart": [
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "446",
+        "width": "331",
+        "size": "824 KB",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Fused Attribute",
+          "name": "Shorts",
+          "value": "Red Shorts 1"
+        },
+        "mainEntity":{
+          "@type": "PropertyValue",
+          "propertyID": "NFTid",
+          "value": "nft1u840lusdgpc5vp708fjwmlshjnvueqwhplrsk59mjdwaet8vgqxq0p3eu6",
+          "url": [
+              "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lI1SON4",
+              "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/red_shorts.png",
+              "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/red_shorts.png"
+          ]
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "446",
+        "width": "331",
+        "size": "824 KB",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Fused Attribute",
+          "name": "Eyes",
+          "value": "brown eyes smokes 2"
+        },
+        "mainEntity":{
+          "@type": "PropertyValue",
+          "propertyID": "NFTid",
+          "value": "nft14mt28v2cx2q8e6d877tn7u5pfnvsqyq8wyy0d9qcan7u8sw65tpqh5s92s",
+          "url": [
+            "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lI1SON4",
+            "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/brown_eyes_smokes.png",
+            "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/brown_eyes_smokes.png"
+          ]
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "446",
+        "width": "331",
+        "size": "824 KB",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Fused Attribute",
+          "name": "Body",
+          "value": "Base layer"
+        },
+        "mainEntity":{
+          "@type": "PropertyValue",
+          "propertyID": "NFTid",
+          "value": "nft16faqwm3de0njhtwheqtkgrftz2p56e66y069gwywvd5w5u3w82tqsu7pv8",
+          "url": [
+            "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lI1SON4",
+            "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/base_layer.png",
+            "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/base_layer.png"
+          ]
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "446",
+        "width": "331",
+        "size": "824 KB",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Fused Attribute",
+          "name": "Backgrounds",
+          "value": "Turquoise cloud background 3"
+        },
+        "mainEntity":{
+          "@type": "PropertyValue",
+          "propertyID": "NFTid",
+          "value": "nft1e7zt7fd4sdu4x276e7dtu6ztln4rtuxpea7c8unzpyd9zl877znq2edgke",
+          "url": [
+            "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lI1SON4",
+            "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/turquoise_cloud_background.png",
+            "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/turquoise_cloud_background.png"
+          ]
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "446",
+        "width": "331",
+        "size": "824 KB",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Fused Attribute",
+          "name": "Objects",
+          "value": "Flaming halo 3"
+        },
+        "mainEntity":{
+          "@type": "PropertyValue",
+          "propertyID": "NFTid",
+          "value": "nft1mp6nfx7easclw6mgpsupxu0lt03evp6gge84kjx3337shfkxnh8qwrsrju",
+          "url": [
+            "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lI1SON4",
+            "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/flaming_halo.png",
+            "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/flaming_halo.png"
+          ]
+        }
+      }
+    ]
+  }
+}
