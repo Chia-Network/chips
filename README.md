@@ -36,13 +36,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
 
 ### Review
-* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)
+* None
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* [26 - New Wallet Sync Protocol](https://github.com/Chia-Network/chips/pull/100)
+* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -58,6 +58,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
+* [26 - New Wallet Sync Protocol](https://github.com/Chia-Network/chips/pull/100)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
