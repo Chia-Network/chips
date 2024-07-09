@@ -42,7 +42,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [33 - Add additional partial headers](https://github.com/Chia-Network/chips/pull/114)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -58,7 +58,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
-* [26 - New Wallet Sync Protocol](https://github.com/Chia-Network/chips/pull/100)
+* [26 - New Wallet Sync Protocol](/CHIPs/chip-0026.md)
+* [33 - Add additional partial headers](/CHIPs/chip-0033.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
