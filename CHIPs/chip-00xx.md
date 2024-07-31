@@ -2,7 +2,7 @@ CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
 :-------------|:----
 Title         | DataLayer Delegation Capabilities
 Description   | Allow datastore owners to add external puzzles with limited capabilities (writers, admins, oracles).
-Authors        | [Michael Taylor](https://github.com/MichaelTaylor3D), [Yak](https://github.com/MichaelTaylor3D)
+Authors        | [Michael Taylor](https://github.com/MichaelTaylor3D), [Yak](https://github.com/Yakuhito)
 Editor        | < Creator must leave this blank. Editor will be assigned.>
 Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
 Status        | < Creator must leave this blank. Editor will assign a status.>
@@ -159,8 +159,9 @@ The puzzles and reference drivers have been thoroughly tested. Note that tests c
  - **Test for filters**: Ensure that the admin and writer filters correctly parse and (dis)allow special conditions. Tests vary the filter used and the condition being tested (`NEW_MERKLE_ROOT`, new metadata)
  - **Tests for the Merkle tree implementation**: Ensure that the Rust implementation for Merkle trees returns the same Merkle root and proofs as the one in the reference wallet/node.
  - **Other tests**: Ensure that the hardcoded puzzle hashes match the hardcoded puzzles and that curry_tree_hash functions are implemented correctly. Ensure that emitting a `CREATE_COIN` condition from delegated puzzles (either to take over the store or to melt it) causes the datastore puzzle to raise.
- - 
+
 ## Reference Implementation
+
 The reference implementation can be found in the [DataLayer-Storage/DataLayer-Driver](https://github.com/Datalayer-Storage/DataLayer-Driver) repository, which powers the [datalayer-driver](https://www.npmjs.com/package/datalayer-driver) NPM package. We plan to include the drivers in the [chia-wallet-sdk](https://github.com/Rigidity/chia-wallet-sdk/) toolkit.
 
 ## Security
@@ -171,4 +172,5 @@ The Chialisp code has been covered by tests (see ‘Test Cases’) and has been 
  - Inner puzzle risk: The security of the delegated or owner puzzles must also be taken into account. This CHIP does not put any restrictions on the inner puzzles that may be used. Possibilities such as key loss or compromise, as well as chialisp vulnerabilities should be thoroughly considered as they affect the security of the whole store.
 
 ## Copyright
+
 The reference implementation is released under the MIT License. chia-wallet-sdk released under the Apache 2.0 License. Rights to this CHIP waived through CC0.
