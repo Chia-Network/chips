@@ -34,6 +34,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
+* [35 - DataLayer Delegation Capabilities](https://github.com/Chia-Network/chips/pull/125)
 
 ### Review
 * None
