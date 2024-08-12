@@ -28,7 +28,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
-* [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
 * [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
@@ -68,6 +67,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
 * [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
+* [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
 
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
