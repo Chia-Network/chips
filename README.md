@@ -27,14 +27,15 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
+* None
+
+### Review
 * [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
 * [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-
-### Review
 * [35 - DataLayer Delegation Capabilities](https://github.com/Chia-Network/chips/pull/125)
 
 ### Review (Fast Track)
