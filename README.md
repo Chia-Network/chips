@@ -40,8 +40,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
-* [35 - DataLayer Delegation Capabilities](https://github.com/Chia-Network/chips/pull/125)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -55,10 +54,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
+* [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
 * [26 - New Wallet Sync Protocol](/CHIPs/chip-0026.md)
 * [33 - Add additional partial headers](/CHIPs/chip-0033.md)
+* [35 - DataLayer Delegation Capabilities](https://github.com/Chia-Network/chips/pull/125)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
