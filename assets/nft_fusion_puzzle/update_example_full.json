@@ -1,0 +1,185 @@
+{
+  "format": "CHIP-0015",
+  "name": "Cheeky Monkey #130 (updated)",
+  "description": "Cheeky Monkey, the first NFT in our Character collection. A Self gifting NFT that gifts you Monkeyzoo token, just hold it in your wallet and await your gifts daily!",
+  "minting_tool": "Mintr",
+  "sensitive_content": false,
+  "attributes": [
+    {
+      "trait_type": "Shorts",
+      "value": "Red Shorts 1"
+    },
+    {
+      "trait_type": "Objects",
+      "value": "No Object 0"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Brown eyes smoked 2"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Base layer"
+    },
+    {
+      "trait_type": "Backgrounds",
+      "value": "Green cloud background 2"
+    },
+    {
+      "trait_type": "MZ Total",
+      "value": 5
+    }
+  ],
+  "collection": {
+    "name": "Cheeky Monkey",
+    "id": "730a3902-b4f2-4d79-9aea-f686e3024abf",
+    "attributes": [
+      {
+        "type": "description",
+        "value": "The Monkeyzoo project NFTs today for metaverses of the future"
+      },
+      {
+        "type": "icon",
+        "value": "https://pbs.twimg.com/profile_images/1542615309969985536/wK9gfnMV_400x400.png"
+      },
+      {
+        "type": "banner",
+        "value": "https://pbs.twimg.com/profile_banners/14711228/1656623125/600x200"
+      },
+      {
+        "type": "twitter",
+        "value": "https://twitter.com/monkeyzoo"
+      },
+      {
+        "type": "website",
+        "value": "https://www.monkeyzoo.net"
+      }
+    ]
+  },
+  "data": {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "encodingFormat": "image/png",
+    "contentSize": "4.1722 MB",
+    "width": 575,
+    "height": 575,
+    "duration": "PT0M12S",
+    "subjectOf": {
+      "@type": "PropertyValue",
+      "propertyID": "Update Puzzle",
+      "value": "xchxr9snwz8rv084p2fhpa7je4z8sc9dapqxdwghcg53my3slsp902fe"
+    },
+    "thumbnail": [
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "575",
+        "width": "575",
+        "name": "Monkeyzoo Update #example.png",
+        "size": "4.1722 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "9dec1cd2c094bb5e2897fc6f4584732bd78abb514b3a7080f078067901fb879f",
+        "height": "150",
+        "width": "150",
+        "name": "Monkeyzoo Update #example.png",
+        "size": "766.484 KB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "fdd3c5cfd4d21ec8f162b94f6b591a8d6d54c874e800f49e0739e068b4810c4d",
+        "height": "100",
+        "width": "100",
+        "name": "Monkeyzoo Update #example.png",
+        "size": "417.402 KB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      }
+    ],
+    "encodesCreativeWork": [
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "73d422df1c9e7fe6a966b2ad697a3aa28ac42a2bf5c42c048636ff44c4070bf9",
+        "height": "2000",
+        "width": "2000",
+        "name": "Monkeyzoo Update #example.png",
+        "size": "4.1040 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/svg",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "name": "Monkeyzoo Update #example.svg",
+        "size": "24.1722 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.svg",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.svg"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/webp",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "2000",
+        "width": "2000",
+        "name": "Monkeyzoo Update #example.webp",
+        "size": "4.1040 MB",
+        "url": [
+          "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lISON4",
+          "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.webp",
+          "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.webp"
+        ]
+      }
+    ],
+    "hasPart": [
+      {
+        "@type": "ImageObject",
+        "encodingFormat": "image/png",
+        "sha256": "127df0f866e4f7a4b512a2c047c108c5ab61ce48e3e7583c16419fdf82c9aba4",
+        "height": "446",
+        "width": "331",
+        "size": "824 KB",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Updated Attribute",
+          "name": "Shorts",
+          "value": "Red Shortz 1"
+        },
+        "mainEntity":{
+          "@type": "PropertyValue",
+          "propertyID": "NFTid",
+          "value": "nft1u840lusdgpc5vp708fjwmlshjnvueqwhplrsk59mjdwaet8vgqxq0p3eu6",
+          "url": [
+              "https://arweave.net/MKIcz1zO7afNJ3iVyiWE9XsHnZhtCkZxuZc1lI1SON4",
+              "https://bafybeidcomuu4fo57gg7t2dlho7juhi4b2vxtmrassd5j77g5uwk4fqli4.ipfs.nftstorage.link/example.png",
+              "https://monkeyzoo.mypinata.cloud/ipfs/QmPHoviUSzaYU5Pr1cyexciyNUQZuXYiCFBPgBtooJ8zkm/example.png"
+          ]
+        }
+      }
+    ]
+  }
+}
