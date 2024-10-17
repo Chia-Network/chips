@@ -34,10 +34,9 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Review
 * [10 - Owner-Editable Metadata Format for NFT1](https://github.com/Chia-Network/chips/pull/33)
-* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Review (Fast Track)
-* [20 - Wallet Hinted Coin Discovery](https://github.com/Chia-Network/chips/pull/81)
+* None
 
 ### Last Call
 * None
@@ -53,6 +52,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [12 - Plot Filter Reduction](/CHIPs/chip-0012.md)
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
+* [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
 
 ### Stagnant
 * None
@@ -60,6 +60,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
 * [6 - DID External Identity Linking](https://github.com/Chia-Network/chips/pull/12)
+* [13 - Tighten plot filter rules](https://github.com/Chia-Network/chips/pull/57)
 
 ### Obsolete
 * CAT1 -- This standard was replaced with CAT2
