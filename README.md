@@ -27,7 +27,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* None
+* [36 - keccak256 CLVM operator](https://github.com/Chia-Network/chips/pull/131)
+* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/132)
 
 ### Review
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
@@ -55,12 +56,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
-* [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
+* [21 - NFT Fusion Puzzle](/CHIPs/chip-0021.md)
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
 * [26 - New Wallet Sync Protocol](/CHIPs/chip-0026.md)
 * [33 - Add additional partial headers](/CHIPs/chip-0033.md)
-* [35 - DataLayer Delegation Capabilities](https://github.com/Chia-Network/chips/pull/125)
+* [35 - DataLayer Delegation Capabilities](/CHIPs/chip-0035.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
