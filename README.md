@@ -27,16 +27,15 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
-* [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
+* None
+
+### Review
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
 * [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
 
-### Review
-* None
 
 ### Review (Fast Track)
 * None
@@ -56,10 +55,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [14 - Chialisp ASSERT_BEFORE_* conditions](/CHIPs/chip-0014.md)
 * [15 - NFT1 metadata extension](/CHIPs/chip-0015.md)
 * [20 - Wallet Hinted Coin Discovery](/CHIPs/chip-0020.md)
+* [21 - NFT Fusion Puzzle](https://github.com/Chia-Network/chips/pull/86)
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
 * [26 - New Wallet Sync Protocol](/CHIPs/chip-0026.md)
 * [33 - Add additional partial headers](/CHIPs/chip-0033.md)
+* [35 - DataLayer Delegation Capabilities](https://github.com/Chia-Network/chips/pull/125)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
@@ -67,6 +68,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [18 - KYC-VC proof structure](https://github.com/Chia-Network/chips/pull/67)
 * [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
+* [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
 
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)

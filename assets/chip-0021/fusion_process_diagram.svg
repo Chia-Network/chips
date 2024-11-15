@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+    <!-- Gradient definitions -->
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f0f0f0;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="fusionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="defusionGradient" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#fad0c4;stop-opacity:1" />
+        </linearGradient>
+        <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+            <feOffset dx="2" dy="2" result="offsetblur" />
+            <feFlood flood-color="rgba(0,0,0,0.3)" />
+            <feComposite in2="offsetblur" operator="in" />
+            <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+    <!-- Background -->
+    <rect x="0" y="10" width="800" height="550" fill="url(#bgGradient)" />
+    <!-- Fusion Arrow (centered, pointing right) -->
+    <path d="M105 45 H655 L705 80 L655 115 H105 Q95 80 105 45" fill="url(#fusionGradient)" stroke="#ffffff" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="380" y="90" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="white">FUSION</text>
+    <!-- NFTs -->
+    <rect x="50" y="150" width="120" height="80" rx="10" ry="10" fill="#ff9999" stroke="#000000" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="110" y="195" font-family="Arial" font-size="18" text-anchor="middle">NFT 1</text>
+    <rect x="50" y="250" width="120" height="80" rx="10" ry="10" fill="#99ff99" stroke="#000000" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="110" y="295" font-family="Arial" font-size="18" text-anchor="middle">NFT 2</text>
+    <rect x="50" y="350" width="120" height="80" rx="10" ry="10" fill="#9999ff" stroke="#000000" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="110" y="395" font-family="Arial" font-size="18" text-anchor="middle">NFT 3</text>
+    <!-- Fusion Puzzle -->
+    <rect x="300" y="240" width="200" height="100" rx="20" ry="20" fill="#ffff99" stroke="#000000" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="400" y="295" font-family="Arial" font-size="22" text-anchor="middle">Fusion Puzzle</text>
+    <!-- Fused NFT -->
+    <rect x="630" y="240" width="120" height="100" rx="10" ry="10" fill="#ff99ff" stroke="#000000" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="690" y="295" font-family="Arial" font-size="18" text-anchor="middle">Fused NFT</text>
+    <!-- Connection lines -->
+    <path d="M170 190 Q235 275 300 275" fill="none" stroke="#000000" stroke-width="3" />
+    <path d="M170 290 H300" fill="none" stroke="#000000" stroke-width="3" />
+    <path d="M170 390 Q235 305 300 305" fill="none" stroke="#000000" stroke-width="3" />
+    <path d="M500 290 H630" fill="none" stroke="#000000" stroke-width="3" />
+    <!-- Defusion Arrow (centered, pointing left) -->
+    <path d="M705 450 H155 L105 485 L155 520 H705 Q715 485 705 450" fill="url(#defusionGradient)" stroke="#ffffff" stroke-width="2" filter="url(#drop-shadow)" />
+    <text x="380" y="495" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="white">DEFUSION</text>
+</svg>
