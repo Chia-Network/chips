@@ -35,7 +35,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-
+* [36 - keccak256 CLVM operator](https://github.com/Chia-Network/chips/pull/131)
+* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/132)
 
 ### Review (Fast Track)
 * None
