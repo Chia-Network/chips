@@ -1,0 +1,172 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Revocable CATs
+Description   | A standard for a Chia Asset Token (CAT) that can be revoked by the issuing party
+Author        | [Andreas Greimel](https://github.com/greimela)
+Editor        | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Primitive 
+Created       | 2024-12-06
+Requires      | [CAT2](https://chialisp.com/cats/)
+
+## Abstract
+
+Tokens that conform to the CAT2 standard use an ownership layer to set up the rules of how they may be spent. This CHIP builds upon the CAT2 standard to create a new type of CAT that allows the issuing entity to take back custody of the tokens they have issued. In addition, Revocable CATs can be minted and melted from a vault. Beyond these special properties, Revocable CATs can be spent just like CATs that follow the CAT2 standard.
+
+## Motivation
+
+In general, tokens can represent real world assets (RWAs) on blockchains. The most common token standard on Chia's blockchain is CAT2, which allows issuers to mint tokens from mojos. While the CAT2 standard could be used to represent certain RWAs, it is often the case that the issuer needs to be able to revoke issued tokens. Some potential reasons for token revocation include when the tokens are lost, stolen, or otherwise possessed by someone who lacks authorization.
+
+In order to fulfill the revocability requirement for the issuers of RWAs, this CHIP sets a new standard for Revocable CATs on Chia's blockchain. It would benefit Chia's ecosystem by allowing the issuance of RWAs that would not have been possible using existing standards.
+
+## Backwards Compatibility
+
+This proposal is for a new CAT standard that will exist in tandem with the CAT2 standard. It does not replace any existing standards, nor does it modify Chia's consensus. This CHIP therefore does not introduce any breaking changes to Chia.
+
+## Rationale
+
+The design for Revocable CATs draws from the existing (albeit stagnant) [CHIP-16](https://github.com/Chia-Network/chips/pull/65) (Verifiable Credentials). That CHIP created a type of singleton with two primary properties:
+1. The issuing entity needed to verify a factual claim about a prospective holder prior to issuing a Verifiable Credential
+2. The issuing entity could revoke the proofs contained within a Verifiable Credential at any point
+
+For the Revocable CAT standard, we wanted to create a new type of CAT that maintained the revocation property of Verifiable Credentials. However, we did not want to restrict ownership of the CATs to only certain people or other entities. In addition, we wanted the CATs to be able to be minted and melted from a specified singleton such as a vault.
+
+We therefore took the existing CAT2 standard, added the revocation aspect of Verifiable Credentials, and created a new TAIL to allow minting and melting from a singleton.
+
+Note that the Revocable CAT standard from this CHIP uses the same 1000 mojo-per-CAT convention as the CAT2 standard.
+
+## Specification
+
+### Structure
+
+The puzzle structure looks like this:
+
+```
+Outer layer ([cat_v2](https://github.com/Chia-Network/chia-blockchain/blob/2ec6b4ac7c1f04caeabfa425978d60a20d8bf524/chia/wallet/cat_wallet/puzzles/cat_v2.clsp))
+    +-- TAIL ([everything_with_singleton](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/everything_with_singleton.clsp))
+    +-- Revocation layer ([revocation_layer.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/revocation_layer.clsp))
+      +-- Inner puzzle (the `p2` puzzle that would usually go into `cat_v2`)
+      +-- hidden_puzzle ([p2_delegated_by_singleton.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/p2_delegated_by_singleton.clsp))
+```
+
+A few notes about this structure:
+* The outer layer is the same puzzle used by CATs that follow the CAT2 standard
+* The revocation layer is the same puzzle that was originally developed for use with Verifiable Credentials. It has two spend paths:
+  * Inner puzzle -- for normal spends; may not remove the revocation layer
+  * Hidden puzzle -- for revocation; must remain in place every time this coin is spent
+
+Both the hidden puzzle and the TAIL function similarly. But by separating them, Revocable CATs are able to use different rules for minting/melting and revocation.
+
+### TAIL puzzle
+
+#### About
+
+The TAIL puzzle for Revocable CATs is `everything_with_singleton` (borrowed from `everything_with_signature`).This puzzle allows any type of singleton (including a vault) to authorize both mints and melts of this CAT by sending a message.
+
+A nonce is curried in to allow a single vault to issue multiple different CATs.
+
+#### Structure
+
+```
+; This is a "limitations_program" for use with cat.clsp.
+; It allows a singleton to both mint and melt this CAT.
+(mod (
+    SINGLETON_MOD_HASH
+    SINGLETON_STRUCT_HASH
+    NONCE
+    Truths
+    parent_is_cat
+    lineage_proof
+    delta
+    inner_conditions
+    (  ; solution
+      singleton_inner_puzzle_hash
+    )
+  )
+
+  (include condition_codes.clib)
+  (include curry.clib)
+
+  (defun-inline calculate_full_puzzle_hash (SINGLETON_MOD_HASH SINGLETON_STRUCT_HASH inner_puzzle_hash)
+    (curry_hashes_inline SINGLETON_MOD_HASH
+      SINGLETON_STRUCT_HASH
+      inner_puzzle_hash
+    )
+  )
+
+  (list
+    (list RECEIVE_MESSAGE 23 delta (calculate_full_puzzle_hash SINGLETON_MOD_HASH SINGLETON_STRUCT_HASH singleton_inner_puzzle_hash))
+  )
+)
+```
+
+### Hidden puzzle
+
+#### About
+
+The hidden puzzle uses `p2_delegated_by_singleton`, which is a `p2_delegated_puzzle` that uses a message from a singleton instead of a signature for authorization.
+
+(Recall from [CHIP-25](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0025.md) that message conditions are structured with a `mode` parameter, which contains a six-bit bitmask.)
+
+The message mode used with the hidden puzzle is `puzzle to coin_id` (010111), which ensures that only one particular coin can receive that particular message.
+
+#### Structure
+
+```
+(mod (
+    SINGLETON_STRUCT
+    singleton_inner_puzzle_hash
+    delegated_puzzle
+    delegated_solution
+  )
+
+  (include condition_codes.clib)
+  (include curry-and-treehash.clib)
+
+  (defun-inline calculate_full_puzzle_hash (SINGLETON_STRUCT inner_puzzle_hash)
+    (puzzle-hash-of-curried-function (f SINGLETON_STRUCT)
+      inner_puzzle_hash
+      (sha256tree SINGLETON_STRUCT)
+    )
+  )
+
+  (c
+    (list RECEIVE_MESSAGE 23 (sha256tree delegated_puzzle) (calculate_full_puzzle_hash SINGLETON_STRUCT singleton_inner_puzzle_hash))
+    (a delegated_puzzle delegated_solution)
+  )
+)
+```
+
+## Test Cases
+* [Lifecycle test 1](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/_tests/wallet/test_revcat_lifecycle.py)
+* [Lifecycle test 2](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/_tests/wallet/test_revocable_cat_lifecycle.py)
+
+
+## Reference Implementation
+
+Revocable CATs are comprised of the following Chialisp puzzles:
+* [p2_delegated_by_singleton.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/p2_delegated_by_singleton.clsp)
+* [everything_with_singleton.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/everything_with_singleton.clsp)
+* [Revocation layer](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/revocation_layer.clsp)
+
+## Security
+
+Chia Network, Inc. has conducted an internal review of the code involved with this CHIP, which has surfaced a couple of minor issues, as detailed below.
+
+Revocation transactions are not guaranteed to make it onto the blockchain. For example, at a given time, the mempool might be completely full. This could occur due to natural demand or from a Denial of Service attack (perhaps a Revocable CAT holder launches the attack to prevent their CATs from being revoked). In both cases, the outcome is the same: the issuer might find it difficult to revoke the CATs in a timely manner.
+
+To mitigate this issue, the issuer could include a large fee in order for their transaction to be included. They could also use [Replace by Fee](https://docs.chia.net/mempool/#replace-by-fee) (RBF) to increase the fee of an existing transaction. Another option for a large issuer might be to farm their own block, in which case they would be free to include their own transactions.
+
+However, while a full mempool might make it difficult for an issuer to revoke their tokens, this is a facet of the blockchain's limited block space, and not a specific issue with Revocable CATs (other than perhaps a higher CLVM cost than standard CATs).
+
+Issuers also might experience difficulty if they want to revoke many tokens at once. This is exacerbated by the fact that holders can split each of their whole CATs into up to 1000 tokens, thereby requiring the issuer to initiate 1000 times as many transactions as would have been required if the CATs had not been split.
+
+In this scenario, the issuer could still revoke the tokens, but it might take a long time and effort.
+
+## Additional Assets
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
