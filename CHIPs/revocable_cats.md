@@ -43,13 +43,11 @@ Note that the Revocable CAT standard from this CHIP uses the same 1000 mojo-per-
 
 The puzzle structure looks like this:
 
-```
-Outer layer ([cat_v2](https://github.com/Chia-Network/chia-blockchain/blob/2ec6b4ac7c1f04caeabfa425978d60a20d8bf524/chia/wallet/cat_wallet/puzzles/cat_v2.clsp))
-    +-- TAIL ([everything_with_singleton](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/everything_with_singleton.clsp))
-    +-- Revocation layer ([revocation_layer.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/revocation_layer.clsp))
-      +-- Inner puzzle (the `p2` puzzle that would usually go into `cat_v2`)
-      +-- hidden_puzzle ([p2_delegated_by_singleton.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/p2_delegated_by_singleton.clsp))
-```
+├ Outer layer ([cat_v2](https://github.com/Chia-Network/chia-blockchain/blob/2ec6b4ac7c1f04caeabfa425978d60a20d8bf524/chia/wallet/cat_wallet/puzzles/cat_v2.clsp)) \
+├── TAIL ([everything_with_singleton](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/everything_with_singleton.clsp)) \
+├── Revocation layer ([revocation_layer.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/revocation_layer.clsp)) \
+├──── Inner puzzle (the `p2` puzzle that would usually go into `cat_v2`) \
+├──── hidden_puzzle ([p2_delegated_by_singleton.clsp](https://github.com/Chia-Network/chia-blockchain/blob/469b8024a26e81d62b6e8e5336312b223c2f3606/chia/wallet/revocable_cats/p2_delegated_by_singleton.clsp)) 
 
 A few notes about this structure:
 * The outer layer is the same puzzle used by CATs that follow the CAT2 standard
