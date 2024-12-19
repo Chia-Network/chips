@@ -28,6 +28,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
+* [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
+* [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 
 ### Review
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
@@ -41,7 +43,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [36 - keccak256 CLVM operator](https://github.com/Chia-Network/chips/pull/131)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -61,6 +63,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [26 - New Wallet Sync Protocol](/CHIPs/chip-0026.md)
 * [33 - Add additional partial headers](/CHIPs/chip-0033.md)
 * [35 - DataLayer Delegation Capabilities](/CHIPs/chip-0035.md)
+* [36 - keccak256 CLVM operator](/CHIPs/chip-0036.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
