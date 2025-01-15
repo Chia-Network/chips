@@ -27,9 +27,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
-* [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 
 ### Review
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
@@ -38,6 +36,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
 * [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/132)
+* [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
+* [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 
 ### Review (Fast Track)
 * None
