@@ -30,6 +30,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
+* [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 
 ### Review
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
