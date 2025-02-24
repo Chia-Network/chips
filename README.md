@@ -28,7 +28,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
-* [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 
@@ -38,9 +37,10 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
 * [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
 * [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/132)
+* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/147)
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
 * [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
+* [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 
 ### Review (Fast Track)
 * None
