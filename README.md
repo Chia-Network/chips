@@ -28,7 +28,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 
 ### Draft
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
-* [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 
 ### Review
@@ -41,6 +40,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
 * [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
+* [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 
 ### Review (Fast Track)
 * None
