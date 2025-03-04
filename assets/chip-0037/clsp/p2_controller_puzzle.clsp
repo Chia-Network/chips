@@ -1,0 +1,25 @@
+; p2_controller_puzzle_hash.clsp by yakuhito
+;; Used to lock coins that can only be controlled by a specific puzzle hash
+
+;; This is also the best way to make wallets need one signature for virtually any spend (thanks, Rigidity!)
+;; Use the EIP-712/passkey puzzle as controller puzzle, and lock all coins in the wallet with this one
+;; One of them can create the controller as their child, which is even cooler 
+
+(mod (
+    CONTROLLER_PUZZLE_HASH
+    delegated_puzzle
+    delegated_solution
+)
+    (include condition_codes.clib)
+    (include sha256tree.clib)
+
+    (c
+        (list
+            RECEIVE_MESSAGE
+            23 ; 010111 = puzzle hash - coin
+            (sha256tree delegated_puzzle) ; message is delegated puzzle hash
+            CONTROLLER_PUZZLE_HASH
+        )
+        (a delegated_puzzle delegated_solution)
+    )
+)
