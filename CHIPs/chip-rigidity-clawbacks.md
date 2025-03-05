@@ -85,6 +85,24 @@ Finally, the finish spend can be initiated by anyone _after_ the clawback expire
 
 In most cases, it's expected that the receiver will be able to do this themselves, and optionally pay fees to do so. However, it's also an "escape hatch" for the scenario in which the receiving wallet doesn't support claiming the clawback on its own. Someone else (including the sender) can perform this spend for them.
 
+### Clawback Memos
+
+There is a memo structure that's used to reconstruct the clawback information:
+
+```lisp
+(sender_puzzle_hash . seconds)
+```
+
+This memo is intended to live in a slot after the hint. So therefore this would look like this:
+
+```lisp
+(receive_puzzle_hash (sender_puzzle_hash . seconds))
+```
+
+Where `receiver_puzzle_hash` is the hint.
+
+Note that although the `CREATE_COIN` conditions in the clawback _optionally_ include a hint, depending on whether it's XCH or a wrapped asset like a CAT, the clawback coin itself must always be hinted, otherwise the receiver won't be able to easily find the coin.
+
 ### UX
 
 Ultimately, to a user these spend paths should be hidden away as an implementation detail. The sender has the option to clawback until the expiration, and always has the option to push it through to the receiver. And the receiver has the option to claim after it expires, but can see it pending until then.
