@@ -122,6 +122,8 @@ The old clawback standard always allowed the coin to be spent (and clawed back) 
 
 Censorship is a concern when it comes to things like this. Although unlikely to be an issue, it's ideal to perform the recovery spend well in advance of the expiration timestamp to minimize any games being played. This is a good idea anyways, since the timestamp can be a little bit off what you may expect when making the transaction (especially since it refers to the previous block, not the current one).
 
+Because the push-through spend path can be spent by anyone without authorization, it could theoretically be used to mess with a pending transaction by replacement (though only once, because the push-through spend removes the clawback puzzle). Thankfully, the superset rule should prevent any griefing that could be done with this, since all of the original spend bundle's input coins must also be spent in the replacement spend bundle.
+
 ## Additional Assets
 
 None
