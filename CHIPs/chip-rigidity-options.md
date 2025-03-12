@@ -220,7 +220,18 @@ This is intended to be used as an inner puzzle to singleton_top_layer_v1_1.
 
 ## Test Cases
 
+In the [wallet sdk implementation](https://github.com/xch-dev/chia-wallet-sdk/blob/4d7d666d2e7e9f4713b5b76af11ff073d7eda152/crates/chia-sdk-driver/src/primitives/option/option_contract.rs), there are tests for all of the following:
+
+1. Minting
+2. Transferring
+3. Exercising (including ensuring it fails after expiration and without paying)
+4. Clawback (including ensuring it fails before expiration)
+5. XCH, CATs, Revocable CATs, and NFTs
+6. Ensuring melting fails without exercising and vice versa
+
 ## Reference Implementation
+
+There is a comprehensive [option contract implementation](https://github.com/xch-dev/chia-wallet-sdk/tree/4d7d666d2e7e9f4713b5b76af11ff073d7eda152/crates/chia-sdk-driver/src/primitives/option) in the chia-wallet-sdk repo.
 
 ## Security
 
