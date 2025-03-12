@@ -56,9 +56,8 @@ When the option singleton is minted, the following metadata structure is include
 Where `strike_type` can be one of the following:
 
 1. XCH `(0 amount)`
-2. CAT `(1 asset_id amount hidden_puzzle_hash)`
-
-The `hidden_puzzle_hash` can be optionally set to nil, and requires the requested CAT be wrapped in the revocation layer if specified.
+2. CAT `(1 asset_id amount)`
+3. Revocable CAT `(2 asset_id hidden_puzzle_hash amount)`
 
 Note that these values are proper nil-terminated lists, in order to leave room for extensions to this standard in the future. For example, NFTs could be supported as a new `strike_type`. However, for now this is limited to XCH and CATs.
 
