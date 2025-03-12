@@ -58,6 +58,9 @@ Where `strike_type` can be one of the following:
 1. XCH `(0 amount)`
 2. CAT `(1 asset_id amount)`
 3. Revocable CAT `(2 asset_id hidden_puzzle_hash amount)`
+4. NFT `(3 launcher_id settlement_puzzle_hash amount)`
+
+For NFTs, the `settlement_puzzle_hash` is what the _full_ puzzle hash of the NFT would be if its p2_puzzle_hash were `SETTLEMENT_PAYMENT_HASH`.
 
 Note that these values are proper nil-terminated lists, in order to leave room for extensions to this standard in the future. For example, NFTs could be supported as a new `strike_type`. However, for now this is limited to XCH and CATs.
 
@@ -192,6 +195,10 @@ This is intended to be used as an inner puzzle to singleton_top_layer_v1_1.
 ## Security
 
 It's important to verify the authenticity of an option contract before displaying it, since although a singleton may adhere to the correct puzzle, the metadata and underlying coin might not line up as expected. This could mislead people into buying something that should be guaranteed but isn't.
+
+The amount of the underlying coin or strike amount must be non-zero, due to a restriction in the settlement payments puzzle. Otherwise, the option cannot be exercised.
+
+Additionally, if an NFT is the strike asset used to exercise the option, the settlement_puzzle_hash must be the same as it was before. If it's not, the option won't be able to be exercised. This means the metadata must be the same as before, and there should be no precommitted owner DID.
 
 ## Additional Assets
 
