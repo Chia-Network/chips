@@ -113,6 +113,25 @@ The clawback spend path is the most straightforward. The sender's spend needs to
 
 Other than that, this can be used directly in the p2_1_of_n spend to do whatever the sender wants with the coin after expiration.
 
+### Validations
+
+Display services and wallets must extensively verify the authenticity of the option contract. Just having a singleton with the correct inner puzzle doesn't necessarily mean it's a valid option.
+
+Here is a list of things that will need to be fetched:
+
+1. The singleton and option contract puzzle arguments
+2. The launcher coin's `key_value_lists` solution parameter
+3. The underlying coin (and possibly its parent or other related context) that matches the coin id in the option contract puzzle
+
+And these are the validations that must be performed, in no particular order:
+
+- The underlying coin exists, is unspent, and matches the claimed coin id
+- The metadata is valid and the expiration timestamp hasn't been reached yet
+- For revocable CAT strike assets, the correct hidden_puzzle_hash is used
+- For NFT strike assets, the puzzle matches the settlement_puzzle_hash it's expecting
+- The underlying coin's puzzle hash matches the expected p2_1_of_n puzzle hash
+- The precommitted delegated puzzle hash matches the expected one
+
 ### Option Contract Puzzle
 
 This is intended to be used as an inner puzzle to singleton_top_layer_v1_1.
