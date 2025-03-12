@@ -1,11 +1,11 @@
-| CHIP Number   | < Creator must leave this blank. Editor will assign a number.>             |
+| CHIP Number   | 0045                                                                       |
 | :------------ | :------------------------------------------------------------------------- |
 | Title         | Option Contracts                                                           |
 | Description   | Put and call options on the Chia blockchain.                               |
 | Author        | [Brandon Haggstrom](https://github.com/Rigidity)                           |
-| Editor        | < Creator must leave this blank. Editor will be assigned.>                 |
-| Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>                |
-| Status        | < Creator must leave this blank. Editor will assign a status.>             |
+| Editor        | [Dan Perry](https://github.com/danieljperry)                               |
+| Comments-URI  | [CHIPs repo, PR #125](https://github.com/Chia-Network/chips/pull/125)      |
+| Status        | Draft                                                                      |
 | Category      | Standards Track                                                            |
 | Sub-Category  | Chialisp                                                                   |
 | Created       | 2025-03-05                                                                 |
