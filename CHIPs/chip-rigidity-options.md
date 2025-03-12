@@ -21,6 +21,17 @@ American style put and call options for assets (including securities) can be pee
 
 With more assets coming to the Chia blockchain, including securities such as the certificates issued by Permuto, it's desirable to not only trade them, but also create an options market around these assets. By composing existing primitives, it shouldn't be too difficult to integrate this into the existing ecosystem.
 
+Here's an example flow for how option contracts can be used:
+
+1. Alice wants to make an option contract with an underlying 10,000 SBX, a strike price of 2 XCH, and an expiration of 3 months later.
+2. Alice makes an offer file wherein she mints the option contract, locks up the 10,000 SBX inside of it, and requests a 0.5 XCH premium.
+3. Bob buys the option for 0.5 XCH and hangs onto it for 2 months.
+4. Bob decides to exercise the option, so his wallet constructs an offer file to do so.
+5. He takes the offer, by melting the option contract, unlocking the underlying 10,000 SBX, and paying the strike price of 2 XCH.
+6. Alice gets 2 XCH and Bob gets 10,000 SBX.
+
+If Bob never wanted to exercise the option, he could have let it expire. Then, Alice owns the 10,000 SBX again and Bob only had to pay 0.5 XCH.
+
 ## Backwards Compatibility
 
 Even though option contract singletons are non-fungible, they don't follow the NFT1 standard. This is for a multitude of reasons:
