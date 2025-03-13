@@ -31,6 +31,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 * [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
 * [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
+* [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 
 ### Review
 * [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
