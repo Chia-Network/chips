@@ -1,17 +1,14 @@
-CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+CHIP Number   | 0046
 :-------------|:----
 Title         | Detecting Dishonest NFT Offers
 Description   | 
-Author        | trgarrett (@trgarrett on Keybase, https://github.com/trgarrett)
-Editor        | < Creator must leave this blank. Editor will be assigned.>
-Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
-Status        | < Creator must leave this blank. Editor will assign a status.>
+Author        | [trgarrett](https://github.com/trgarrett) (@trgarrett on Keybase)
+Editor        | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | [CHIPs repo, PR #151](https://github.com/Chia-Network/chips/pull/151)
+Status        | Draft
 Category      | Informational
 Sub-Category  | Informative
 Created       | 2025-03-08
-Requires      | <CHIP number(s), (optional)>
-Replaces      | <CHIP number, (optional)>
-Superseded-By | <CHIP number (only allowed for Obsolete CHIPs)>
 
 ## Abstract
 Under a narrow set of circumstances, there are possible bypasses for NFT1 royalty trading via colluding offers. By lying within or completely omitting the `trade_prices_list` from the NFT transfer program solution, an offer maker can under-declare the value transfer involved. An honest taker might simply re-calculate royalties themselves and append them on, while a dishonest taker could omit their royalty payment with no impact to the validity of the spends. The two primary threats that might result are wash trading and NFT "flippers" who are unwilling to pay royalties. To increase trader confidence, it may be necessary to provide special handling to those offers in wallets, offer display services, and in the calculation of trading volumes. Further mitigations are possible but the costs likely outweigh the benefits.
