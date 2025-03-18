@@ -34,12 +34,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 
 ### Review
-* [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
-* [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
-* [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
-* [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
-* [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/147)
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
 * [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
@@ -49,7 +43,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* None
+* [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
+* [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
+* [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
+* [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
+* [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
+* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/147)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
