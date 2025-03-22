@@ -4,7 +4,7 @@
 | Description   | Put and call options on the Chia blockchain.                               |
 | Author        | [Brandon Haggstrom](https://github.com/Rigidity)                           |
 | Editor        | [Dan Perry](https://github.com/danieljperry)                               |
-| Comments-URI  | [CHIPs repo, PR #125](https://github.com/Chia-Network/chips/pull/125)      |
+| Comments-URI  | [CHIPs repo, PR #152](https://github.com/Chia-Network/chips/pull/152)      |
 | Status        | Draft                                                                      |
 | Category      | Standards Track                                                            |
 | Sub-Category  | Chialisp                                                                   |
