@@ -1,0 +1,73 @@
+; p2_eip712_message.clsp by yakuhito
+;; A replacement for the standard puzzle allowing coins to be controlled by EIP-712 messages
+
+;; The EIP-712 domain contains:
+;;   - name to be dislayed when signing ("Chia Coin Spend")
+;;   - version ("1")
+;;   - salt (32-byte genesis challenge of the testnet11/mainnet Chia network)
+;; The domain separator can then be computed off-chain as follows:
+;; bytes32 domainSeparator = keccak256(abi.encode(
+;;    keccak256("EIP712Domain(string name,string version,bytes32 salt)"),
+;;    keccak256(bytes("Chia Coin Spend")),
+;;    keccak256(bytes("1")),
+;;    salt
+;; ));
+
+;; We can also compute type hash as:
+;; bytes32 typeHash = keccak256("ChiaCoinSpend(bytes32 coin_id,bytes32 delegated_puzzle_hash)");
+
+;; Per the EIP-712 spec, the hash that is actually signed can be obtained as:
+;; bytes32 messageHash = keccak256(abi.encode(
+;;     typeHash,
+;;     coin_id,
+;;     delegated_puzzle_hash
+;; ));
+;; bytes32 hashToSign = keccak256(abi.encodePacked(
+;;     "\x19\x01",
+;;     domainSeparator,
+;;     messageHash
+;; ));
+
+;; Also note how awesome it is that we're passing bytes32 values to abi.encode, so we don't
+;; have to worry about padding.
+
+(mod (
+    PREFIX_AND_DOMAIN_SEPARATOR
+    TYPE_HASH
+    PUBKEY
+    my_id
+    signed_hash
+    signature
+    delegated_puzzle
+    delegated_solution
+)
+    (include condition_codes.clib)
+    (include sha256tree.clib)
+
+    (if (all
+        (not (secp256k1_verify PUBKEY signed_hash signature))
+        ; https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md#softfork-usage
+        (not (softfork
+            (q . 2745) ; total cost needed to run the code + 140 = 2605 + 140 = 2745 
+            (q . 1) ; keccak256 soft fork
+            (mod
+                (PREFIX_AND_DOMAIN_SEPARATOR TYPE_HASH my_id delegated_puzzle_hash signed_hash)
+                (if (= (keccak256 PREFIX_AND_DOMAIN_SEPARATOR (keccak256 TYPE_HASH my_id delegated_puzzle_hash)) signed_hash) () (x))
+            ) ; code to evaluate
+            (list
+                PREFIX_AND_DOMAIN_SEPARATOR
+                TYPE_HASH
+                my_id
+                (sha256tree delegated_puzzle)
+                signed_hash
+            ) ; environment
+        ))
+    )
+        (c
+           (list ASSERT_MY_COIN_ID my_id)
+           (a delegated_puzzle delegated_solution)
+        )
+        ; else
+        (x)
+    )
+)
