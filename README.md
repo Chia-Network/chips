@@ -43,12 +43,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [27 - Signer Protocol Wallet APIs](https://github.com/Chia-Network/chips/pull/102)
-* [28 - Blind Signer Translation](https://github.com/Chia-Network/chips/pull/103)
-* [29 - Signer Protocol Serialization](https://github.com/Chia-Network/chips/pull/104)
-* [30 - Wallet Signer BLOB Subdivision](https://github.com/Chia-Network/chips/pull/105)
-* [31 - Wallet Signer QR Transportation](https://github.com/Chia-Network/chips/pull/106)
-* [37 - EIP-712 Wallet Puzzle](https://github.com/Chia-Network/chips/pull/147)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -66,9 +61,15 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [22 - Enhanced Harvester Protocol](/CHIPs/chip-0022.md)
 * [25 - Chialisp Message Conditions](/CHIPs/chip-0025.md)
 * [26 - New Wallet Sync Protocol](/CHIPs/chip-0026.md)
+* [27 - Signer Protocol Wallet APIs](/CHIPs/chip-0027.md)
+* [28 - Blind Signer Translation](/CHIPs/chip-0028.md)
+* [29 - Signer Protocol Serialization](/CHIPs/chip-0029.md)
+* [30 - Wallet Signer BLOB Subdivision](/CHIPs/chip-0030.md)
+* [31 - Wallet Signer QR Transportation](/CHIPs/chip-0031.md)
 * [33 - Add additional partial headers](/CHIPs/chip-0033.md)
 * [35 - DataLayer Delegation Capabilities](/CHIPs/chip-0035.md)
 * [36 - keccak256 CLVM operator](/CHIPs/chip-0036.md)
+* [37 - EIP-712 Wallet Puzzle](/CHIPs/chip-0037.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
