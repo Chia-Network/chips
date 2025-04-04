@@ -29,7 +29,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Draft
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
-* [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
 * [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 
@@ -38,6 +37,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
+* [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
 
 ### Review (Fast Track)
 * None
