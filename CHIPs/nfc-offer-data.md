@@ -1,22 +1,20 @@
-CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+CHIP Number   | 0047
 :-------------|:----
 Title         | NFC Offer Data
 Description   | Standard for NFC tag based offer data structure, read operations, and write operations with optional locking
 Author        | [Brandt Holmes](https://github.com/BrandtH22)
-Editor        | < Creator must leave this blank. Editor will be assigned.>
-Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
-Status        | < Creator must leave this blank. Editor will assign a status.>
+Editor        | [Dan Perry](https://github.com/danieljperry)
+Comments-URI  | [CHIPs repo, PR #158](https://github.com/Chia-Network/chips/pull/158)
+Status        | Draft
 Category      | Informational
 Sub-Category  | Guideline
 Created       | 2024-03-19
-Requires      | CHIP 42
+Requires      | [0042](https://github.com/Chia-Network/chips/pull/143)
 Replaces      | NA
 Superseded-By | NA
 
 ## Abstract
-This CHIP establishes a standardized framework for integrating Near Field Communication (NFC) technology with Chia NFT offers, enabling physical-digital asset linkage. 
-It defines the data structures, operations, and security measures required for storing and managing NFT offer data on NFC tags. 
-The standard ensures interoperability across different implementations while maintaining the security and integrity of NFT offer data in physical form.
+This CHIP establishes a standardized framework for integrating Near Field Communication (NFC) technology with Chia NFT offers, enabling physical-digital asset linkage. It defines the data structures, operations, and security measures required for storing and managing NFT offer data on NFC tags. The standard ensures interoperability across different implementations while maintaining the security and integrity of NFT offer data in physical form.
 
 Core functionality includes tag type support, data structure definitions, read/write operations, security protocols, and lock mechanisms. 
 
@@ -72,7 +70,8 @@ The proposed standard utilizes:
 
 ## Backwards Compatibility
 This proposal is fully compatible with all CHIPs and current Chia consensus.
-This proposal supports the https://offerco.de/ 5 character offer short codes for compatibility but recommends using 64 character (32 byte) short codes for collision and grinding protection.
+
+This proposal supports the [offerco.de](https://offerco.de/) 5 character offer short codes for compatibility but recommends using 64 character (32 byte) short codes for collision and grinding protection.
 
 ## Rationale
 ### Design Decisions
@@ -83,7 +82,7 @@ This proposal supports the https://offerco.de/ 5 character offer short codes for
 - Authentication is out of scope for this CHIP - due to low availability of NFCs that support signing mechanisms supported by the Chia blockchain, authentication from the key signing of the chip is not supported in this CHIP.
 
 ## Specification
-Note: to use this solution for single sided offers it is highly recommended that only wallets which have adopted [CHIP 42](https://github.com/Chia-Network/chips/pull/143) (Protected Single Sided Offers) should be used to accept the offers.
+Note: to use this solution for single sided offers it is highly recommended that only wallets which have adopted [CHIP-42](https://github.com/Chia-Network/chips/pull/143) (Protected Single Sided Offers) should be used to accept the offers.
 
 There are two example codebases associated with this solution:
 - The [NFC Offer repo](https://github.com/Chia-Network/nfc-offer) overviews how the data can be written to and read from NFCs (future adaptations can also include signing from the NFC) 
@@ -332,7 +331,7 @@ Reference Implementations can be found in the repos listed below:
 - [ISO/IEC 14443A](https://www.iso.org/) 
 
 ## Additional Assets
-NA
+None
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
