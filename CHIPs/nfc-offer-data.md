@@ -78,7 +78,8 @@ This proposal supports the [offerco.de](https://offerco.de/) 5 character offer s
 - Offer Short Codes: actual offer data is too large for storing on NFC chips and the size can vary greatly based on how the offer is constructed. Using deterministic short codes makes the length offer portion of the data deterministic.
 - Protocol Version Identifier: the 5 character version identifier in the NFC Data enables a seamless method of updating the data structure or NFC features while maintaining backward compatibility.
 - 64 character (32 byte) codes: this length was chosen to help protect from grinding the codes and from collisions.
-- Security for offer short code API: The CNI implementation only permits CNI to upload new offers, enforces rate limits on requesting offers, and requires teh offer short code to retrieve the offer.
+- NFTs use the standard [bech32](https://github.com/Chia-Network/chia-blockchain/blob/f241889b4107b3678d46c87182e7dc9251eae440/chia/util/bech32m.py) encoding and decoding of puzzle hashes to ensure deterministic lengths.
+- Security for offer short code API: The CNI implementation only permits CNI to upload new offers, enforces rate limits on requesting offers, and requires the offer short code to retrieve the offer.
 - Authentication is out of scope for this CHIP - due to low availability of NFCs that support signing mechanisms supported by the Chia blockchain, authentication from the key signing of the chip is not supported in this CHIP.
 
 ## Specification
@@ -109,7 +110,7 @@ This specification defines the standard for storing Chia NFT offer data on NFC t
 #### Payload Format
 The data is stored as a continuous string with fixed-length fields:
 ```
-[Version (5 chars)][NFT ID (64 chars)][Offer String (variable)]
+[Version (5 chars)][NFT ID (62 chars)][Offer String (variable)]
 
 Example:
 "DT001nft1vyet0xdu0cady88hd7mm0xaauql8547hjlk8gt2ujcn5zvm8ly7s7krg4j3w4md3w4md12..."
