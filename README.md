@@ -31,7 +31,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 * [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
-* [47 - NFC Offer Data](https://github.com/Chia-Network/chips/pull/158)
 
 ### Review
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
@@ -39,6 +38,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
+* [47 - NFC Offer Data](https://github.com/Chia-Network/chips/pull/158)
 
 ### Review (Fast Track)
 * None
