@@ -38,6 +38,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
+* [47 - NFC Offer Data](https://github.com/Chia-Network/chips/pull/158)
 
 ### Review (Fast Track)
 * None
