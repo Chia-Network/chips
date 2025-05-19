@@ -31,6 +31,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 * [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
+* [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
+* [49 - Proof Format Fork Timelines](https://github.com/Chia-Network/chips/pull/161)
 
 ### Review
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
