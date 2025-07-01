@@ -45,7 +45,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [47 - NFC Offer Data](https://github.com/Chia-Network/chips/pull/158)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -72,6 +72,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [35 - DataLayer Delegation Capabilities](/CHIPs/chip-0035.md)
 * [36 - keccak256 CLVM operator](/CHIPs/chip-0036.md)
 * [37 - EIP-712 Wallet Puzzle](/CHIPs/chip-0037.md)
+* [47 - NFC Offer Data](/CHIPs/chip-0047.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
