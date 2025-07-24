@@ -33,11 +33,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - Proof Format Fork Timelines](https://github.com/Chia-Network/chips/pull/161)
+* [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
+* [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 
 ### Review
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
 * [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
-* [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
 
@@ -45,7 +46,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* None
+* [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
