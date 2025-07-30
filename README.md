@@ -37,14 +37,14 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 
 ### Review
-* [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
-* [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
+* [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
+* [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
 * [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
 * [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
 
