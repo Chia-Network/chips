@@ -45,8 +45,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 ### Last Call
 * [38 - Revocable CATs](https://github.com/Chia-Network/chips/pull/136)
 * [40 - everything_with_singleton TAIL](https://github.com/Chia-Network/chips/pull/139)
-* [41 - Streaming Puzzle](https://github.com/Chia-Network/chips/pull/142)
-* [44 - Clawback Standard v2](https://github.com/Chia-Network/chips/pull/150)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -73,6 +71,8 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [35 - DataLayer Delegation Capabilities](/CHIPs/chip-0035.md)
 * [36 - keccak256 CLVM operator](/CHIPs/chip-0036.md)
 * [37 - EIP-712 Wallet Puzzle](/CHIPs/chip-0037.md)
+* [41 - Streaming Puzzle](/CHIPs/chip-0041.md)
+* [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
 
 ### Stagnant
