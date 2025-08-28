@@ -32,12 +32,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - Proof Format Fork Timelines](https://github.com/Chia-Network/chips/pull/161)
-* [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
-* [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 
 ### Review
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
+* [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
+* [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 
 ### Review (Fast Track)
 * None
