@@ -30,6 +30,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - Proof Format Fork Timelines](https://github.com/Chia-Network/chips/pull/161)
+* [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
 
 ### Review
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
