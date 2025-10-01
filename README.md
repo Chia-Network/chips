@@ -36,7 +36,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
 * [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
-* [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 
@@ -44,7 +43,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* None
+* [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
