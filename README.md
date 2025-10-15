@@ -43,7 +43,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -74,6 +74,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [40 - everything_with_singleton TAIL](/CHIPs/chip-0040.md)
 * [41 - Streaming Puzzle](/CHIPs/chip-0041.md)
 * [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
+* [45 - Options contracts](/CHIPs/chip-0045.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
 
 ### Stagnant
