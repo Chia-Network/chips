@@ -30,7 +30,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - Proof Format Fork Timelines](https://github.com/Chia-Network/chips/pull/161)
-* [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
 
 ### Review
 * [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
@@ -38,12 +37,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
+* [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* [45 - Options contracts](https://github.com/Chia-Network/chips/pull/152)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -74,6 +74,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [40 - everything_with_singleton TAIL](/CHIPs/chip-0040.md)
 * [41 - Streaming Puzzle](/CHIPs/chip-0041.md)
 * [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
+* [45 - Options contracts](/CHIPs/chip-0045.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
 
 ### Stagnant
