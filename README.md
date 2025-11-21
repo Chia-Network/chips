@@ -1,27 +1,11 @@
 # CHia Improvement Proposals (CHIPs)
 
-This repository contains a list of improvements related to Chia. The complete procedure for proposing and managing a CHIP can be found in [CHIP 1](/CHIPs/chip-0001.md).
+This repository contains a list of improvements related to Chia.
 
-The [CHIPs backlog project](https://github.com/Chia-Network/chips/projects/1) provides the list of on-going proposals and their status. 
-
-## Meetings
-**Purpose:**
-
-The CHIPs community meetings provide a forum for the community to gather and discuss CHIPs proposals and support each other in building a secure, sustainable, and compliant blockchain technology. 
-
-**Agenda:**
-
-The agenda of each meeting should focus on the CHIPs proposals, and it should include two main topics: 
-- Author to present the CHIP
-- Feedback and discussion
-
-**Logistics**
-- The meeting information will be tracked with GitHub [project](https://github.com/Chia-Network/dev-community-meetings/projects/1). 
-- The agenda should be published two weeks before the actual meeting to give the community ample time to suggest agenda items or post questions about the CHIP. 
-
+The complete procedure for proposing and managing a CHIP can be found in [CHIP-1](/CHIPs/chip-0001.md). After carefully reading that document, if you have any further questions, please ask in the #chips channel of [our Discord](https://discord.gg/chia).
 
 ## CHIP list
-The rest of this document is a summary of all notable CHIPs, organized by status.
+The rest of this document is a summary of all notable CHIPs, organized by status. This list is updated whenever the status of any CHIP changes, so you can assume it is up to date.
 
 ### Living
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
@@ -41,8 +25,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [39 - Fee Service Standard](https://github.com/Chia-Network/chips/pull/138)
-* [42 - Protected Single Sided Offers](https://github.com/Chia-Network/chips/pull/143)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -70,8 +53,10 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [36 - keccak256 CLVM operator](/CHIPs/chip-0036.md)
 * [37 - EIP-712 Wallet Puzzle](/CHIPs/chip-0037.md)
 * [38 - Revocable CATs](/CHIPs/chip-0038.md)
+* [39 - Fee Service Standard](/CHIPs/chip-0039.md)
 * [40 - everything_with_singleton TAIL](/CHIPs/chip-0040.md)
 * [41 - Streaming Puzzle](/CHIPs/chip-0041.md)
+* [42 - Protected Single Sided Offers](/CHIPs/chip-0042.md)
 * [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
 * [45 - Options contracts](/CHIPs/chip-0045.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
@@ -105,15 +90,6 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
-* [Accelerated plot filter reduction](https://github.com/Chia-Network/chips/pull/95)
+* [Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 
 -----
-
-Take a look at [notes/TODO.md](/notes/TODO.md) to see CHIPs that still need to be created.
-
-To view these CHIPs in pretty rendered Markdown in your browser, type:
-
-```
-gem install bundler jekyll
-jekyll serve
-```
