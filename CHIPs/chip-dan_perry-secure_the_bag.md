@@ -1,0 +1,190 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Secure the Bag for distributed payouts
+Description   | An algorithm and implementation for creating a secured bag that optimizes for maximum distribution of payouts 
+Author        | [Dan Perry](https://github.com/danieljperry), [Brandon Haggstrom](https://github.com/Rigidity)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Informational
+Sub-Category  | Guideline
+Created       | 2025-10-29
+Requires      | None
+
+## Abstract
+`Secure the Bag`, originally proposed by [Jeremy Rubin](rubin.io) for Bitcoin around 2019, and later renamed to [OP_CHECKTEMPLATEVERIFY](https://github.com/bitcoin/bips/blob/master/bip-0119.mediawiki), is a proposal to create "tree" payments to multiple recipients. [Permuto Capital](https://www.permuto.capital/) will use Secure the Bag to initiate dividend payments to its holders. The optimal structure of a secured bag for making these payments is one in which each intermediate coin contains both large and small payment amounts. This CHIP describes an algorithm for creating this type of secured bag. Ecosystem applications can use the same algorithm to verify that a tree of destination addresses is accurately represented in a secured bag.
+
+## Motivation
+This CHIP gets its motivation from the Permuto Capital trusts, which will make periodic payments to holders of Dividend Certificates (DCs). The exact mechanics of the various Permuto Capital trusts is outside of the scope of this CHIP. See Permuto's website for more info.
+
+All addresses that hold a given trust's DCs at the first transaction block after the Record Date (as outlined in the trust's SEC filings) for that trust will later receive a dividend payment. One method of paying these dividends would be to send the funds individually to each address. While this would satisfy the requirement of paying dividends to all holders, its CLVM cost could be quite high. For example, if one million addresses needed to receive a payment, then this method would require at least one million coin spends and creations. In addition, the trust administrator (and not the dividend recipients) would need to pay any associated blockchain fees.
+
+A more cost-effective way of making these payments is with Secure the Bag. A certain number of payments (e.g. 100) will be bundled into a single "intermediate" coin. The same number of intermediate coins (100) can then be bundled into another intermediate coin, which can then be bundled into a single coin. As a result, a tree of coins is created. This is known as a "secured bag".
+
+In order to distribute the payments, the top coin is spent, which creates 100 intermediate coins, each of which needs to be spent in order to create 100 more intermediate coins apiece, each of which is then spent in order to create the destination coins. The total number of coins to be spent in this example is `1 + 100 + 100^2 = 10,101` coins, or nearly 99% fewer than with the simple example.
+
+Another advantage of Secure the Bag is that _anyone_ can spend the top coin and the intermediate coins. This is possible because the intermediate and destination coins are pre-configured in the top coin's Chialisp puzzle. If a user knows that their payment is contained within one of the intermediate coins, then that user can spend the coin, which will distribute the payments to all 100 addresses in this example.
+
+This begs the two questions that became the motivation for this CHIP:
+
+1. How can the recipient discern which intermediate coin contains their payment?
+
+There are at least two potential ways to obtain this info.
+
+**Preferred Method** If the recipient's wallet supports Secure the Bag payments, then it obtains any pending payments from an API call to the issuer when the wallet is syncing. In this case, the wallet could display the payment as "pending" in the transaction history, and it could give the user the opportunity to complete the payment by adding a transaction fee in order to spend the intermediate coin.
+
+This method will be detailed in the [Specification](#specification) section once the Wallet SDK implementation is complete.
+
+**Alternative Method** The issuer creates a website where users can search for pending payments. If a user wants to complete any of the pending payments, they can do so by clicking a button to connect their wallet via WalletConnect or OAuth. _Anyone_ could use this method to make altruistic spends of any intermediate coin because no signature is needed to spend these coins.
+
+Ideally, both of these methods will be used. Other methods could be developed as well, as long as the issuer publishes the metadata structure of the tree of coins publicly. This information would most likely be published off chain, but on-chain publication might also make sense in certain cases.
+
+2. If one of the intermediate coins consists entirely of payments that are lower than the cost of a single blockchain transaction, then who would be willing to spend the coin?
+
+Either someone would lose money on the transaction, or multiple users would need to pool their funds together to pay the fee. This is a situation we should avoid if at all possible.
+
+## Backwards Compatibility
+This CHIP doesn't make changes to Chia's consensus, and it is optional for ecosystem developers to implement. It is fully backwards compatible.
+
+## Rationale
+This CHIP was designed to maximize the probability that the intermediate coins in a secured bag will be spent in a timely manner. Each intermediate coin only needs to provide a single blockchain fee, after which several destination coins will be created. This implies that only a small subset of the recipients will need to provide a blockchain fee. It therefore is logical to organize a secured bag with the goal of distributing the value held within as much as possible, so that those with the largest incoming payouts (AKA those most motivated to pay the fee) will have those payouts held within separate coins.
+
+## Specification
+
+### Mempool
+The specification uses the reference mempool, which has a maximum size of 110 billion cost (10 blocks). However, it is important to note that the Chia blockchain consensus doesn't specify any mempool requirements. Each individual node can run any type, and size, of mempool. In fact, nodes can choose not to run a mempool at all.
+
+### Input
+In order to implement Secure the Bag, at a minimum we need to input a list of destination addresses and amounts. For this CHIP, this input must be a `.csv` (comma-separated value) file where each line uses the following format:
+
+`<address>,<amount>`
+
+This file contains 1 or more lines. The `<address>` can be an address on a Chia testnet (prefix `txch`) or mainnet (prefix `xch`). This file must pertain to only one of the network types, so including both `txch` and `xch` addresses in the same file is not permitted.
+
+The `<amount>` must be of either type `CAT2` or `revocable CAT`. Both of these standards use a 64-bit number that is maximally divisible by 1000. Thus, the smallest possible value is `1/1000 = 0.001` and the largest possible value is `(2^64-1)/1000 = 18,446,744,073,709,551.615`. The `<amount>` on each line must correspond to the same asset, though this type is not specified in the `.csv` file.
+
+It is recommended to organize the lines in this file by `<amount>`, in descending order (the first line should be the largest amount). The reason for this recommendation is that it will cause the amounts to be distributed evenly when the secured bag is later created.
+
+### Variables
+If the structure of the input `.csv` file is valid, then securing the bag may proceed. Two variables are needed:
+
+1. `d` -- the number of lines in the input `.csv` file
+  * This will correspond to the number of destination addresses
+  * In order to keep the process simple, duplicate addresses are allowed, but are discouraged (they can be consolidated prior to securing the bag)
+2. `i1`, `i2`, `i3`, etc -- the **maximum** number of coins to create at the intermediate levels
+  * `i1` is the number of coins that will be created when the secured bag is spent (ie, the first intermediate level)
+  * `i2`, `i3`, etc are the number of coins in the subsequent intermediate levels 
+  * The maximum allowed for any	any `i` value is `300`; however, because of the risk of incurring high fees when the mempool is busy or full, a smaller number is recommended
+  * `100` should work in most cases, but could result in more coin spends than are strictly necessary
+
+  Some recommendations for choosing `i1`, `i2`, `i3`, etc:
+  * If `d <= 10'000`, then `i1` is recommended to be `100`
+    * Because `sqrt(d) <= 100`, if `i1 = 100`, there will only need to be one level of intermediate coins (`i2` is not needed)
+    * Each intermediate coin spend will need to pay for less than 1% of a block's space, which should keep transaction fees reasonable, even with a busy (but not full) mempool
+    * If the mempool is expected to be completely full, then it's possible to set `i1` to a lower value in order to minimize the transaction fee for the intermediate spends, but this comes with tradeoffs:
+      * The intermediate coins will contain fewer destination coins, so there will be a smaller pool of candidates to pay the fee to spend them
+      * Another level of intermediate coins will be needed if `sqrt(d) > i1`, which will necessitate paying additional fees
+  * If `10'000 < d <= 1'000'000`, then using both `i1` and `i2` is recommended
+    * `i1` is recommended to be `ceiling(d/10'000)`
+    * `i2` is recommended to be `ceiling((d/i1)/100)`
+    * If the mempool is expected to be completely full, then either or both of these numbers could deviate from the formula, with the same analysis as shown above
+  * If `1'000'000 < d <= 100'000'000`, then using `i1`, `i2`, and `i3` is recommended
+    * `i1` is recommended to be `ceiling(d/1'000'000)`
+    * `i2` is recommended to be `ceiling((d/i1)/10'000)`
+    * `i3` is recommended to be `ceiling(((d/i1)/i2)/100)`
+    * If the mempool is expected to be completely full, then any of these numbers could deviate from the formula, with the same analysis as shown above
+3. `c` -- the maximum number of destination coins that will be bundled together
+    * `c` is recommended to be `100`, regardless of `d`
+    * If the mempool is expected to be completely full, then `c` can be smaller, with the tradeoffs of having a smaller pool of candidates to pay the final fee, and the possibility of requiring more intermediate levels
+4. `n` -- the total number of coins to be created in the final level of intermediate coins
+    * This number will always be `ceiling(d/c)`
+    * This number needs to be calculated separately from the highest `i` number because of possible rounding errors
+
+### Securing the bag
+
+#### Step 1: Bundle the destination addresses into intermediate coins
+Iterate through the input file, and assign each line to a coin number, using `<line number> mod n`. (The intermediate coins won't necessarily each have an identical number of destination coins.) The resulting coins are used in the highest `i` number available (`i1`, `i2`, or `i3`).
+
+#### Step 2: Bundle intermediate level(s) into the secured bag
+If the highest available `i` number is `i1`, then
+  * Bundle each of the `i1` coins into the secured bag
+
+Else, if the highest available `i` number is `i2`, then
+  * Iterate through each coin in `i2` and bundle them to the `i1` coins, using `<coin number> mod <i1>`
+  * Bundle each of the `i1` coins into the secured bag
+
+Else, if the highest available `i` number is `i3`, then
+  * Iterate through each coin in `i3` and bundle them to the `i2` coins, using `<coin number> mod <i2>`
+  * Iterate through each coin in `i2` and bundle them to the `i1` coins, using `<coin number> mod <i1>`.
+  * Bundle each of the `i1` coins into the secured bag
+
+### Examples
+
+This section will give a few examples of how the secured bag is structured using various input values with the above formula. 
+
+#### Example 1
+This is a basic scenario where there are fewer than 10'000 destination coins, and where the number is evenly divisible by 100.
+
+* `d` = 5000
+* `i1` = 100
+* `c` = 100
+* `n` = 50
+
+Step 1:
+* Iterate through the 5000 lines (`d`), creating 50 intermediate coins (`n`), each of which contain 100 destination coins (`c`).
+
+Step 2:
+* Bundle the 50 intermediate coins into the secured bag.
+
+As a result, each of the `n` coins will contain one of the 50 largest destination coins. The idea is that whoever is set to receive the largest payments will be most likely to supply a transaction fee to spend the intermediate coins. 
+
+#### Example 2
+In this example, we barely need to use `i2`, and the number of destination coins is not evenly divisible by 100.
+
+* `d` = 10'001
+* `i1` = 2
+* `i2` = 51
+* `c` = 100
+* `n` = 101
+
+Step 1:
+* Iterate through the 10'001 lines (`d`), creating 101 intermediate coins (`n`) in `i2`, 2 of which contain 100 coins, and 99 of which contain 99 coins.
+
+Step 2:
+* Iterate through each of the 51 coins in `i2` and bundle them to the 2 `i1` coins, using `<coin number> mod 2`
+* Bundle both of the `i1` coins into the secured bag
+
+#### Example 3
+
+In this example, the number of destination coins is an order of magnitude larger than in Example 1.
+
+* `d` = 100'000
+* `i1` = 10
+* `i2` = 100
+* `c` = 100
+* `n` = 1000
+
+Step 1:
+* Iterate through the 100'000 lines (`d`), creating a total of 1000 intermediate coins (`n`) in `i2`, each of which contains destination 100 coins.
+
+Step 2:
+* Iterate through each of the 1000 coins in `i2` and bundle them to the 10 `i1` coins, using `<coin number> mod 10`
+* Bundle each of the `i1` coins into the secured bag
+
+## Test Cases
+We will add testcases as the reference implementation is created.
+
+## Reference Implementation
+This CHIP has yet to be implemented. It will be added to the Wallet SDK.
+
+## Security
+This CHIP presents an optional algorithm for bundling coins in a secured bag. Secure the Bag itself has already been used in the CAT2 rollout. The method of bundling coins presented here does not introduce any additional risks beyond those which have already been incurred by Secure the Bag.
+
+## Additional Assets
+None
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
