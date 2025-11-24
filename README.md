@@ -14,6 +14,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
+* [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 
 ### Review
 * [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
