@@ -11,7 +11,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
@@ -69,6 +68,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [19 - Restricted CAT standard](https://github.com/Chia-Network/chips/pull/68)
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 * [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
+* [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
 
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
