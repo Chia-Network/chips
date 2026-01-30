@@ -16,7 +16,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 
 ### Review
-* [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 * [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
@@ -25,7 +24,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* None
+* [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
