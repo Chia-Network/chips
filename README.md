@@ -24,7 +24,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [43 - Meta Inner Puzzle Spec (MIPS)](https://github.com/Chia-Network/chips/pull/145)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -56,6 +56,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [40 - everything_with_singleton TAIL](/CHIPs/chip-0040.md)
 * [41 - Streaming Puzzle](/CHIPs/chip-0041.md)
 * [42 - Protected Single Sided Offers](/CHIPs/chip-0042.md)
+* [43 - Meta Inner Puzzle Spec (MIPS)](/CHIPs/chip-0043.md)
 * [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
 * [45 - Options contracts](/CHIPs/chip-0045.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
