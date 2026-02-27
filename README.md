@@ -11,14 +11,14 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
-* [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 * [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
 * [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 
 ### Review
+* [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
+* [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 * [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
