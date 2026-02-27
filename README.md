@@ -16,6 +16,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 * [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
+* [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 
 ### Review
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
