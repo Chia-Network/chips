@@ -1,0 +1,829 @@
+CHIP Number   | --
+:-------------|:----
+Title         | Silent Payments
+Description   | Unlinkable on-chain payments to a static address using ECDH on BLS12-381
+Author        | [Kevin Chmilar](https://github.com/kdc2000) 
+Editor        | --
+Comments-URI  | --
+Status        | Draft
+Category      | Process
+Sub-Category  | Tooling
+Created       | 2026-03-30
+Requires      | None
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+
+This CHIP defines a protocol for silent payments on the Chia blockchain, adapted from Bitcoin's BIP-352. A silent payment is a payment to a static address without on-chain linkability or a need for any notifications. This can be applied to the standard Chia blockchain payment puzzle or any puzzle that wraps it.
+
+## Motivation
+
+When a user publishes a regular XCH address, every payment to that address is easily linkable by any observer. Generating a fresh address for each payer requires interaction, which is impractical for donations, invoices, or public profiles.
+
+Silent payments allow the sender to derive a fresh, unlinkable address from the recipient's static address — without interaction, without extra on-chain data, and without any visible difference from a normal transaction.  The recipient will generate a static silent payment address once.  After publishing it, the recipient will need to scan all coin spends on the blockchain to see if the static address was the destination of a payment. 
+
+### Comparison with BIP-352
+
+Bitcoin's BIP-352 (Silent Payments, authored by Josie Baker, Ruben Somsen, and Andrew Toth) defines a silent payment protocol for Bitcoin using ECDH on secp256k1. The sender's input public keys, visible in transaction witnesses, serve as the sender's contribution to the ECDH. This CHIP adapts that approach to the Chia blockchain's BLS12-381 cryptography and coin set model, using the synthetic public key from the standard puzzle reveal in place of Bitcoin's input keys.
+
+Key differences from BIP-352:
+
+| | BIP-352 | This CHIP |
+|---|---|---|
+| Curve | secp256k1 | BLS12-381 |
+| Sender key source | Transaction input witness | Standard puzzle reveal (synthetic public key) |
+| Key derivation | BIP-32 | EIP-2333 BLS unhardened derivation |
+| Address format | `sp1q...` (bech32m, 66 bytes) | `spxch1...` (bech32m, 96 bytes) |
+| Input hash | hash(smallest outpoint \|\| *A*) | hash(smallest coin ID \|\| *A*) |
+| Labels | Point subtraction on output keys | Forward computation on puzzle hashes |
+
+## Goals
+
+The aim of this protocol is to satisfy the following properties, taken from BIP-352:
+
+* No increase in the size or cost of transactions
+* Resulting transactions are indistinguishable from standard Chia blockchain spends and cannot be identified as silent payments
+* Transactions cannot be linked to a silent payment address by an outside observer
+* No sender-receiver interaction required
+* No linking of multiple payments to the same sender
+* Each silent payment goes to a unique address, avoiding accidental address reuse
+* Supports payment labeling
+* Uses existing mnemonic seed phrase and BLS key derivation for backup and recovery
+* Separates scanning and spending responsibilities
+* Compatible with multi-input spends (aggregated key transactions)
+* Protocol is upgradeable
+
+## Overview
+
+This overview is taken from BIP-352, modified with details for this CHIP. In what follows:
+
+- Uppercase letters represent public keys
+- Lowercase letters represent private keys
+- || refers to byte concatenation
+- · refers to elliptic curve scalar multiplication on BLS12-381 G1
+- *G* represents the generator point and *r* represents the group order
+
+Each section builds on the previous one to introduce a different aspect of the protocol. For the full specification, see [Specification](#specification).
+
+**Simple case**
+
+Bob publishes a public key *B* as a silent payment address. Alice selects a coin with synthetic secret key *a*, public key *A*, and creates a destination output for Bob:
+
+* Let *P* = *B* + hash(*a* · *B*) · *G*
+* Encode *P* as a standard `p2_delegated_puzzle_or_hidden_puzzle` puzzle hash
+
+Since *a* · *B* == *b* · *A* ([Elliptic-curve Diffie-Hellman](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman)), Bob can scan with his private key *b*. For each spent coin in a block, he extracts the synthetic public key *A* from the puzzle reveal and calculates *P* = *B* + hash(*b* · *A*) · *G*. If *P*'s puzzle hash matches one of the new coins in the block, that coin is a silent payment to Bob.
+
+**Creating more than one output**
+
+To allow Alice to create more than one output for Bob, an integer counter is included:
+
+* Let *k* = 0
+* Let *P*<sub>0</sub> = *B* + hash(*a* · *B* || *k*) · *G*
+* For additional outputs:
+  * Increment *k* by one
+  * Let *P*<sub>k</sub> = *B* + hash(*a* · *B* || *k*) · *G*
+
+Bob detects this output the same as before by searching for *P*<sub>0</sub> = *B* + hash(*b* · *A* || 0) · *G*. Once he detects the first output, he must:
+
+* Check for *P*<sub>1</sub> = *B* + hash(*b* · *A* || 1) · *G*
+* If *P*<sub>1</sub> is not found, stop
+* If *P*<sub>1</sub> is found, continue to check for *P*<sub>2</sub> and so on until an additional output is not found
+
+Since Bob will only perform these subsequent checks after finding at least one matching output, the increase to his overall scanning requirement is negligible.
+
+**Preventing address reuse**
+
+If Alice were to spend a different coin with the same synthetic public key *A*, she would derive the same destinations. To prevent this, Alice includes an input hash:
+
+* Let *input_hash* = hash(*coin_id* || *A*)
+* Let *P*<sub>0</sub> = *B* + hash(*input_hash* · *a* · *B* || 0) · *G*
+
+The coin ID is unique per coin (derived from parent info, puzzle hash, and amount), so even if Alice reuses the same key, each transaction produces different one-time addresses. Bob must calculate the same *input_hash* when scanning.
+
+**Using all inputs**
+
+In the simplified example above, Alice's transaction has only one input *A*, but a Chia spend bundle can spend many coins. Rather than picking one input, Alice sums all her input secret keys:
+
+* Let *a* = *a*<sub>1</sub> + *a*<sub>2</sub> + ... + *a*<sub>n</sub>
+* Let *input_hash* = hash(*coin_id*<sub>L</sub> || (*a* · *G*)), where *coin_id*<sub>L</sub> is the lexicographically smallest coin ID
+* Let *P*<sub>0</sub> = *B* + hash(*input_hash* · *a* · *B* || 0) · *G*
+
+This reduces Bob's scanning cost. Instead of checking each input separately, Bob sums the synthetic public keys extracted from each coin's puzzle reveal and performs one ECDH per spend group.
+
+**Scan and spend key**
+
+Since Bob needs his private key *b* to check for incoming payments, *b* must be exposed to an online device. To minimize risk, Bob publishes an address of the form (*B*<sub>scan</sub>, *B*<sub>spend</sub>). He keeps *b*<sub>spend</sub> in offline cold storage and scans with *b*<sub>scan</sub> and *B*<sub>spend</sub>. Alice performs the tweak using both of Bob's public keys:
+
+* Let *P*<sub>0</sub> = *B*<sub>spend</sub> + hash(*input_hash* · *a* · *B*<sub>scan</sub> || 0) · *G*
+
+Bob detects this payment by calculating *P*<sub>0</sub> = *B*<sub>spend</sub> + hash(*input_hash* · *b*<sub>scan</sub> · *A* || 0) · *G* with his online device and can spend using (*b*<sub>spend</sub> + hash(*input_hash* · *b*<sub>scan</sub> · *A* || 0)) mod *r* as the private key.
+
+**Labels**
+
+For a single silent payment address of the form (*B*<sub>scan</sub>, *B*<sub>spend</sub>), Bob may wish to differentiate incoming payments. Bob could publish multiple silent payment addresses, but this would require him to scan for each one, which becomes prohibitively expensive. Instead, Bob can label his spend public key *B*<sub>spend</sub> with an integer *m*:
+
+* Let *B*<sub>m</sub> = *B*<sub>spend</sub> + hash(*b*<sub>scan</sub> || *m*) · *G* where *m* is an incrementable integer starting from 1
+* Publish (*B*<sub>scan</sub>, *B*<sub>1</sub>), (*B*<sub>scan</sub>, *B*<sub>2</sub>) etc.
+
+Alice performs the tweak as before using one of the published (*B*<sub>scan</sub>, *B*<sub>m</sub>) pairs. Bob detects the labeled payment in the following manner:
+
+* Let *P*<sub>0</sub> = *B*<sub>spend</sub> + hash(*input_hash* · *b*<sub>scan</sub> · *A* || 0) · *G*
+* For each output puzzle hash, compute *P*<sub>0</sub> + *label_pk* for each registered label and compare the resulting puzzle hash against the output
+
+Unlike BIP-352, which uses point subtraction on output public keys, Chia must use forward computation because outputs are identified by puzzle hashes (not public keys). Point subtraction on puzzle hashes is mathematically undefined, so the scanner computes forward from each candidate label.
+
+It is important to note that an outside observer can easily deduce that each published (*B*<sub>scan</sub>, *B*<sub>m</sub>) pair is owned by the same entity, since each address shares the same *B*<sub>scan</sub>. Labels are not meant as a way for Bob to manage separate identities, but rather a way to distinguish payment sources.
+
+**Labels for change**
+
+Bob can also use labels for managing his own change outputs. The index *m* = 0 is reserved for this use case. This gives Bob an alternative to using BLS key derivation for managing change, while still allowing him to know which of his unspent outputs were change when recovering his wallet from the mnemonic. It is important that the wallet never hands out the label with *m* = 0 in order to ensure nobody else can create payments that are wrongly labeled as change.
+
+While the use of labels is optional, every receiving silent payments wallet should at least scan for the change label when recovering from backup in order to ensure maximum cross-compatibility.
+
+## Rationale
+
+This CHIP adapts BIP-352, a silent payment protocol designed for Bitcoin, to the Chia blockchain. The basic design — using ECDH to derive unlinkable one-time addresses from a static recipient public key — translates directly. The key adaptations for Chia blockchain are:
+
+- **Sender key source:** Bitcoin extracts the sender's public key from transaction input witnesses. Chia extracts it from the standard puzzle reveal, where the synthetic public key is curried into `p2_delegated_puzzle_or_hidden_puzzle`. This key is always available on-chain for any standard spend.
+- **Key derivation:** Bitcoin uses BIP-32 (secp256k1). Chia uses EIP-2333 (BLS12-381) with unhardened derivation, matching the convention used by Chia wallets. The scan and spend keys use purpose indices 12 and 13, chosen to avoid collision with Chia's reserved indices 0-6.
+- **Label detection:** Bitcoin outputs are public keys, so labels can be detected by point subtraction. Chia outputs are puzzle hashes, so point subtraction is undefined. The scanner uses forward computation instead — deriving the puzzle hash for each candidate label and comparing against outputs.
+- **Multi-input grouping:** Bitcoin transactions have explicit input boundaries. Chia blocks merge all spend bundles together, so the scanner must infer which spends belong to the same transaction. Two strategies are used: puzzle-hash grouping (same derivation index) and announcement linkage (parsing opcode 60/61 conditions from solutions).
+- **Address encoding:** The silent payment address encodes two 48-byte BLS G1 public keys (scan + spend) in a bech32m string with prefix `spxch` (mainnet) or `tspxch` (testnet), following Chia's `xch`/`txch` convention.
+
+## Backwards Compatibility
+
+This proposal is fully backwards compatible. Silent payment coins are standard Chia blockchain coins locked to the `p2_delegated_puzzle_or_hidden_puzzle` puzzle. No changes to the consensus layer, puzzle format, or network protocol are required.
+
+Wallets that do not implement this CHIP will not be able to use this protocol and will not detect or send silent payment coins.
+
+## Specification
+
+### Definitions
+
+- **`G1`**: The G1 group of the BLS12-381 curve.
+- ***G***: The generator point of G1.
+- ***r***: The order of the G1 group: `0x73EDA753299D7D483339D80809A1D80553BDA402FFFE5BFEFFFFFFFF00000001`.
+- **serialize(*P*)**: The 48-byte compressed representation of a G1 point *P*.
+- **ser<sub>32</sub>(*k*)**: The 4-byte big-endian serialization of a 32-bit integer *k*.
+- **ser<sub>256</sub>(*x*)**: The 32-byte big-endian serialization of a 256-bit scalar *x* (private key).
+- **tagged_hash(*tag*, *data*)**: SHA256(SHA256(*tag*) || SHA256(*tag*) || *data*) — BIP-340-style tagged hash for domain separation. The *tag* is a UTF-8 encoded string.
+- **Recipient scan key pair**: (*b*<sub>scan</sub>, *B*<sub>scan</sub>) where *b*<sub>scan</sub> is derived at path `m/12381/8444/12/0` (unhardened). Used for ECDH detection.
+- **Recipient spend key pair**: (*b*<sub>spend</sub>, *B*<sub>spend</sub>) where *b*<sub>spend</sub> is derived at path `m/12381/8444/13/0` (unhardened). Used for spending detected coins.
+- **Silent payment address**: The pair (*B*<sub>scan</sub>, *B*<sub>spend</sub>), encoded as a bech32m string.
+- **Labeled address**: (*B*<sub>scan</sub>, *B*<sub>m</sub>) where *B*<sub>m</sub> = *B*<sub>spend</sub> + *label_pk* for label index *m*.
+- **Sender synthetic key pair**: (*a*<sub>syn</sub>, *A*<sub>syn</sub>) where *a*<sub>syn</sub> is the sender's synthetic secret key and *A*<sub>syn</sub> is the synthetic public key curried into the sender's standard puzzle.
+- **Coin ID**: SHA256(parent_coin_info || puzzle_hash || amount) — Chia's unique identifier for a coin.
+- ***input_hash***: int(tagged_hash("Chia_SP/Inputs", *coin_id*<sub>L</sub> || serialize(*A*))) mod *r* where *coin_id*<sub>L</sub> is the lexicographically smallest coin ID among the sender's inputs and *A* is the sender's synthetic public key.
+- **||**: Byte concatenation.
+- ***O***: The identity element (point at infinity) of G1. serialize(*O*) = `0xc00000...00` (48 bytes with the compressed infinity flag set).
+- ***n***: The number of sender coins being spent in a transaction.
+- **Spend group**: A set of coin spends in a block that share the same puzzle hash and are therefore presumed to belong to the same transaction. Used by the scanner to identify multi-input spends.
+- ***A*<sub>sum</sub>**: The sum of all sender synthetic public keys in a spend group: *A*<sub>sum</sub> = *A*<sub>1</sub> + *A*<sub>2</sub> + ... + *A*<sub>n</sub>.
+
+### Notation
+
+This specification uses BIP-352-style pseudocode with explicit type annotations:
+
+- Let *x*: `Type` = *expression* declares a typed variable.
+- Types: `int` (integer mod *r*), `bytes32` (32 bytes), `G1` (BLS12-381 G1 point), `list[T]` (ordered list of T).
+- *G* is the generator point of the BLS12-381 G1 group; *r* is the group order.
+- · denotes elliptic curve scalar multiplication: *a* · *G* means scalar *a* times generator *G*.
+- || denotes byte concatenation.
+- Fail(*message*) aborts the operation with an error.
+- Arithmetic on `int` values is implicitly mod *r* unless stated otherwise.
+- serialize(*P*) returns the 48-byte compressed encoding of G1 point *P*.
+- ser<sub>32</sub>(*k*) returns the 4-byte big-endian encoding of integer *k*.
+- ser<sub>256</sub>(*x*) returns the 32-byte big-endian encoding of 256-bit integer *x*.
+
+### Silent Payment Address
+
+The recipient's silent payment address encodes two public keys:
+- *B*<sub>scan</sub>: the scan public key (48 bytes compressed G1)
+- *B*<sub>spend</sub>: the spend public key (48 bytes compressed G1)
+
+The address is encoded as a bech32m string with human-readable part `spxch` (mainnet) or `tspxch` (testnet). The payload is the 96-byte concatenation: serialize(*B*<sub>scan</sub>) || serialize(*B*<sub>spend</sub>).
+
+For a labeled sub-address, *B*<sub>spend</sub> is replaced by *B*<sub>m</sub> = *B*<sub>spend</sub> + *label_pk* (see Labeling section). The scan key *B*<sub>scan</sub> is unchanged across all labels, so the sender always performs ECDH with the same scan key regardless of which label the address uses.
+
+### Key Derivation
+
+Both keys use EIP-2333 BLS unhardened derivation from the master secret key:
+
+- Scan key: `m/12381/8444/12/0`
+- Spend key: `m/12381/8444/13/0`
+
+Purpose indices 12 (scan) and 13 (spend) are chosen to avoid collision with Chia's standard purpose indices, 0 for farmer, 2 for wallet, etc.
+
+The scan key is sufficient for payment detection (ECDH). The spend key is required to spend detected coins. This allows a "watch-only" scanner that holds only the scan key.
+
+### Sending
+
+Inputs:
+- *sender_sks*: `list[int]` — synthetic secret keys, one per spent coin (n >= 1)
+- *coin_ids*: `list[bytes32]` — coin IDs of all spent coins
+- *recipients*: `list[(G1, G1)]` — list of (*B*<sub>scan</sub>, *B*<sub>spend</sub> or *B*<sub>m</sub>) pairs
+
+Procedure **SendSilentPayment**:
+* Let *a*<sub>sum</sub>: `int` = (*sender_sks*[0] + *sender_sks*[1] + ... + *sender_sks*[n-1]) mod *r*
+* Fail if *a*<sub>sum</sub> == 0 ("aggregated sender key sum is zero — invalid for ECDH")
+* Let *A*<sub>sum</sub>: `G1` = *a*<sub>sum</sub> · *G*
+* Let *coin_id*<sub>L</sub>: `bytes32` = min(*coin_ids*) (lexicographic comparison as raw bytes)
+* Let *input_hash*: `int` = int(tagged_hash("Chia_SP/Inputs", *coin_id*<sub>L</sub> || serialize(*A*<sub>sum</sub>))) mod *r*
+* Group *recipients* by *B*<sub>scan</sub>. For each group with scan key *B*<sub>scan</sub>:
+  * Let *S*: `G1` = (*input_hash* · *a*<sub>sum</sub>) · *B*<sub>scan</sub>
+  * Let *shared_secret*: `bytes32` = SHA256(serialize(*S*))
+  * For *k* = 0, 1, ... for each recipient in the group:
+    * Let *t*<sub>k</sub>: `int` = int(tagged_hash("Chia_SP/SharedSecret", *shared_secret* || ser<sub>32</sub>(*k*))) mod *r*
+    * Let *P*<sub>k</sub>: `G1` = *B*<sub>spend</sub> + *t*<sub>k</sub> · *G*
+    * Let *offset*: `int` = int(SHA256(serialize(*P*<sub>k</sub>) || `DEFAULT_HIDDEN_PUZZLE_HASH`), signed=True) mod *r*
+    * Let *synthetic_pk*: `G1` = *P*<sub>k</sub> + *offset* · *G*
+    * Let *puzzle_hash*: `bytes32` = tree_hash(curry(`p2_delegated_puzzle_or_hidden_puzzle`, *synthetic_pk*))
+* Create outputs sending the appropriate amounts to each *puzzle_hash*.
+
+Note: The *offset* step uses signed integer interpretation of the SHA-256 digest (see Synthetic Key Computation Note). When n=1, *a*<sub>sum</sub> is simply the single secret key and min(*coin_ids*) is the single coin ID.
+
+### Scanning (Detection)
+
+#### Scanning a Spend Group
+
+Given a spend group — one or more coin spends presumed to belong to the same transaction — the scanner extracts the sender's public keys, aggregates them, and performs ECDH to check for silent payments.
+
+Inputs:
+- *b*<sub>scan</sub>: `int` — recipient's scan secret key
+- *B*<sub>spend</sub>: `G1` — recipient's spend public key
+- *A*<sub>sum</sub>: `G1` — sender's aggregated synthetic public key (sum of extracted PKs from all spends in the group; for a single spend, just the one PK)
+- *coin_ids*: `list[bytes32]` — coin IDs of all spent coins in the group
+- *output_phs*: `list[bytes32]` — puzzle hashes of output coins parented by any spend in the group
+- *labels*: `map[G1 -> int]` — optional: registered label public keys mapped to label index *m*
+
+Procedure **ScanForSilentPayment**:
+* If *A*<sub>sum</sub> == *O*: skip this group (zero-sum guard)
+* Let *coin_id*<sub>L</sub>: `bytes32` = min(*coin_ids*) (lexicographic comparison as raw bytes)
+* Let *input_hash*: `int` = int(tagged_hash("Chia_SP/Inputs", *coin_id*<sub>L</sub> || serialize(*A*<sub>sum</sub>))) mod *r*
+* Let *S*: `G1` = *b*<sub>scan</sub> · (*input_hash* · *A*<sub>sum</sub>)
+* Let *shared_secret*: `bytes32` = SHA256(serialize(*S*))
+* For *k* = 0, 1, 2, ...:
+  * Let *t*<sub>k</sub>: `int` = int(tagged_hash("Chia_SP/SharedSecret", *shared_secret* || ser<sub>32</sub>(*k*))) mod *r*
+  * Let *P*<sub>k</sub>: `G1` = *B*<sub>spend</sub> + *t*<sub>k</sub> · *G*
+  * Let *base_ph*: `bytes32` = puzzle_hash_for_pk(*P*<sub>k</sub>)
+  * If *base_ph* matches any puzzle hash in *output_phs*:
+    * Record detection: (*k*, *t*<sub>k</sub>, label=None, puzzle_hash=*base_ph*)
+    * Continue to *k*+1
+  * For each (*label_pk*, *m*) in *labels*:
+    * Let *P*<sub>k,m</sub>: `G1` = *P*<sub>k</sub> + *label_pk*
+    * Let *labeled_ph*: `bytes32` = puzzle_hash_for_pk(*P*<sub>k,m</sub>)
+    * If *labeled_ph* matches any puzzle hash in *output_phs*:
+      * Record detection: (*k*, *t*<sub>k</sub>, label=*m*, puzzle_hash=*labeled_ph*)
+      * Continue to *k*+1
+  * If no match at index *k*: stop scanning this group.
+
+Note: puzzle_hash_for_pk(*P*) computes the synthetic public key and standard puzzle hash as described in the Sending section (i.e. offset, synthetic_pk, and puzzle_hash steps). When the group contains a single spend, *A*<sub>sum</sub> is just the one extracted PK and *coin_ids* contains the one coin ID.
+
+#### Scanning a Block
+
+The scanner processes each block by identifying spend groups and running **ScanForSilentPayment** on each. Chia blocks merge all spend bundles together, so the scanner must infer which spends belong to the same transaction.
+
+Inputs:
+- *b*<sub>scan</sub>: `int` — recipient's scan secret key
+- *B*<sub>spend</sub>: `G1` — recipient's spend public key
+- *removals*: `list[CoinSpend]` — all non-coinbase coin spends in the block
+- *additions*: `list[Coin]` — all non-coinbase new coins in the block
+- *labels*: `map[G1 -> int]` — optional: registered labels
+
+Procedure **ScanBlock**:
+
+**Pass 1:** Each spend as its own group
+* Let *detected_coins*: `set[bytes32]` = {}
+* For each *removal* in *removals*:
+  * Let *A*: `G1` = extract_synthetic_pk(*removal*.puzzle_reveal)
+  * If *A* is None: skip (non-standard puzzle)
+  * Let *coin_id*: `bytes32` = *removal*.coin_id
+  * Let *output_phs*: `list[bytes32]` = puzzle hashes of *additions* parented by this *removal*
+  * Run **ScanForSilentPayment**(*b*<sub>scan</sub>, *B*<sub>spend</sub>, *A*, [*coin_id*], *output_phs*, *labels*)
+  * Add any detected coin IDs to *detected_coins*
+
+**Pass 2a:** Group by puzzle hash
+* Let *ph_groups*: `map[bytes32 -> list[CoinSpend]]` = group *removals* by puzzle_hash
+* For each (*puzzle_hash*, *group*) in *ph_groups* where len(*group*) >= 2:
+  * For each *removal* in *group*:
+    * Let *pk*<sub>i</sub>: `G1` = extract_synthetic_pk(*removal*.puzzle_reveal)
+    * If *pk*<sub>i</sub> is None: skip this *removal*
+  * Let *A*<sub>sum</sub>: `G1` = *pk*<sub>1</sub> + *pk*<sub>2</sub> + ... + *pk*<sub>n</sub>
+  * Let *group_coin_ids*: `list[bytes32]` = coin IDs of all *removals* in *group*
+  * Let *group_output_phs*: `list[bytes32]` = puzzle hashes of *additions* parented by ANY *removal* in *group*
+  * Run **ScanForSilentPayment**(*b*<sub>scan</sub>, *B*<sub>spend</sub>, *A*<sub>sum</sub>, *group_coin_ids*, *group_output_phs*, *labels*)
+  * Deduplicate against *detected_coins*
+
+**Pass 2b:** Group by announcement linkage
+* For each *removal* in *removals*:
+  * Run the puzzle with its solution to extract output conditions
+  * If any condition has opcode 60 (`CREATE_COIN_ANNOUNCEMENT`): record the announcement ID = SHA256(*removal*.coin_id || *message*)
+  * If any condition has opcode 61 (`ASSERT_COIN_ANNOUNCEMENT`): record the asserted announcement ID
+* For each announcing *removal*, find all *removals* that assert its announcement ID. This forms a linked group.
+* For each linked group with 2 or more members:
+  * Extract PKs, aggregate, and run **ScanForSilentPayment** as in Pass 2a.
+  * Deduplicate against *detected_coins*
+
+**Scanner grouping strategies:** Pass 2a groups by puzzle hash, which handles the common case where a wallet spends multiple coins at the same derivation index. Pass 2b groups by on-chain announcement linkage, which handles the case where coins at different derivation indices are spent together. Pass 2b parses the actual conditions from the solution, so it is immune from pollution of unrelated spends in the same block. Implementations SHOULD support both strategies.
+
+### Spending
+
+#### Unlabeled Output
+
+Inputs:
+- *b*<sub>spend</sub>: `int` — recipient's spend secret key
+- *t*<sub>k</sub>: `int` — recorded tweak from scanning at output index *k*
+
+Procedure **SpendUnlabeled**:
+* Let *b*<sub>onetime</sub>: `int` = (*b*<sub>spend</sub> + *t*<sub>k</sub>) mod *r*
+* Let *P*<sub>onetime</sub>: `G1` = *b*<sub>onetime</sub> · *G*
+* Let *offset*: `int` = int(SHA256(serialize(*P*<sub>onetime</sub>) || `DEFAULT_HIDDEN_PUZZLE_HASH`), signed=True) mod *r*
+* Let *b*<sub>synthetic</sub>: `int` = (*b*<sub>onetime</sub> + *offset*) mod *r*
+* Sign the delegated puzzle hash, coin ID, and `AGG_SIG_ME` additional data using *b*<sub>synthetic</sub>.
+
+#### Labeled Output
+
+Inputs:
+- *b*<sub>spend</sub>: `int` — recipient's spend secret key
+- *b*<sub>scan</sub>: `int` — recipient's scan secret key (for label scalar derivation)
+- *t*<sub>k</sub>: `int` — recorded tweak from scanning at output index *k*
+- *m*: `int` — detected label index
+
+Procedure **SpendLabeled**:
+* Let *label_scalar*: `int` = int(tagged_hash("Chia_SP/Label", ser<sub>256</sub>(*b*<sub>scan</sub>) || ser<sub>32</sub>(*m*))) mod *r*
+* Let *b*<sub>onetime</sub>: `int` = (*b*<sub>spend</sub> + *t*<sub>k</sub> + *label_scalar*) mod *r*
+* Let *P*<sub>onetime</sub>: `G1` = *b*<sub>onetime</sub> · *G*
+* Let *offset*: `int` = int(SHA256(serialize(*P*<sub>onetime</sub>) || `DEFAULT_HIDDEN_PUZZLE_HASH`), signed=True) mod *r*
+* Let *b*<sub>synthetic</sub>: `int` = (*b*<sub>onetime</sub> + *offset*) mod *r*
+* Sign the delegated puzzle hash, coin ID, and `AGG_SIG_ME` additional data using *b*<sub>synthetic</sub>.
+
+### Labeling
+
+Labels allow a recipient to generate multiple distinct silent payment sub-addresses from a single key pair, enabling the recipient to distinguish payment streams (e.g., "donations" vs. "invoices") while maintaining unlinkability from an observer's perspective.
+
+#### Label Generation
+
+For label index *m* (where *m* = 0 is reserved for change outputs):
+
+* Let *label_scalar*: `int` = int(tagged_hash("Chia_SP/Label", ser<sub>256</sub>(*b*<sub>scan</sub>) || ser<sub>32</sub>(*m*))) mod *r*
+  where ser<sub>256</sub>(*b*<sub>scan</sub>) is the 32-byte big-endian representation of the scan secret key scalar.
+* Let *label_pk*: `G1` = *label_scalar* · *G*
+* Let *B*<sub>m</sub>: `G1` = *B*<sub>spend</sub> + *label_pk*
+
+The labeled silent payment address is (*B*<sub>scan</sub>, *B*<sub>m</sub>). Note that *B*<sub>scan</sub> is unchanged — the scan key is shared across all labels.
+
+#### Change Detection (m = 0)
+
+Label *m* = 0 is reserved for change outputs. When the sender is also the recipient, sending change back to themselves, they construct the change output using (*B*<sub>scan</sub>, *B*<sub>0</sub>) where *B*<sub>0</sub> = *B*<sub>spend</sub> + *label_pk*<sub>0</sub>. This allows the recipient to identify change outputs by checking only label *m* = 0, without scanning the full blockchain.
+
+#### Label Linkability Note
+
+Two labeled addresses from the same recipient share the same *B*<sub>scan</sub>. An observer comparing two labeled addresses can determine they belong to the same recipient by comparing the scan key component. Recipients who require unlinkability between payment streams should use separate wallets with independent key pairs.
+
+### Tagged Hash
+
+This protocol uses BIP-340-style tagged hashing for domain separation. The tagged hash function is:
+
+* tagged_hash(*tag*, *data*) = SHA256(SHA256(*tag*) || SHA256(*tag*) || *data*)
+
+where *tag* is a UTF-8 encoded string and *data* is arbitrary bytes.  The following domain tags are used:
+- `"Chia_SP/Inputs"` — Input hash computation
+- `"Chia_SP/SharedSecret"` — Output tweak derivation
+- `"Chia_SP/Label"` — Label scalar generation
+
+The `"Chia_SP/"` prefix provides domain separation from other protocols using tagged hashes (e.g., Bitcoin's `"BIP0352/"` tags).
+
+### Extracting the Synthetic Public Key
+
+The standard puzzle `p2_delegated_puzzle_or_hidden_puzzle`, when curried with a synthetic public key, has the structure:
+
+(a (q . MOD) (c (q . SYNTHETIC_PK) 1))
+
+The synthetic public key is the first curried argument. Implementations MUST verify that the puzzle's uncurried module matches the known `p2_delegated_puzzle_or_hidden_puzzle` tree hash (`e9aaa49f45bad5c889b86ee3341550c155cfdd10c3a6757de618d20612fffd52`) before accepting the extracted key.
+
+### Synthetic Key Computation Note
+
+The synthetic offset computation uses signed integer interpretation of the SHA-256 digest, following the Chia standard:
+
+*offset* = int.from_bytes(SHA256(*pk* || *hidden_puzzle_hash*), "big", signed=True) mod *r*
+
+This matches the behavior of Chia's `int_from_bytes` function. Implementations MUST use signed interpretation to produce correct puzzle hashes.
+
+### *K*<sub>max</sub>: Maximum Outputs Per Spend Group
+
+The scanner iterates output indices *k* = 0, 1, 2, ... for each spend group until no match is found. To bound the worst-case scanning cost, implementations SHOULD enforce a maximum output count *K*<sub>max</sub> per spend group. If *k* reaches *K*<sub>max</sub> without a gap, the scanner stops iterating for that spend group.
+
+#### Derivation from Chia Block Constraints
+
+Chia cost constants:
+
+| Constant | Value | Source |
+|----------|-------|--------|
+| Maximum block cost | 11,000,000,000 | Chia consensus |
+| Maximum spend bundle cost | 5,500,000,000 | Mempool rule (half of block cost) |
+| CREATE_COIN cost | 1,800,000 | CLVM condition cost |
+| AGG_SIG_ME cost | 1,200,000 | CLVM condition cost |
+| Byte cost | 12,000 | CLVM byte multiplier |
+
+Per-output minimum cost:
+- CREATE_COIN condition: 1,800,000
+- Output puzzle hash (32 bytes): 32 · 12,000 = 384,000
+- Output amount (up to 8 bytes): 8 · 12,000 = 96,000
+- **Per-output total: ~2,280,000**
+
+Single-spend baseline overhead (from reference implementation tests):
+- CLVM execution: ~27,000
+- AGG_SIG_ME: 1,200,000
+- Byte cost (~433 bytes for puzzle reveal + solution): ~5,196,000
+- **Baseline total: ~6,423,000**
+
+Maximum outputs from a single spend bundle:
+- Available cost: 5,500,000,000 - 6,423,000 = 5,493,577,000
+- Theoretical maximum: floor(5,493,577,000 / 2,280,000) = 2,409
+
+***K*<sub>max</sub> = 2,400** (at the theoretical maximum for a single spend bundle).
+
+BIP-352 uses *K*<sub>max</sub> = 2,323 (derived from Bitcoin's 100 kvB standardness limit). The Chia value is comparable.
+
+Note: The spend bundle cost limit (5.5B) is a mempool policy, not a consensus rule. A farmer could theoretically include a spend bundle using the full block cost (11B), which would allow ~4,800 outputs. *K*<sub>max</sub> = 2,400 covers the standard mempool case. The scanner's worst-case complexity per block is O(*N* · *K*<sub>max</sub>) where *N* is the number of spend groups.
+
+### Edge Cases
+
+#### Identity Element (Zero-Sum Prevention)
+
+When aggregating sender keys for multi-input sends, the sum may equal zero (e.g., the aggregated public key is the identity element *O*). This occurs if the individual secret keys happen to cancel out modulo *r*.
+
+- **Sender side:** If *a*<sub>sum</sub> == 0, the sender MUST abort the transaction with an error. ECDH with the identity element produces a predictable shared secret (SHA256 of the serialized identity point), which would be the same for all recipients and all transactions. This is a catastrophic privacy failure.
+- **Scanner side:** If *A*<sub>sum</sub> == *O* (identity element after point addition), the scanner MUST skip this spend group. The identity element check is: serialize(*A*<sub>sum</sub>) == serialize(*O*), or equivalently, *A*<sub>sum</sub> is the point at infinity.
+
+The probability of a random zero-sum is approximately 1/*r*, negligible for BLS12-381's 255-bit group order. However, a malicious sender could construct a zero-sum deliberately, so the check is a defense-in-depth measure.
+
+#### Scanner Grouping Strategies
+
+The multi-input scanner uses two strategies to identify which coin spends in a block belong to the same multi-input transaction. Chia blocks merge all spend bundles together, so the scanner must infer grouping from on-chain data.
+
+**Pass 2a — Puzzle hash grouping:** Coins at the same derivation index share the same puzzle hash. If multiple coins with the same puzzle hash are spent in the same block, they are likely from the same wallet in the same transaction. This is the fast, common case.
+
+**Pass 2b — Announcement linkage:** In a multi-input spend bundle, the primary coin creates a coin announcement (opcode 60) and secondary coins assert that announcement (opcode 61). The scanner parses each removal's solution to extract these conditions and builds exact groups from the on-chain linkage. This handles the case where coins at different derivation indices are spent together, and is immune to pollution from unrelated spends in the same block.
+
+Senders that support multi-input silent payments SHOULD prefer spending coins at the same derivation index when possible, as this ensures detection by the simpler Pass 2a strategy. However, implementations SHOULD support both strategies to handle all cases.
+
+## Test Cases
+
+The following test vectors include all intermediate cryptographic values, allowing implementers to verify each step of their implementation independently. All values are generated by the reference implementation (`shared.py`) and verified by the automated test suite (`tests/test_vectors.py`).
+
+### Test Vector 1: Single Output Payment
+
+**Scenario:** Sender pays a single recipient using the standard (unlabeled) silent payment protocol. Both sender and recipient derive from the same BIP-39 test mnemonic but use different derivation paths.
+
+**Inputs:**
+
+| Value | Data |
+|-------|------|
+| Sender mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` (BIP-39 test vector) |
+| Recipient mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` (same mnemonic, different derivation paths) |
+| Coin ID | `SHA256("test-vector-1-coin")` = `5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175` |
+
+**Key Derivation:**
+
+| Value | Hex |
+|-------|-----|
+| Sender wallet SK (m/12381/8444/2/0) | `6c8d1a9f97413f8d8e8c158f5bc875b58b498de05c9109b4dc240280d32e2a31` |
+| Sender synthetic SK (a_syn) | `5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a` |
+| Sender synthetic PK (A) | `8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa` |
+| Recipient scan SK (b_scan, m/12381/8444/12/0) | `132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6` |
+| Recipient scan PK (B_scan) | `a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896` |
+| Recipient spend SK (b_spend, m/12381/8444/13/0) | `53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087` |
+| Recipient spend PK (B_spend) | `8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74` |
+
+**Protocol Execution:**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| input_hash | int(tagged_hash("Chia_SP/Inputs", coin_id \|\| serialize(A))) mod r | `38a1c8379cceb0fbebfdf3016707e54a1c7e9d21afb9489b9cc58f6055cc9411` |
+| ECDH point S = (input_hash * a_syn) * B_scan | G1 point | `aa15516b2b572ebedcd3c048c07189485f8374449923389534125e99763845700d6d84d8edaf73b6516874d9a798de09` |
+| shared_secret = SHA256(serialize(S)) | 32 bytes | `d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6` |
+| t_0 = int(tagged_hash("Chia_SP/SharedSecret", shared_secret \|\| ser32(0))) mod r | integer mod r | `5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1` |
+| One-time PK P_0 = B_spend + t_0 * G | G1 point | `b671487c1d275842f529f7a73a63a32a9a1a49e1dbabcac4058cc48626b6db31f48dc49e769a6f8076a9111ff14e964d` |
+| One-time puzzle hash | 32 bytes | `23adba149dd9000d65e0f8e21b6975364cbe89a63caf56533df4b7664c21fbf5` |
+| One-time address | | `txch1ywkm59yamyqq6e0qlr3pk6t4xextazdx8jh4v5ea7jmkvnppl06swd5m0t` |
+
+**Verification:**
+- Scanner using *b*<sub>scan</sub> + *A* produces the same puzzle hash: YES
+- Recipient derives one-time SK = (*b*<sub>spend</sub> + *t*<sub>0</sub>) mod *r* = `3c399c61ae130724903b3b650e936ff042b7646764289a33519e17100a89db37`
+- One-time SK * G matches P_0: YES
+
+### Test Vector 2: Multi-Output Payment
+
+**Scenario:** Sender pays two different recipients in a single transaction. Each recipient has a different scan key, producing different shared secrets and different one-time puzzle hashes.
+
+**Inputs:**
+
+| Value | Data |
+|-------|------|
+| Sender mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` |
+| Recipient A mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` |
+| Recipient B mnemonic | `zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo wrong` |
+| Coin ID | `SHA256("test-vector-2-coin")` = `b75c75c4787bade82b417272eff88ed90b3013a14b06c16be66b944856f378a2` |
+
+**Key Derivation (Sender):**
+
+Sender keys are the same as Test Vector 1 (same mnemonic and derivation).
+
+| Value | Hex |
+|-------|-----|
+| Sender synthetic PK (A) | `8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa` |
+
+**Key Derivation (Recipient A):**
+
+Recipient A keys are the same as Test Vector 1 recipient.
+
+| Value | Hex |
+|-------|-----|
+| Recipient A scan PK (B_scan_A) | `a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896` |
+| Recipient A spend PK (B_spend_A) | `8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74` |
+
+**Key Derivation (Recipient B):**
+
+| Value | Hex |
+|-------|-----|
+| Recipient B scan PK (B_scan_B) | `904b64222fcc0bcf254bcfadcd579cf0530b4fba7ed454f3e6d85799cc9f54913f048f1fb393e4acf1bbe56d09d73108` |
+| Recipient B spend PK (B_spend_B) | `99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813` |
+
+**Protocol Execution:**
+
+The input_hash is shared across both recipients (same sender key and coin ID):
+
+| Step | Value | Hex |
+|------|-------|-----|
+| input_hash | int(tagged_hash("Chia_SP/Inputs", coin_id \|\| serialize(A))) mod r | `42b39c642d50849aa93f23c34085d80bb6a236cad4e0edd2841d526838c92b22` |
+
+**Recipient A (k=0):**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| shared_secret_A = SHA256(serialize((input_hash * a_syn) * B_scan_A)) | 32 bytes | `e9b20a7df882357c76abb4b5f87dcfc9a64cda6413c85f61efa1c4e81e1be50d` |
+| t_A_0 = int(tagged_hash("Chia_SP/SharedSecret", shared_secret_A \|\| ser32(0))) mod r | integer mod r | `13682ff0957fce11761842863c1658c4cfe9dad4b312fb5fcd71f66567d33d9b` |
+| One-time PK P_A_0 = B_spend_A + t_A_0 * G | G1 point | `97b332699dfd7741b3f0c8bf1e1a0edef3b4ad7a092a8f38d74f17216cfb1d0f5abe7d853f8e3223407be827c9c3aaa8` |
+| One-time puzzle hash A | 32 bytes | `596275d286042c639d97e3765fe89d0e5554ac250e0fb4c594a9165017c0a9e5` |
+| One-time address A | | `txch1t938t55xqskx88vhudm9l6yape24ftp9pc8mf3v54yt9q97q48jsqly0xr` |
+
+**Recipient B (k=0):**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| shared_secret_B = SHA256(serialize((input_hash * a_syn) * B_scan_B)) | 32 bytes | `1450c748a04e4925bf34d0ef09e21fd1dab0eb0a3675efcb5b2da66d813c06e9` |
+| t_B_0 = int(tagged_hash("Chia_SP/SharedSecret", shared_secret_B \|\| ser32(0))) mod r | integer mod r | `21d2901f3189dc8def5c5a29e84933a5543ceabd131653dd2ea1951523045976` |
+| One-time PK P_B_0 = B_spend_B + t_B_0 * G | G1 point | `a2557b2b6029fcc6783e8447588311a06b5d3dcad132a318d40bf0d6114595dd3d14fd58fe6f6c88dfa190aaa6bef873` |
+| One-time puzzle hash B | 32 bytes | `65249bcb907c9a6fac2e14499f6220cc24ba9359767d680c19405da06b69b263` |
+| One-time address B | | `txch1v5jfhjus0jdxltpwz3ye7c3qesjt4y6ewe7ksrqegpw6q6mfkf3s0xpfcj` |
+
+**Verification:**
+- shared_secret_A != shared_secret_B (different scan keys produce different secrets): YES
+- puzzle_hash_A != puzzle_hash_B (different recipients get different outputs): YES
+- Scanner A detects only puzzle_hash_A: YES
+- Scanner B detects only puzzle_hash_B: YES
+
+### Test Vector 3: Labeled Payment
+
+**Scenario:** Sender pays a recipient using a labeled sub-address with label m=1. The recipient detects the payment via forward computation with the label, and derives the labeled spending key.
+
+**Inputs:**
+
+| Value | Data |
+|-------|------|
+| Sender mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` |
+| Recipient mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` |
+| Label index | m = 1 |
+| Coin ID | `SHA256("test-vector-3-coin")` = `4504f59ea184be18924f95244649287382ec6cdc13f333a8990f648c803a6dac` |
+
+**Key Derivation:**
+
+Sender and recipient base keys are the same as Test Vector 1.
+
+| Value | Hex |
+|-------|-----|
+| Sender synthetic PK (A) | `8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa` |
+| Recipient scan SK (b_scan) | `132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6` |
+| Recipient scan PK (B_scan) | `a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896` |
+| Recipient spend PK (B_spend) | `8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74` |
+
+**Label Generation:**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| label_scalar = int(tagged_hash("Chia_SP/Label", ser256(b_scan) \|\| ser32(1))) mod r | integer mod r | `48fa440acca87f501b9984b5d23327d0b7766a4baa913dfb3001d412c48ce465` |
+| label_pk = label_scalar * G | G1 point | `a6dcff3646739745ef7f3ba8e51808dac13765fa9d5e73386d3fbd7841e0773e02a0f8d91baf57d337954322bd06d80c` |
+| B_m = B_spend + label_pk | G1 point (labeled spend PK) | `965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2` |
+
+**Protocol Execution:**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| input_hash | int(tagged_hash("Chia_SP/Inputs", coin_id \|\| serialize(A))) mod r | `58a1875602949aa6bfaf9cb4837957e7175ffb0b14422dbc8d371799f98e66f5` |
+| shared_secret = SHA256(serialize((input_hash * a_syn) * B_scan)) | 32 bytes | `3d1eabb622c40142d4b2557fc222a22cd93d98550255cecb2b6a84985f49215d` |
+| t_0 = int(tagged_hash("Chia_SP/SharedSecret", shared_secret \|\| ser32(0))) mod r | integer mod r | `301e842ace534f7de854dcc5a48a656d7e9a6d8b8f93db9fb8277f4d1889bdf1` |
+| One-time PK P_0 = B_m + t_0 * G | G1 point | `97e7466509081a3ed6e50ba0231a6fa1b48d8c910ac6ec933e26cd5091569c615f299726c91a730dbf51a26cb249f17c` |
+| One-time puzzle hash | 32 bytes | `ba271d218d487e8e5dc994a09a8580e1e8a0559a615bd5805cff11b5a343441c` |
+| One-time address | | `txch1hgn36gvdfplguhwfjjsf4pvqu852q4v6v9datqzulugmtg6rgswqpr9rsm` |
+
+**Label Detection (Scanner Side):**
+
+The scanner computes the base one-time PK, using *B*<sub>spend</sub>, not *B*<sub>m</sub>:
+- Base *P*<sub>0</sub> = *B*<sub>spend</sub> + *t*<sub>0</sub> · *G* (does NOT match the output puzzle hash)
+- For each registered label: P_0_labeled = Base P_0 + label_pk
+- puzzle_hash_for_pk(P_0_labeled) matches the output: label m=1 detected
+
+**Labeled Spending Key Derivation:**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| Base one-time SK = (b_spend + t_0) mod r | 32 bytes | `10021d8ab756b398cb4c4732864c264981e39a898e1ff4ea487b8f39f1bb6e77` |
+| Labeled one-time SK = (base_one-time_SK + label_scalar) mod r | 32 bytes | `58fc619583ff32e8e6e5cbe8587f4e1a395a04d538b132e5787d634cb64852dc` |
+| Labeled one-time SK * G = P_0 | Verified: YES |
+
+### Test Vector 4: Multi-Input Payment
+
+**Scenario:** Sender spends two coins at derivation indices 0 and 1, aggregating their synthetic keys for ECDH. The recipient detects the payment using the aggregated public key and derives the spending key.
+
+**Inputs:**
+
+| Value | Data |
+|-------|------|
+| Sender mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` |
+| Recipient mnemonic | `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about` |
+| Sender derivation indices | 0 and 1 |
+| Coin ID 0 | `SHA256("test-vector-4-coin-0")` = `2b9857e0307ebfbe51829e3be8c992ae57f6a8debe06a5deab429ddae83a8c1a` |
+| Coin ID 1 | `SHA256("test-vector-4-coin-1")` = `209bb03a4cd165785e6149bc6dcb27e35829006f02ec927ab5a20521fd27d21a` |
+
+**Key Derivation (Individual Sender Keys):**
+
+| Value | Hex |
+|-------|-----|
+| Sender synthetic SK 0 (a_syn_0, index 0) | `5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a` |
+| Sender synthetic PK 0 (A_0, index 0) | `8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa` |
+| Sender synthetic SK 1 (a_syn_1, index 1) | `05fded8808216b65d439fc41cb07c7270e37ed743e0745652afe055cfe91cf0f` |
+| Sender synthetic PK 1 (A_1, index 1) | `94c5c19f4343bc2655af729469285a392de9048851363b0b1329a4539a46ab4c6e8bfb39d32da25bffe4d9cdbe3e1061` |
+
+**Key Aggregation:**
+
+| Value | Hex |
+|-------|-----|
+| Aggregated SK (a_sum = (a_syn_0 + a_syn_1) mod r) | `5600d8781de32f0f3d86bc96b46a3a4ea56ae26da168b55dc66b503acbf95b89` |
+| Aggregated PK (A_sum = a_sum * G) | `a223ab27f801044cd98c8314014b8073347b0e5aae43c69b78b5ca2a562ee9f799b8efad179b34da1b306ca4d62bad40` |
+| PK consistency: A_sum == A_0 + A_1 (point addition) | YES |
+
+**Recipient Keys:**
+
+Recipient keys are the same as Test Vector 1 (same mnemonic, scan/spend derivation paths).
+
+| Value | Hex |
+|-------|-----|
+| Recipient scan PK (B_scan) | `a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896` |
+| Recipient spend PK (B_spend) | `8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74` |
+
+**Protocol Execution:**
+
+| Step | Value | Hex |
+|------|-------|-----|
+| Lexicographic minimum coin ID (coin_id_L) | coin_id_1 < coin_id_0 | `209bb03a4cd165785e6149bc6dcb27e35829006f02ec927ab5a20521fd27d21a` |
+| input_hash | int(tagged_hash("Chia_SP/Inputs", coin_id_L \|\| serialize(A_sum))) mod r | `3f1071552b7f2f5e49b68166cb204f0a1b6a23b0c30a28bcba59a9c3f766e166` |
+| ECDH point S = (input_hash * a_sum) * B_scan | G1 point | `b99921528f3e0b744040ad552d2209eae9092542f4968ab7a85a5c68098f09241a5d5112916f232fdd0edca5f0045080` |
+| shared_secret = SHA256(serialize(S)) | 32 bytes | `e729dea8c4732747d0e5e930607c52ddfce01ff7c72eaec9ee7c84131e078494` |
+| t_0 = int(tagged_hash("Chia_SP/SharedSecret", shared_secret \|\| ser32(0))) mod r | integer mod r | `18fafd6001bef3fece078f469731b40a5f362994795f9ff6b9339aa235fee312` |
+| One-time PK P_0 = B_spend + t_0 * G | G1 point | `b71f484e6d90a657b215ad7bff6f96a8d9bff07e0133d74917cc6c3ef6fa273a706aa56e1fd6da19ed5466f16450ccb1` |
+| One-time puzzle hash | 32 bytes | `5d7fc7d7447c746cfb400e801a169fc7bfd1c13e03bc7866e6b743860a53ac6b` |
+| One-time address | | `txch1t4lu046y036xe76qp6qp595lc7larsf7qw78sehxkapcvzjn434s43wctu` |
+
+**Verification:**
+- Scanner using *b*<sub>scan</sub> + *A*<sub>sum</sub> produces the same puzzle hash: YES
+- Recipient derives one-time SK = (*b*<sub>spend</sub> + *t*<sub>0</sub>) mod *r* = `6ccc3e13145fd561e438d1bb82954cebb63cfa9577ea15404987aa8e0f309399`
+- One-time SK * G matches P_0: YES
+- create_silent_payment_outputs([syn_sk_0, syn_sk_1], [coin_id_0, coin_id_1], [(scan_pk, spend_pk)]) produces the same puzzle hash: YES
+
+## Reference Implementation
+
+A Python reference implementation is available at: https://github.com/kdc2000/silent-payments
+
+The implementation consists of:
+- `generate_address.py` -- Generate the recipient's static silent payment address (bech32m).
+- `send_payment.py` -- Derive the one-time address and send a payment.
+- `scanner.py` -- Scan the blockchain for incoming silent payments.
+- `spend_coin.py` -- Spend a detected silent payment coin.
+
+Core cryptographic functions are in `shared.py`.
+
+## Future Extensions
+
+### Non-Standard Puzzle Support
+
+Any Chia primitive that wraps the standard `p2_delegated_puzzle_or_hidden_puzzle` as its inner puzzle can potentially support silent payments. The scanner extracts the sender's synthetic public key by uncurrying the outer layers to reach the inner p2 puzzle, then extracts the key using the standard method. The key requirement is that the inner puzzle is curried as a full puzzle tree, not a hash, so that uncurrying can reach the synthetic public key.
+
+Primitives that replace the inner puzzle entirely — such as Chia Vaults, which use MIPS custody puzzles instead of `p2_delegated_puzzle_or_hidden_puzzle` — are not compatible with this approach.
+
+## Security
+
+### ECDH Security
+
+The security of the shared secret relies on the computational Diffie-Hellman (CDH) assumption on the BLS12-381 G1 group. An attacker observing both *A*<sub>syn</sub> (from the puzzle reveal) and *B*<sub>scan</sub> (the recipient's scan public key) cannot compute the shared secret (*input_hash* · *a*<sub>syn</sub>) · *B*<sub>scan</sub> without knowledge of either private key.
+
+### Address Unlinkability
+
+Each payment produces a unique one-time puzzle hash derived from a fresh ECDH shared secret. The input hash ensures unlinkability even when the same sender key is reused across transactions: different coin IDs produce different input hashes, which produce different shared secrets and therefore different one-time puzzle hashes. An observer who does not know the recipient's scan public key cannot determine that two coins were sent to the same recipient. Even an observer who knows the recipient's scan public key cannot link payments without possessing the scan secret key *b*<sub>scan</sub>.
+
+### Scanning Privacy
+
+Only the holder of the recipient's scan secret key *b*<sub>scan</sub> can perform the ECDH computation needed to detect payments. A third party cannot determine whether a coin belongs to a given silent payment address without the scan secret key. Note that compromising the scan key reveals detection capability for ALL past and future payments to that address, but does not allow spending (which requires the separate spend secret key *b*<sub>spend</sub>).
+
+### Sender Privacy
+
+The sender's synthetic public key is visible in the puzzle reveal of their spent coin. This is inherent to Chia's standard puzzle and is not additional information introduced by this protocol. An observer who can identify the sender's coin can determine that the sender made a transaction, but cannot determine the recipient without the recipient's scan secret key.
+
+### Non-Standard Puzzles
+
+If the sender's coin uses a non-standard puzzle (e.g., CAT, singleton, or DID wrapper), the synthetic public key may not be extractable. Implementations MUST handle this gracefully by skipping coins whose parent puzzles do not match the standard `p2_delegated_puzzle_or_hidden_puzzle`.
+
+### Key Reuse Across Payments
+
+The input hash mechanism provides defense-in-depth against key reuse. Even though the sender's synthetic key naturally changes with each coin they spend (different coins at different derivation indices produce different synthetic keys), the input hash ensures that even if the same synthetic key were used across multiple transactions, each transaction would produce different one-time addresses because the coin IDs differ.
+
+Within a single transaction, multiple outputs share the same input hash and sender key but derive different one-time addresses via two mechanisms:
+- Different recipients have different *B*<sub>scan</sub> values, producing different shared secrets.
+- Multiple outputs to the same recipient's scan key use different counter values *k*, producing different tweaks.
+
+### Scan Key as High-Value Secret
+
+The scan key *b*<sub>scan</sub> reveals detection capability for all past and future silent payments to the associated address. Compromising the scan key allows an attacker to identify every silent payment ever received and every future payment, across the entire blockchain. The scan key should receive the same protection as the spend key. Wallet implementations should consider secure key storage (hardware wallet, encrypted keystore) for the scan key.
+
+
+## Appendix A: Light Client Support
+
+This appendix is out of scope for the current CHIP but is included to motivate further research and discussion.
+
+A "light client" is any Chia wallet that does not process full blocks and does not have a direct connection to a personal full node. Wallets connected to a personal full node are not considered light clients. A light client needs two things: (a) a way to obtain the sender's public key data needed for ECDH, and (b) a way to determine if any of the derived puzzle hashes exist on-chain.
+
+### Tweak Data
+
+For each standard coin spend in a block, the sender's synthetic public key is extractable from the puzzle reveal. A full node or indexing server can pre-compute this data and serve it to light clients. Each entry is 48 bytes (a compressed BLS12-381 G1 point) plus the coin ID (32 bytes), totaling 80 bytes per eligible spend.
+
+The light client receives this tweak data, performs the ECDH computation locally using its scan secret key, and derives candidate puzzle hashes. The server learns when the client is scanning but not which puzzle hashes the client is interested in, since the ECDH step happens entirely on the client.
+
+### Checking for Matches
+
+Once the light client has derived candidate puzzle hashes, it needs to check whether any of them exist on-chain. Several approaches are available:
+
+**Compact block filters (most private):** Chia has a [BIP-158 implementation](https://github.com/Chia-Network/chiabip158) used by the privacy sync protocol. The light client downloads compact filters for each block and checks candidate puzzle hashes locally. On a match, the client downloads the relevant coin records to confirm. The full node cannot determine which puzzle hashes the client is checking.
+
+**Direct puzzle hash query (fast, less private):** The light client queries `get_coin_records_by_puzzle_hash` for each candidate. This is fast but reveals the candidate puzzle hashes to the node. Since each candidate is a one-time puzzle hash, the node learns that *some* client is scanning for silent payments but cannot link the query to a specific silent payment address without the scan secret key.
+
+**Subscription-based (ongoing monitoring):** After an initial sync, the light client could subscribe to newly derived puzzle hashes via `register_for_ph_updates` for real-time detection of future payments. The privacy trade-off is the same as the direct query approach.
+
+### Transaction Cut-Through
+
+A light client that does not scan every block can skip spend data for coins that have already been spent. If a coin was created and spent before the client's next scan, the sender's public key from that spend is no longer relevant — it could not have produced an unspent silent payment output. This reduces the amount of tweak data the client needs to process, particularly for clients that scan infrequently.
+
+### Out-of-Band Notifications
+
+As an optimization, senders can send encrypted notifications to the recipient through an external channel (not on-chain). The notification contains the shared secret and output details, allowing the recipient to detect and spend the payment without scanning. This is not a substitute for scanning — the recipient can always fall back to full scanning to detect payments from senders who do not support notifications, or to verify that notifications are honest.
+
+### Bandwidth Estimates
+
+Chia's block rate is approximately one block every 18.75 seconds (~4,608 blocks per day). The number of standard coin spends per block varies, but is typically much lower than Bitcoin's transaction volume. Assuming an average of 50 eligible spends per block:
+
+- Tweak data: 50 × 80 bytes = 4 kB per block, ~18 MB per day
+- Compact block filters: approximately 1-2 kB per block, ~5-9 MB per day
+- Total for private scanning: ~23-27 MB per day
+
+These are rough estimates. Actual bandwidth depends on network activity and would need to be measured on mainnet.
+
+## Appendix B: ECDH vs BLS Pairings
+
+BLS12-381 supports bilinear pairings, which could enable alternative shared secret constructions (e.g., deriving the shared secret from the on-chain BLS signature). However, ECDH via scalar multiplication on G1 is simpler, well-understood, and sufficient for the purpose. Pairing-based approaches may be explored in future extensions for batch scanning optimization.
+
+## Appendix C: ECDH Scalar Multiplication
+
+The ECDH computation requires general scalar multiplication on an arbitrary G1 point: *a* · *B*<sub>scan</sub>, where *B*<sub>scan</sub> is the recipient's scan public key (not the generator *G*). The `chia_rs` library provides point addition on G1 elements and scalar multiplication by the generator (`PrivateKey.get_g1()`), but does not expose general scalar multiplication on arbitrary points.
+
+The reference implementation works around this with a Python-level double-and-add loop that performs ~255 iterations of G1 point addition through the `chia_rs` FFI boundary. This is correct but slow — each ECDH computation requires hundreds of cross-boundary calls.
+
+The `chia_rs` library wraps [blst](https://github.com/supranational/blst), which implements optimized scalar multiplication (`blst_p1_mult`) using windowed non-adjacent form (wNAF) with platform-specific assembly. If `chia_rs` exposed this function, the ECDH computation would be a single native call:
+
+```python
+# Current prototype: ~255 Python iterations
+ecdh_point = scalar_mult_g1(adjusted_scalar, scan_pk)
+
+# With native support: single call
+ecdh_point = scan_pk.multiply(adjusted_scalar.to_bytes(32, "big"))
+```
+
+For the prototype, the Python implementation is sufficient. For a production scanner processing every spend in every block, native scalar multiplication would significantly reduce scanning time.
+
+## References
+
+- [BIP-352: Silent Payments](https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki) — Josie Baker, Ruben Somsen, Andrew Toth.
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
