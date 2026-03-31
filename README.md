@@ -15,6 +15,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
 * [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
+* [57 - Silent Payments](https://github.com/Chia-Network/chips/pull/198)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
