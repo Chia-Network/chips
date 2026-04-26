@@ -22,13 +22,12 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
-* [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* None
+* [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
