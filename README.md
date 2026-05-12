@@ -14,7 +14,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 * [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
-* [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 * [57 - Silent Payments](https://github.com/Chia-Network/chips/pull/198)
 
 ### Review
@@ -22,12 +21,13 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
+* [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 
 ### Review (Fast Track)
 * None
 
 ### Last Call
-* [52 - Partial Offers](https://github.com/Chia-Network/chips/pull/174)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -63,6 +63,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
 * [45 - Options contracts](/CHIPs/chip-0045.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
+* [52 - Partial Offers](/CHIPs/chip-0052.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
@@ -94,6 +95,5 @@ The following standards were finalized before the CHIP process had been created:
 ### Under Consideration
 The following Pull Requests have not yet been formalized as a CHIP:
 * [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
-* [Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 
 -----
