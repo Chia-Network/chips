@@ -1,0 +1,198 @@
+
+| CHIP Number   |                                                                                                                                                                                                                                                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Title         | Parallel voting at scale: off-chain proofs, on-chain finality                                                                                                                                                                                                                                                                         |
+| Description   | Standard for large-scale on-chain elections on Chia: an Election Singleton orchestrates registration and ballot issuance; Registration, Ballot, and Voting Coins separate enrollment from parallel votes and from per-ballot finalize (Groth16 + `bls_verify` on the Ballot Coin) with off-chain aggregation and proving.             |
+| Author        | Michael Taylor (on behalf of [DIG Network](https://github.com/DIG-Network))                                                                                                                                                                                                                                                           |
+| Editor        |                                                                                                                                                                                                                                                                                                                                       |
+| Comments-URI  |                                                                                                                                                                                                                                                                                                                                       |
+| Status        |                                                                                                                                                                                                                                                                                                                                       |
+| Category      | Standards Track                                                                                                                                                                                                                                                                                                                       |
+| Sub-Category  | Primitive                                                                                                                                                                                                                                                                                                                             |
+| Created       | 2026-05-04                                                                                                                                                                                                                                                                                                                            |
+| Requires      | [CHIP-0011](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md) (CLVM BLS / curve operations for Groth16 verification); [CHIP-0050](https://github.com/Yakuhito/chips/blob/b23ed49e00164cbc62b9b6ae4d48071930c5b1d2/CHIPs/chip-0050.md) (action layer; see [PR #165](https://github.com/Chia-Network/chips/pull/165)) |
+| Replaces      | None                                                                                                                                                                                                                                                                                                                                  |
+| Superseded-By |                                                                                                                                                                                                                                                                                                                                       |
+
+
+**Reference implementation (open source):** This CHIP is implemented in **[DIG-Network/chia-parallel-voting](https://github.com/DIG-Network/chia-parallel-voting)** on branch **`main`** ([puzzles/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/puzzles), [sdk/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/sdk), [cli/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/cli), [wasm/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/wasm), [app/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/app)). When this CHIP ships in the Chia chips repo, the Markdown **companion files** in the same directory are [README.md](./README.md), [chip-protocol-flow.md](./chip-protocol-flow.md), and the other `chip-*.md` files linked there; executable artifacts remain in the reference repository.
+
+## Abstract
+
+This CHIP defines a standard for decentralized, permissionless voting at scale on the Chia blockchain, with a practical target on the order of twenty thousand voters. There is no known theoretical upper bound; what you hit first in practice is off-chain computation and proving, not a hard chain limit.
+
+BLS is the workhorse for aggregating voter *signatures*, but BLS alone is not enough to aggregate *votes* in a trustless setting: it does not, by itself, bind the voter threshold, how many voters backed a given result, or how many voters were registered for the election. This CHIP requires all three kinds of commitment (BLS aggregate, quorum threshold, and the registered-voter bound) to line up at finalize.
+
+The novel piece here is the realization that Groth16 circuits can produce cryptographic commitments today’s CLVM can verify. For a **fixed circuit**, the proof the coin checks is **constant size in CLVM** (it does not grow with how many voters contributed off-chain), and it still binds threshold, registration scope, and the BLS aggregate. Whoever submits the aggregation for finalization cannot fake a passing proof. If the finalize spend proves the required threshold voted and the correct BLS aggregate is in the bundle, the vote finalizes on-chain.
+
+## Motivation
+
+On Chia, a naive voting design often hits a **singleton parallelization** problem: to make the vote outcome actionable inside CLVM, many designs force every voter update through the **Ballot Box Singleton** (one tally coin everyone has to spend). In a decentralized setup that behaves like **at most one tally step per block**, so counting twenty thousand votes can mean **twenty thousand blocks** of wall-clock time, and the problem gets worse as the quorum grows.
+
+The usual shortcut is **semi-permissioned**: one operator key aggregates off-chain and posts the result to the **Ballot Box Singleton**. That trades the bottleneck for **trust and uptime**: participants depend on that party to show up and behave; anything that might move serious value on the outcome inherits a **single point of failure**.
+
+This CHIP defines a **permissionless** pattern that keeps registration and ballot issuance on the **Election Singleton**’s **slow lane**, pushes per-voter work onto **parallel coins**, and runs **per-ballot finalize** (Groth16 + BLS verification on the **Ballot Coin**) without wedging the whole election behind a **Ballot Box Singleton** again. The goal is to make **large-scale on-chain elections** on Chia realistic enough that richer **governance** can be built on the base layer.
+
+The same shape is meant to support **DIG Network**: an L2-style stack on Chia where validators **attest** to L2 blocks and **anchor** them on L1 without a designated aggregator key.
+
+It also points toward **production DAO governance** (for example CAT-weighted votes) and, longer term, **Chia Vault** spend paths that can take an **announcement** from a finalized ballot and treat it as authorization for a vault action.
+
+## Backwards Compatibility
+
+This CHIP does not propose any changes to CLVM. 
+
+## Specification
+
+This section defines the on-chain artifacts, state, and spend rules needed for interoperable implementations. Election and Ballot singletons **MUST** route inner actions through the [CHIP-0050](https://github.com/Yakuhito/chips/blob/b23ed49e00164cbc62b9b6ae4d48071930c5b1d2/CHIPs/chip-0050.md) action layer where applicable. Groth16 verification and `bls_verify` **MUST** use the capabilities and encodings described in [CHIP-0011](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md). **End-to-end phase ordering** (ceremony through exit): [chip-protocol-flow.md](./chip-protocol-flow.md). **Puzzle tables and encodings** live in the companion documents linked under **Companion documents** below.
+
+### Protocol partitioning
+
+Throughput is preserved by separating three classes of spends:
+
+1. **Election singleton**: Handles `register`, `createBallot`, and `deregister` only (Rue: [register.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/election/register.rue), [create_ballot.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/election/create_ballot.rue), [deregister.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/election/deregister.rue); action layer [action.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/action.rue)). Enrollment is intentionally singleton-bound; it occurs once per voter and is not on the hot path for each vote.
+2. **Parallel voting**: `mint_voting_coin` ([mint_voting_coin.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/registration_coin/mint_voting_coin.rue)) and `update_vote` ([update_vote.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/voting_coin/update_vote.rue)) **MUST NOT** require spending the Election Singleton, so many voters can update distinct coins in the same block, within mempool and consensus limits.
+3. **Ballot Coin**: Each ballot carries `finalize` ([finalize.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/finalize.rue)), `oracle` ([oracle.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/oracle.rue)), and `announce_finalization` ([announce_finalization.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/announce_finalization.rue)). Ballot finalization **MUST NOT** spend the Election Singleton, so delayed or disputed finalization on one ballot does not block registration, ballot creation, or deregistration on the election.
+
+### Coin roles
+
+**Election-facing:**
+
+- **Election Singleton**: Orchestrates voter registration, mints Ballot Coin lineages via `createBallot` only, and authorizes `deregister` for collateral release. It does not perform vote finalization; that responsibility is entirely on the Ballot Coin.
+- **Registration Coin**: Escrows the voter’s CAT, represents membership in the election registration Merkle tree, and maintains a per-registration sparse tree of ballot launcher ids to enforce one Voting Coin lineage per ballot.
+- **Ballot Coin**: Per ballot: `vote_close_height`, `vote_options_root`, inherited VK/IC and threshold parameters, and state `(finalized, vote_outcome, agg_signers)`.
+- **Voting Coin**: Carries `vote_data` and BLS material for aggregation for one (voter, ballot) pair; it is created and updated without spending the Election Singleton.
+
+**Ceremony-facing (separate lineage from elections):**
+
+- **Ceremony Singleton**: Accepts `contribute` during a configured height window, then `finalize` after the window closes. On-chain state includes `vk_hash`, `marker_root` (Merkle root over sorted contribution marker coin ids), and `finalized`. Reference: [puzzles/ceremony_singleton/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/puzzles/ceremony_singleton).
+- **Ceremony Marker Coin**: Created per accepted `contribute`; puzzle [marker.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ceremony_coin/marker.rue). Curries launcher id, participant public key, contribution hash, and previous contribution hash. The puzzle may produce no conditions when spent, leaving an on-chain commitment until removed.
+- **Ceremony Voucher Coin**: Created only in ceremony `finalize`; [ceremony_voucher.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ceremony_singleton/ceremony_voucher.rue). Anyone-can-spend with self-recreation so multiple election deploys can anchor to the same ceremony. Election deploy **SHOULD** co-spend the voucher and assert its announcement to bind `vk_hash`, `max_voters`, and `ceremony_launcher_id`.
+- **Finalize summary output**: Additional coin(s) or outputs with memos (including VK bytes) for indexers using launcher hints.
+
+**Election lineage (normative):**
+
+- Registration Coin **MUST** descend from `register` on the Election Singleton.
+- Ballot Coin **MUST** descend from `createBallot` only. The reference implementation uses a 2-mojo launcher eve to satisfy singleton outer morph constraints; compatible implementations **SHOULD** match that pattern unless an equivalent approach is fully validated.
+- Voting Coin **MUST** descend from `mint_voting_coin` on a Registration Coin that proves election membership.
+
+The ceremony graph is independent. Elections reference it through `ceremony_launcher_id`, `vk_hash`, and (recommended) voucher co-spend at deploy.
+
+### Companion documents (normative detail)
+
+Tables of inner actions, Merkle slot and leaf rules, announcement preimages, Groth16 public-input ordering, and pinned constants are maintained as **companion** Markdown files alongside this CHIP so the Specification stays readable as a protocol overview:
+
+
+| Document | Contents |
+| -------- | -------- |
+| [chip-protocol-flow.md](./chip-protocol-flow.md) | Phases 0–5; *Implementation:* links into [puzzles/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/puzzles), [sdk/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/sdk), [cli/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/cli) in the reference repo |
+| [chip-ceremony.md](./chip-ceremony.md) | Ceremony marker, voucher, inner-action table (**Source** column), Rue / SDK cites |
+| [chip-election-coins.md](./chip-election-coins.md) | Per-role Rue and actor links after each subsection |
+| [chip-witnesses-encoding.md](./chip-witnesses-encoding.md) | Merkle rules, `vote_message`, public inputs; [merkle_utils.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/merkle_utils.rue), [circuit.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/prover/circuit.rs), [finalize.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/finalize.rue) |
+| [chip-groth16-clvm.md](./chip-groth16-clvm.md) | CLVM Groth16 walkthrough tied to [finalize.rue](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/finalize.rue) and [circuit.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/prover/circuit.rs); figures in reference [assets/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/assets) |
+
+An implementation **MUST** conform to this Specification and to any **MUST** / **MUST NOT** requirement in those companions where the companion text is marked normative. **Companion index:** [README.md](./README.md).
+
+### Election and ballots (summary)
+
+The **Election Singleton** stores eight fields (`registration_merkle_root`, `registration_count`, `registration_vote_weight`, `election_start_height`, `ceremony_launcher_id`, `max_voters`, `vk_hash`, `vote_mode_lock`). Deploy-time curries carry VK, IC, threshold pack, `MAX_SIGNERS`, launcher ids, and CHIP-0050 action roots and **MUST** stay consistent on every Ballot Coin minted by `createBallot`. Inner actions are **`register`**, **`createBallot`**, and **`deregister`** only; **`createBallot`** is the **only** valid ancestry for a Ballot Coin and snapshots registration root and total weight for finalize-time proofs. **`finalize`**, **`oracle`**, and **`announce_finalization`** belong on the Ballot Coin, not the Election singleton.
+
+This CHIP does **not** specify an on-chain XCH registration fee on `register` or an `accumulated_fees` field on the singleton. Ballot end time is **`VOTE_CLOSE_HEIGHT`** on each Ballot Coin, not a single global election timer. Full state and action tables: [chip-election-coins.md](./chip-election-coins.md).
+
+### Ceremony (summary)
+
+The **Ceremony Singleton** accepts **`contribute`** during a configured height window, then **`finalize`** after the window when enough participants have contributed. It seals **`vk_hash`** and **`marker_root`**, mints a **Ceremony Voucher** (and summary outputs with VK material for indexers), and forms a lineage **independent** of elections. Elections bind to the ceremony via **`ceremony_launcher_id`** and **`vk_hash`**; election deploy **SHOULD** co-spend the voucher and assert **`CANONICAL_MSG`**. Full tables and preimage: [chip-ceremony.md](./chip-ceremony.md).
+
+### Witnesses, proofs, and encodings (summary)
+
+Off-chain actors enumerate registrations and Voting Coins, verify lineage, aggregate BLS over the canonical **`vote_message`**, and build a Groth16 witness. On-chain **`finalize`** on the Ballot Coin verifies Groth16 and BLS aggregate verification via [CHIP-0011](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md) pairing opcodes; any actor may submit a valid bundle. **`mint_voting_coin`** and **`update_vote`** assert the Ballot **`oracle`** so close height and vote mode are pinned where Groth16 public inputs do not carry them. For **how Groth16 meets CLVM**, **on-chain verification cost vs off-chain proving cost**, and an **informative note on BLS12-377 vs 381** (hypothetical future CLVM; not required today), see [chip-groth16-clvm.md](./chip-groth16-clvm.md). Sparse tree definitions, vote modes, the eight ordered public inputs, VK byte length, and announcement strings: [chip-witnesses-encoding.md](./chip-witnesses-encoding.md).
+
+The keywords **MUST**, **MUST NOT**, **SHOULD**, and **MAY** in this Specification and in the linked companion documents are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html).
+
+## Test plan
+
+Interoperability is exercised by the open-source reference implementation ([DIG-Network/chia-parallel-voting](https://github.com/DIG-Network/chia-parallel-voting), branch `main`). Reviewers **SHOULD** treat failures there as specification or implementation drift until puzzles, circuit, and tests agree.
+
+**Automated tests** (Rust, under [`sdk/tests/`](https://github.com/DIG-Network/chia-parallel-voting/tree/main/sdk/tests)):
+
+| Area | Examples |
+| ---- | -------- |
+| Ceremony | `ceremony_contribute_e2e`, `ceremony_deploy_e2e`, `ceremony_5_contributions_e2e` |
+| Deploy, registration, ballots | `register_action_e2e`, `voter_register_full_flow`, `create_ballot_e2e`, `create_ballot_action_isolated`, `launch_ballot_e2e` |
+| Voting | `voter_cast_vote_e2e`, `voter_cast_vote_two_voters_e2e`, `voter_revote_e2e`, `voter_double_vote_e2e`, `voter_revote_oracle_required_e2e` |
+| Finalize | `finalize_per_ballot_e2e`, `finalize_one_third_threshold_e2e` |
+| Collateral / deregister | `voter_release_collateral_e2e`, `voter_release_after_cast_e2e`, `aggregator_sync_after_deregister_e2e` |
+| Merkle / constants / parity | `m5r_merkle_gate_e2e`, `chip_spec_compliance`, `deployer_aggregator_eve_hash_parity_e2e`, `puzzle_constants` |
+| Broader harness | `integration`, `live_orchestration_e2e`, `actor_functions_e2e`, `ballot_reader_e2e`, `find_current_singleton_propagation_lag_e2e` |
+
+**Bytecode fixtures:** After `build.sh` / `build.ps1`, compiled CLVM lives under [`puzzles/compiled/`](https://github.com/DIG-Network/chia-parallel-voting/tree/main/puzzles/compiled) and is loaded via [`sdk/src/puzzles.rs`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/puzzles.rs). Groth16 proofs in tests are generated by the reference prover ([`sdk/src/prover/`](https://github.com/DIG-Network/chia-parallel-voting/tree/main/sdk/src/prover)), not from pinned hex blobs in this document set.
+
+**Live-chain integration:** [`cli/src/bin/live_integration_test.rs`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/cli/src/bin/live_integration_test.rs) builds the `chip-voting-live-test` binary (full election lifecycle with on-chain confirmations). [`wasm/integration-tests/`](https://github.com/DIG-Network/chia-parallel-voting/tree/main/wasm/integration-tests) holds Node scripts that exercise the WASM bundle against a live node (notably [`live_integration.mjs`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/wasm/integration-tests/live_integration.mjs)).
+
+## Reference Implementation
+
+Normative bytecode and the Groth16 circuit live in **[chia-parallel-voting](https://github.com/DIG-Network/chia-parallel-voting)** (`main`):
+
+
+| Layer                                                  | Location                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rue → CLVM puzzles                                     | [puzzles/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/puzzles); build [puzzles/compiled/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/puzzles/compiled) via [build.sh](https://github.com/DIG-Network/chia-parallel-voting/blob/main/build.sh) / [build.ps1](https://github.com/DIG-Network/chia-parallel-voting/blob/main/build.ps1) |
+| Puzzle hashes / hex loader                             | [sdk/src/puzzles.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/puzzles.rs)                                                                                                                                                                                                                                                                           |
+| Actors (deployer, voter, aggregator, ballot, ceremony) | [sdk/src/actors/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/sdk/src/actors)                                                                                                                                                                                                                                                                                  |
+| Groth16 circuit + prover                               | [sdk/src/prover/circuit.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/prover/circuit.rs), [sdk/src/prover/proof.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/prover/proof.rs)                                                                                                                                         |
+| Merkle / witness helpers                               | [sdk/src/merkle.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/merkle.rs)                                                                                                                                                                                                                                                                             |
+| CLI                                                    | [cli/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/cli); binary `chip-voting`. **Live-chain:** `chip-voting-live-test` (see row below).                                                                                                                                                                                                                                                                                       |
+| Live-chain integration (real network)                  | [cli/src/bin/live_integration_test.rs](https://github.com/DIG-Network/chia-parallel-voting/blob/main/cli/src/bin/live_integration_test.rs) (`cargo run --bin chip-voting-live-test`, full lifecycle with confirmations); [wasm/integration-tests/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/wasm/integration-tests) (Node: [`live_integration.mjs`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/wasm/integration-tests/live_integration.mjs) and related scripts against WASM + a live node) |
+| WASM + browser UI                                      | [wasm/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/wasm), [app/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/app)                                                                                                                                                                                                                         |
+| Integration / E2E tests (simulator, in-repo)           | [sdk/tests/](https://github.com/DIG-Network/chia-parallel-voting/tree/main/sdk/tests)                                                                                                                                                                                                                                                                                            |
+
+
+Workspace: [Cargo.toml](https://github.com/DIG-Network/chia-parallel-voting/blob/main/Cargo.toml). Overview: [README.md](https://github.com/DIG-Network/chia-parallel-voting/blob/main/README.md).
+
+## Security
+
+### Security goals
+
+For a correctly deployed election, when the **configured quorum** (rational threshold over **registered weight**, as enforced in the reference circuit and Groth16 proof) is met by voters attesting to the same outcome, the protocol aims to ensure:
+
+- **Finalize soundness:** No one can produce an accepted **`finalize`** spend that claims an outcome and signer aggregate **unless** (i) the Groth16 verification equation passes for the curried VK and the public inputs reconstructed on-chain, and (ii) the aggregate BLS signature verifies for the canonical **`vote_message`** and the supplied **`agg_signers`** (see [chip-groth16-clvm.md](./chip-groth16-clvm.md)).
+- **Binding to ballot and election context:** Public inputs and scalar bindings in [`finalize.rue`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/finalize.rue) tie the proof to **`BALLOT_LAUNCHER_ID`**, snapshotted registration root and weight, threshold pack, and **`vote_message`** (which itself binds **`vote_outcome`**, ballot id, and election id). A valid proof for one ballot **cannot** be replayed as another without changing on-chain curried values and breaking verification.
+- **Registration-gated voting:** **`mint_voting_coin`** and **`update_vote`** assert the Ballot **`oracle`** in its **open** form so **`VOTE_CLOSE_HEIGHT`** and **`vote_options_root`** are committed on-chain alongside spend-time checks; combined with registration and per-ballot trees (see [chip-witnesses-encoding.md](./chip-witnesses-encoding.md)), only voters enrolled in the election’s registration Merkle tree can obtain a valid voting lineage for a ballot.
+
+### Trust boundaries and assumptions
+
+
+| Boundary                   | Assumption                                                                                                                                                                                                                                                                                                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Chia base layer**        | Validators execute CLVM correctly; block timestamps and inclusion rules behave as in Chia consensus. Standard mempool fees apply.                                                                                                                                                                                         |
+| **CHIP-0011 / CHIP-0050**  | Pairing-based opcodes and encodings are correct and stable as specified; action-layer routing on the Election and Ballot singletons is used as in this CHIP’s puzzles (see **Requires** in the preamble table).                                                                                                           |
+| **Groth16 SRS**            | Soundness holds for the **published verification key** bound by **`vk_hash`** (and, when used, ceremony voucher binding per [chip-ceremony.md](./chip-ceremony.md)). If the ceremony is compromised or **`vk_hash`** does not match the intended circuit, **finalize soundness fails** independently of puzzle logic.     |
+| **Ceremony `finalize`**    | The ceremony’s **`finalize`** spend is **not** authenticated by a designated on-chain key; the first valid spend wins. Operators **MUST** independently verify **`vk_hash`**, **`marker_root`**, and contribution transcripts against their security policy **before** trusting an election that references the ceremony. |
+| **Off-chain aggregator**   | **Anyone** may assemble and submit a **`finalize`** bundle. Safety does not rely on the aggregator being honest; an honest aggregator is a **liveness / UX** convenience. A malicious aggregator cannot forge a passing **`finalize`** without breaking Groth16 or BLS assumptions above.                                 |
+| **Deploy-time parameters** | **`VOTE_THRESHOLD_NUM` / `DEN`**, **`MAX_SIGNERS`**, **`vote_mode_lock`**, CAT policy, and ceremony caps are chosen by deployers; buggy or adversarial **configuration** (e.g. threshold ≥ 1, wrong VK) is **out of scope** for puzzle soundness.                                                                         |
+
+
+### Threats and mitigations (selected)
+
+- **Forged finalization**: Mitigated by on-chain Groth16 + aggregate **BLS** verification and scalar re-derivation in **`finalize`** (see [chip-groth16-clvm.md](./chip-groth16-clvm.md)).
+- **Cross-ballot or cross-election replay of proofs**: Mitigated by **`ballot_launcher_id`**, snapshotted roots, and **`vote_message`** binding **election** and **ballot** launcher ids in public inputs and hashes.
+- **Voting after close or wrong vote options**: Mitigated by asserting the Ballot **`oracle`** announcement that pins **`VOTE_CLOSE_HEIGHT`** and **`VOTE_OPTIONS_ROOT`** for **`mint_voting_coin`** / **`update_vote`**; **`finalize`** enforces **height ≥ `VOTE_CLOSE_HEIGHT`**.
+- **Registration spam**: Not fully prevented by this CHIP: mitigations are **economic** (CAT collateral, fees) and **operational** (issuer policy). There is **no** normative on-chain XCH registration fee in this CHIP.
+- **Censorship**: Block producers or mempools can delay any spend; **`finalize`** is permissionless, so **censorship of finalization** is a **liveness** risk, not a soundness gap. **Registration** and ballot creation are singleton-bound and more exposed to ordering / censorship.
+- **Privacy**: Votes and outcomes are **visible on-chain** (coins, memos, announcements). This CHIP does **not** provide ballot secrecy or receipt-freeness.
+- **Wallet / signing layer**: Incorrect client software, weak key storage, or wallets that do not expose required signing APIs (e.g. unsafe / CHIP-0002-style spends for full dApp flows) can strand users or leak keys; that layer is **not** specified here.
+
+### Dependency surface
+
+Implementations rely on [CHIP-0011](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md) for curve arithmetic underlying Groth16 and BLS verification in CLVM, and on [CHIP-0050](https://github.com/Yakuhito/chips/blob/b23ed49e00164cbc62b9b6ae4d48071930c5b1d2/CHIPs/chip-0050.md) for structured inner spends on singletons. Changes or bugs in those standards affect this protocol in the same way as for other CHIP-0050 coins.
+
+### Residual risks and review notes
+
+- **Circuit–puzzle drift:** The R1CS in [`sdk/src/prover/circuit.rs`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/sdk/src/prover/circuit.rs) **MUST** stay aligned with [`finalize.rue`](https://github.com/DIG-Network/chia-parallel-voting/blob/main/puzzles/ballot_coin/finalize.rue) public-input ordering; shipping a mismatched pair breaks all finalizations for that VK.
+- **Ceremony transparency:** Organizations **SHOULD** publish ceremony parameters, participant lists, and reproducible **`vk_hash`** checks where governance requires it.
+- **Proving time, emulation, future 377:** Large electorates mostly stress **off-chain proof generation**; that is a **liveness / ops** concern, not finalize soundness. The expensive pattern is **emulating heavier BLS12-381 arithmetic inside the BLS12-381 scalar circuit** (**field emulation**; **k = 10** as shorthand for a deep emulation tower in this stack), so proving can be **slow** while **`finalize`** stays a short on-chain check. **Informative only:** **BLS12-377** pairings in CLVM alongside **381** could allow **Groth16 on 377** with **`bls_verify`** still on **381**; the **377/381 cycle** supports **L2-style anchoring** without **381-inside-381** emulation. Details: [chip-groth16-clvm.md](./chip-groth16-clvm.md).
+
+**Out of scope for this CHIP:** Incentive design for aggregators, bridge or L2 composition, formal verification of the circuit, and legal or regulatory classification of votes.
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
