@@ -1,6 +1,6 @@
 # Witnesses, Merkle trees, vote modes, and encodings (companion to CHIP draft)
 
-**What this doc is:** the **bytes and hashes** everything agrees on: registration SPT, per-ballot trees, `vote_message`, the **eight** public inputs in order, and announcement strings. Overview stays in [chip-scaled-parallel-voting.md](../../CHIPs/chip-scaled-parallel-voting.md) § Specification. **Groth16 vs CLVM (and why proving can hurt):** [chip-groth16-clvm.md](./chip-groth16-clvm.md).
+**What this doc is:** the **bytes and hashes** everything agrees on: registration SPT, per-ballot trees, `vote_message`, the **eight** public inputs in order, and announcement strings. Overview stays in [chip-0058.md](../../CHIPs/chip-0058.md) § Specification. **Groth16 vs CLVM (and why proving can hurt):** [chip-groth16-clvm.md](./chip-groth16-clvm.md).
 
 **Code:** [DIG-Network/chia-scaled-parallel-voting](https://github.com/DIG-Network/chia-scaled-parallel-voting) on `main`.
 

@@ -1,6 +1,6 @@
 # Ceremony layer (companion to CHIP draft)
 
-**What this doc is:** the **Ceremony Singleton** and its helper coins (marker, voucher): state, deploy fields, and what **`contribute`** / **`finalize`** actually require. High-level flow is [chip-protocol-flow.md](./chip-protocol-flow.md) Phase 0; election binding is summarized in [chip-scaled-parallel-voting.md](../../CHIPs/chip-scaled-parallel-voting.md) (Specification).
+**What this doc is:** the **Ceremony Singleton** and its helper coins (marker, voucher): state, deploy fields, and what **`contribute`** / **`finalize`** actually require. High-level flow is [chip-protocol-flow.md](./chip-protocol-flow.md) Phase 0; election binding is summarized in [chip-0058.md](../../CHIPs/chip-0058.md) (Specification).
 
 **Code:** [DIG-Network/chia-scaled-parallel-voting](https://github.com/DIG-Network/chia-scaled-parallel-voting) on `main`.
 

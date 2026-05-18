@@ -1,8 +1,8 @@
 # Groth16, CLVM, and ballot finalization (companion to CHIP draft)
 
-**What this doc is:** how **Ballot Coin `finalize`** checks a Groth16 proof plus aggregate **BLS** in CLVM ([CHIP-0011](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md)), **why** that combination is sound, and **informative** context on prover cost and a possible **BLS12-377** future. **Threshold intuition:** PNG figures below (`figure_1.png`, `figure_2.png`) sit in this same `assets/chip-scaled-parallel-voting/` folder (mirrored in the reference repo’s [`assets/`](https://github.com/DIG-Network/chia-scaled-parallel-voting/tree/main/assets)); they are **not** literal CRS diagrams.
+**What this doc is:** how **Ballot Coin `finalize`** checks a Groth16 proof plus aggregate **BLS** in CLVM ([CHIP-0011](https://github.com/Chia-Network/chips/blob/main/CHIPs/chip-0011.md)), **why** that combination is sound, and **informative** context on prover cost and a possible **BLS12-377** future. **Threshold intuition:** PNG figures below (`figure_1.png`, `figure_2.png`) sit in this same `assets/chip-0058/` folder (mirrored in the reference repo’s [`assets/`](https://github.com/DIG-Network/chia-scaled-parallel-voting/tree/main/assets)); they are **not** literal CRS diagrams.
 
-**Code:** [DIG-Network/chia-scaled-parallel-voting](https://github.com/DIG-Network/chia-scaled-parallel-voting) on `main`. **Public-input order and Merkle rules:** [chip-witnesses-encoding.md](./chip-witnesses-encoding.md). **Spec overview:** [chip-scaled-parallel-voting.md](../../CHIPs/chip-scaled-parallel-voting.md).
+**Code:** [DIG-Network/chia-scaled-parallel-voting](https://github.com/DIG-Network/chia-scaled-parallel-voting) on `main`. **Public-input order and Merkle rules:** [chip-witnesses-encoding.md](./chip-witnesses-encoding.md). **Spec overview:** [chip-0058.md](../../CHIPs/chip-0058.md).
 
 ---
 

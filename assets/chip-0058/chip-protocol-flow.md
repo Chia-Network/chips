@@ -1,6 +1,6 @@
 # Protocol flow (companion to CHIP draft)
 
-**What this doc is:** the **end-to-end story** in order: ceremony, deploy, register, vote, finalize, exit. [chip-scaled-parallel-voting.md](../../CHIPs/chip-scaled-parallel-voting.md) stays the spec summary; here you get **which lane each spend lives in** and **where to read code** in [**chia-scaled-parallel-voting**](https://github.com/DIG-Network/chia-scaled-parallel-voting) on `main`.
+**What this doc is:** the **end-to-end story** in order: ceremony, deploy, register, vote, finalize, exit. [chip-0058.md](../../CHIPs/chip-0058.md) stays the spec summary; here you get **which lane each spend lives in** and **where to read code** in [**chia-scaled-parallel-voting**](https://github.com/DIG-Network/chia-scaled-parallel-voting) on `main`.
 
 **Related:** deeper tables live in [chip-ceremony.md](./chip-ceremony.md), [chip-election-coins.md](./chip-election-coins.md), [chip-witnesses-encoding.md](./chip-witnesses-encoding.md), [chip-groth16-clvm.md](./chip-groth16-clvm.md).
 
