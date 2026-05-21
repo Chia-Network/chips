@@ -50,7 +50,7 @@ Rationale for changes to the protocol itself is a little bit squishier, many wer
 
 As mentioned, the new chialisp puzzles borrow from the MIPS and vault standards as much as possible.
 
-The p2 singletons are a simple MIPS puzzle with a nonce of `0`, no restrictions, and a singleton member (https://github.com/Chia-Network/chia_puzzles/blob/main/puzzles/mips_puzzles/member_puzzles/singleton_member.clsp).
+The p2 singletons are a simple MIPS puzzle with a nonce of `0`, no restrictions, and a [singleton member](https://github.com/Chia-Network/chia_puzzles/blob/main/puzzles/mips_puzzles/member_puzzles/singleton_member.clsp).
 
 The plot nfts while self pooling are, of course, at the outermost layer a [singleton v1.1](https://github.com/Chia-Network/chia_puzzles/blob/main/puzzles/singleton_top_layer_v1_1.clsp) then -> a MIPS puzzle with a nonce of `0`, no restrictions, and a [member puzzle mimicking the functionality of the standard puzzle](https://github.com/Chia-Network/chia_puzzles/blob/main/puzzles/mips_puzzles/member_puzzles/bls_with_taproot_member.clsp).
 
@@ -60,7 +60,7 @@ The plot nfts while pooling are, again, a singleton v1.1 then -> a MIPS puzzle w
   * [A restriction which bans all `SEND_MESSAGE` conditions](https://github.com/Chia-Network/chia-blockchain/blob/main/chia/wallet/puzzles/custody/send_message_banned.clsp) (TODO better link)
 * a MIPS puzzle with a nonce of `0`, no restrictions, and a ["fixed puzzle" member](https://github.com/Chia-Network/chia_puzzles/blob/main/puzzles/mips_puzzles/member_puzzles/fixed_puzzle_member.clsp) where the fixed puzzle to run is [a custom puzzle](https://github.com/Chia-Network/chia-blockchain/blob/0d4f962e32b4c885ff6b96f58639612cb112ddca/chia/pools/claim_pool_rewards_dpuz.clsp) which populates its `REWARD_MESSAGE` that it sends with a [delegated puzzle](https://github.com/Chia-Network/chia-blockchain/blob/0d4f962e32b4c885ff6b96f58639612cb112ddca/chia/pools/plotnft_drivers.py#L54) (TODO better link)
 
-The design of the pooling state is admittedly a little bit arcane but the surface area of each individual puzzle is quite small and the majority of the complexity comes from their assembly which uses the well tested MIPS rails.  A diagram of this construction can be found [here] (TODO link).
+The design of the pooling state is admittedly a little bit arcane but the surface area of each individual puzzle is quite small and the majority of the complexity comes from their assembly which uses the well tested MIPS rails.  A diagram of this construction can be found [here](https://github.com/Chia-Network/chips/blob/quex.pooling_v2/assets/chip-00XX/Pooling%20V2%20Chialisp.png).
 
 ### Plot NFT v2 Wallet
 
@@ -111,7 +111,7 @@ No security nuances beyond the existing plot NFTs seem apparent to the author at
 
 ## Additional Assets
 
-(TODO, link to image)
+[Puzzle Diagram](https://github.com/Chia-Network/chips/blob/quex.pooling_v2/assets/chip-00XX/Pooling%20V2%20Chialisp.png)
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
