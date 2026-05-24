@@ -166,6 +166,20 @@ This is the most important alternative, and it deserves a direct comparison. The
 
 To be clear about what Titled CAT does *not* do: it does not solve curation, and it is not a replacement for a fungible-CAT registry in cases where mutable display metadata is appropriate (a utility token that expects to rebrand). For those, CAT2 plus a registry remains the right tool. Titled CAT and such a registry address different asset populations and are complementary.
 
+### Relationship to NFT1
+
+Titled CAT is singleton-anchored and DID-rooted, so a natural question is whether it subsumes NFT1: could an NFT simply be a Titled CAT minted with an edition cap of one? For a *single* unique asset (a one-of-one artwork, a deed) the answer is essentially yes, and a Titled CAT with `edition_cap = 1`, `mint_closed`, and a `creator_did` carries the same intrinsic, immutable, DID-rooted identity an NFT does. But NFT1 is not superseded, because the two standards anchor identity at different granularities, and that difference is architectural rather than incidental.
+
+A Titled CAT puts one singleton around a whole *class* (the title) and holds balances as fungible Units, spending the singleton only at supply changes. NFT1 puts a singleton around every *item*, spent on every transfer, which is what lets each item carry distinct metadata and a DID-bound owner. A CAT Unit has no individual identity by construction: any two Units of a title are interchangeable and merge into one coin, so there is no per-Unit slot for distinct artwork or a distinct owner. Identity lives on the title, shared by every Unit.
+
+This decides which standard fits. A 10,000-piece PFP collection of unique artworks needs a per-item identity anchor for each item, and the only anchor is the Title Singleton, so it requires 10,000 titles *plus* 10,000 single-Unit CATs. This is roughly twice the footprint of NFT1's 10,000 singletons, with the fungibility machinery serving no purpose. NFT1 is correct and cheaper. Storing the per-item metadata on the title does not help: the obstacle is not where metadata lives but that fungible Units cannot be individually addressed. The reasoning inverts for *interchangeable* items: a drop of one hundred numbered copies of a card is one hundred singletons under NFT1, but one title and one hundred fungible Units under Titled CAT. 
+
+Titled CAT is NFT1 turned inside out: NFT1 is native when items are distinct, Titled CAT when items are interchangeable within a class, including the editioned middle NFT1 serves awkwardly.
+
+DID ownership follows the same line. Titled CAT supports DID ownership of the *title*, but deliberately not of each *holding*. Binding an owner DID to every Unit would have to be spent on every transfer, forfeiting the bare-CAT2 transfer cost, and would make Units non-fungible (a Unit owned by one DID could no longer merge with another's). Per-holding DID ownership therefore stays with NFT1, while Titled CAT provides clean collection-level and issuer-level provenance.
+
+The partition is clean and complementary: **NFT1 for assets whose items are individually distinct or individually DID-owned; Titled CAT for assets whose items share a class identity and are interchangeable within it**, across the spectrum from divisible fungibles to indivisible editioned collectibles.
+
 ### Why scope this to the primitive alone?
 
 This CHIP defines the primitive only. Two companions are anticipated and should be developed separately rather than folded in here:
