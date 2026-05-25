@@ -16,7 +16,7 @@ Superseded-By | None
 
 ## Abstract
 
-A **Titled CAT** is a Chia Asset Token (CAT) that carries a verifiable, immutable, on-chain *title*: a name, a ticker, content hashes, a creator DID, and supply commitments, anchored in a single on-chain object and bound to the token by construction. Today an NFT carries its identity on-chain (name, creator DID, content hash) while a CAT carries none (a CAT's identity lives off-chain in indexers). Titled CAT closes this asymmetry: it gives any CAT (both divisible fungibles and indivisible editioned assets) the same on-chain, immutable, DID-rooted identity that NFTs already enjoy, without a registry.
+A **Titled CAT** is a Chia Asset Token (CAT) that carries a verifiable, immutable, on-chain *title*: a name, a ticker, content hashes, a creator DID, and supply commitments, bound to the token by construction. An NFT carries its identity on-chain (name, creator DID, content hash) while a CAT carries none, relying on off-chain indexers. Titled CAT closes this asymmetry, giving any CAT (divisible fungibles and indivisible editioned assets alike) the same immutable, DID-rooted on-chain identity an NFT has, without a registry.
 
 The standard is **additive and opt-in**. Titled CATs do not modify, deprecate, or compete with CAT2. An ordinary CAT remains the right choice for any token that wants mutable branding or no identity at all. Titled CAT introduces no new consensus rules, no new CLVM operators, and only one new puzzle: the **Title Singleton** inner puzzle which composes CAT2, the CHIP-40 `everything_with_singleton` TAIL, the CHIP-56 Fee Layer (for optional royalties), and the CHIP-38 revocation layer (for optional revocability).
 
@@ -65,9 +65,7 @@ NFTs face none of this, because their identity is intrinsic. Titled CAT brings t
 
 A registry solves two distinct problems: it can *store* identity data, and it can *curate* which assets are considered "official." 
 
-Titled CAT addresses only the first, by making identity intrinsic, so a token no longer needs to be *registered* merely to establish what it is.
-
-Titled CAT does **not** solve curation. Anyone can mint a Titled CAT named "wUSDC.b" with their own DID, and deciding *which* DID is the legitimate issuer remains an off-chain, venue-specific judgment, exactly as for NFT1 collections today. So Titled CAT removes the need to *pay to register identity* without removing the ecosystem's ability to curate trusted issuers. The two are complementary, and the Rationale treats the relationship to CATalog in detail.
+Titled CAT makes only the first intrinsic, so a token no longer needs to be *registered* to establish what it is. It does not attempt curation: which DID is the legitimate issuer of a "wUSDC.b" remains an off-chain, venue-specific judgment, exactly as for NFT1 collections. Titled CAT removes the need to *pay to register identity* without removing the ecosystem's ability to curate trusted issuers.
 
 ### One primitive across the fungibility spectrum
 
@@ -86,7 +84,7 @@ Titled CAT is feasible today with no protocol changes. Everything the non-royalt
 
 ## Backwards Compatibility
 
-Titled CAT introduces no breaking changes. It does not modify Chia's consensus, the CLVM, or any existing primitive. It is purely additive and fully opt-in, and it neither replaces nor deprecates CAT2.
+Titled CAT introduces no breaking changes: it does not modify Chia's consensus, the CLVM, or any existing primitive. It is purely additive and opt-in, and neither replaces nor deprecates CAT2.
 
 A wallet that does not implement Titled CAT recognition will see a Titled CAT's Units as ordinary CATs with a recognizable TAIL pattern (`everything_with_singleton` bound to a launcher ID). It will not display the title's name, ticker, precision, or artwork, and lacking the committed `precision` will fall back to its default CAT display. This is a strictly safe degradation: a non-Titled-aware wallet shows a generic CAT, never a misleading identity.
 
@@ -99,7 +97,7 @@ A second alternative is extending CAT2 itself to carry mandatory on-chain identi
 
 ### On-chain Identity
 
-On-chain identity for CATs is important for the same reasons it is on-chain for NFTs. An on-chain, hash-committed identity lets any party verify, without trusting an indexer or registry, that the artwork and metadata they are shown are what the issuer committed to. An immutable creator-DID binding lets any party trace the asset to its issuer and detect impersonation. These guarantees are valuable for a trading card, and they are equally valuable for a stablecoin or a tokenized commodity (arguably more so, given the sums involved).
+On-chain identity matters for a CAT for the same reasons it matters for an NFT. A hash-committed identity lets any party verify, without trusting an indexer or registry, that the artwork and metadata shown are what the issuer committed to, and an immutable creator-DID binding lets any party trace the asset to its issuer and detect impersonation. These guarantees are as valuable for a stablecoin or a tokenized commodity as for a trading card, arguably more so given the sums involved.
 
 ### Title Singleton plus a CAT
 
@@ -109,11 +107,11 @@ The design decomposes cleanly along Chia's coin-set model:
 - The **fungible holdings**: who holds how many Units, and how Units transfer, split, consolidate, and participate in Offers are what CAT2 already represents.
 - The Title Singleton and the token's CAT are bound by the CHIP-40 `everything_with_singleton` TAIL, which commits the Title Singleton's launcher ID. This binding is the heart of the design: a Unit's TAIL Asset ID is derivable from the launcher ID, and the only object that can authorize a Unit's existence is its Title Singleton. Identity is therefore *intrinsic*, and there is no separate registry record and no "which object is the canonical identity holder?" question.
 
-The decisive efficiency consequence: the Title Singleton participates only in mint and melt. Ordinary Unit transfers never touch it. A Titled CAT with no royalty layer therefore has the *same per-transfer CLVM cost as a bare CAT2*. On-chain identity, at the level that matters for everyday use, comes at no extra cost.
+The efficiency consequence: the Title Singleton participates only in mint and melt. A Titled CAT with no royalty layer has the *same per-transfer CLVM cost as a bare CAT2*, so on-chain identity comes at no extra cost for everyday use.
 
 ### Immutable identity
 
-Immutability is a key aspect of the value proposition and it is a large part of what distinguishes Titled CAT from a registry:
+Immutability is central to the value proposition and is much of what distinguishes Titled CAT from a registry:
 
 - **Asymmetric failure modes.** A hostile or careless change to an asset's identity *after* holders have acquired it is a far worse failure than the inability to fix a typo. A holder cannot defend against a rename or a re-pointed artwork hash, but an issuer can avoid typos by being careful once, at creation.
 - **Verify-once trust.** Immutability lets a wallet or buyer verify identity from the Title ID a single time and trust it permanently. Optional mutability would force every consumer to ask "has this changed, and who may change it?" which adds an attack surface.
@@ -125,6 +123,10 @@ Immutability is a key aspect of the value proposition and it is a large part of 
 - **Supply state is one-way**: `total_minted` only increases, and `mint_closed` only flips from false to true.
 
 Issuers who want mutable branding are well served by plain CAT2 plus a registry, and should use it. The principled split is: **immutable identity-bearing CAT (Titled CAT) versus mutable registry-backed CAT2.**
+
+### Mutability solutions
+
+Immutability needs an escape hatch for the case where identity genuinely must change, such as a real rebrand or a corrected content hash. That hatch is migration by melt-and-mint, and it is what makes immutability acceptable. The issuer mints a new Titled CAT carrying the corrected identity, closes the old title's mint, and offers holders a swap: a holder melts old Units with `melt_units` and receives an equal count of the new title's Units.
 
 ### DID-rooted provenance
 
@@ -138,17 +140,27 @@ The base unit is always one mojo, and `precision` only states how many mojos con
 
 ### Optional fee layer and revocation layer
 
-Royalties and revocability are wanted by some Titled CATs and not others, and forcing either onto all of them would impose cost and machinery on assets that do not need it. Making both optional, layered components keeps the common case (a Titled CAT with neither) as cheap as a bare CAT2, while letting the richer cases compose exactly the layers they need. The Titled CAT reuses these existing components unchanged. Royalties in particular are oriented to the editioned, indivisible case. Divisible fungibles generally want identity without a per-trade fee, and the Specification accordingly recommends they omit the Fee Layer (see *Royalty configuration*).
+Royalties and revocability are wanted by some Titled CATs and not others, and forcing either onto all would impose cost and complexity on assets that do not need it. Making both optional, reused-as-is layered components keeps the common case (a Titled CAT with neither) as cheap as a bare CAT2 while letting richer cases compose exactly the layers they need. Royalties in particular are oriented to the editioned, indivisible case. Divisible fungibles generally want identity without a per-trade fee, so the Specification recommends they omit the Fee Layer (see *Royalty configuration*).
+
+### Regulated and stablecoin issuers
+
+A regulated fungible token such as a fiat-backed stablecoin typically wants three properties at once: verifiable issuer identity, control over who may hold the asset, and the ability to freeze or claw back. Titled CAT supplies identity intrinsically and composes the other two from existing layers. Holding control reuses the deployed Credential Restricted CAT (CR-CAT) pattern, where a credential layer gates each transfer on the receiver proving an on-chain Verifiable Credential from an authorized provider, and claw-back reuses the CHIP-38 revocation layer. Both add to the inner stack as the Fee and revocation layers do (see *Unit layer stack*), with the revocation layer outside the credential layer by default so an issuer's claw-back path stays independent of the credential check while ordinary transfers satisfy both. 
 
 ### Why not CAT2 + CATalog + Fee CAT + precision-1?
 
-This is the most important alternative, and it deserves a direct comparison. The composition of a plain CAT2 with `precision = 1`, identity registered in CATalog, royalties via the CHIP-56 Fee Layer, displayed as an identity asset via a CATalog flag is reasonable and can reproduce much of the outcome. The distinction is where identity lives and what establishing it costs:
+This is the most important alternative. A plain CAT2 with `precision = 1`, identity registered in CATalog, royalties via the CHIP-56 Fee Layer, and a CATalog display flag is reasonable and reproduces much of the outcome. The distinction is where identity lives and what establishing it costs:
 
 - **Intrinsic versus looked-up.** A Titled CAT's identity *is* its TAIL, bound to the Title Singleton by construction, with no canonical-holder ambiguity. A wallet reads it by resolving the one object the TAIL already commits to: it walks the Title Singleton's lineage to the current coin and reads the curried fields. That lineage is short, because the Title Singleton is spent only at supply changes, and the walk is the same trustless, full-node operation that NFT and DID wallets already perform to resolve a singleton, with every field verifiable against the on-chain commitment. There is thus no registry to consult and no trusted third party. The CATalog composition instead keeps identity in a separate registry entry keyed to the asset ID, whose answer a wallet must trust the registry to resolve.
 - **No per-asset registration cost.** A 1,000-card game is 1,000 registrations and 1,000 fees under the registry approach. Under Titled CAT each title is simply a singleton with no third-party registration step.
 - **Immutable by default, not by configuration.** CATalog's default metadata updater permits updating a CAT's name and ticker. Immutability requires deliberately selecting the immutable updater. A Titled CAT's identity is immutable by currying.
 
-To be clear about what Titled CAT does *not* do: it does not solve curation, and it is not a replacement for a fungible-CAT registry in cases where mutable display metadata is appropriate (a utility token that expects to rebrand). For those, CAT2 plus a registry remains the right tool. Titled CAT and such a registry address different asset populations and are complementary.
+Titled CAT does not solve curation, and it is not a replacement for a registry where mutable display metadata is appropriate (a utility token that expects to rebrand). For that, CAT2 plus a registry remains the right tool.
+
+### Curation via registries
+
+Making identity intrinsic does not make registries such as CATalog redundant. The proposed registry does two jobs: it stores identity data, and it curates and indexes assets. Titled CAT removes only the first need, because a wallet can read name, ticker, hashes, and creator DID straight from the chain. The second job remains valuable and is not something the primitive attempts. Verified-issuer lists, collection groupings, search, trending and discovery feeds, and human-curated "official" designations are real services, and they are better supplied by a registry or marketplace than baked into a coin.
+
+So Titled CAT and a registry compose rather than compete. Titled CAT provides a trustless identity substrate, and a registry like CATalog can index that substrate and add curation and discovery on top, annotating titles it has vetted without having to be the authoritative source of what a title is. This is consistent with the position taken throughout: paying to register basic identity should not be a precondition for an asset to state what it is, but curation and discovery are genuine services worth offering and worth paying for.
 
 ### Relationship to NFT1
 
@@ -156,7 +168,7 @@ Titled CAT is singleton-anchored and DID-rooted, so a natural question is whethe
 
 A Titled CAT puts one singleton around a whole *class* (the title) and holds balances as fungible Units, spending the singleton only at supply changes. NFT1 puts a singleton around every *item*, spent on every transfer, which is what lets each item carry distinct metadata and a DID-bound owner. A CAT Unit has no individual identity by construction: any two Units of a title are interchangeable and merge into one coin, so there is no per-Unit slot for distinct artwork or a distinct owner. Identity lives on the title, shared by every Unit.
 
-This decides which standard fits. A 10,000-piece PFP collection of unique artworks needs a per-item identity anchor for each item, and the only anchor is the Title Singleton, so it requires 10,000 titles *plus* 10,000 single-Unit CATs. This is roughly twice the footprint of NFT1's 10,000 singletons, with the fungibility machinery serving no purpose. NFT1 is correct and cheaper. Storing the per-item metadata on the title does not help: the obstacle is not where metadata lives but that fungible Units cannot be individually addressed. The reasoning inverts for *interchangeable* items: a drop of one hundred identical copies of a card is one hundred singletons under NFT1, but one title and one hundred fungible Units under Titled CAT. The boundary is precisely individuation. Because Units are fungible, a Titled CAT cannot assign a per-copy serial number, a distinguishing "#7 of 100" that travels with one specific copy: any two Units merge indiscriminately, so there is nowhere for a serial to live. An edition of one hundred is one hundred *interchangeable* copies, not copies #1 through #100. The moment individual copies must be distinguished, whether by serial number, distinct artwork, or a per-copy owner, the asset has crossed back into NFT1's domain. 
+This decides which standard fits. A 10,000-piece PFP collection of unique artworks needs a per-item identity anchor, and the only anchor is the Title Singleton, so it requires 10,000 titles *plus* 10,000 single-Unit CATs, roughly twice the footprint of NFT1's 10,000 singletons with the fungibility machinery serving no purpose. NFT1 is correct and cheaper. Storing per-item metadata on the title does not help: the obstacle is not where metadata lives but that fungible Units cannot be individually addressed. The reasoning inverts for *interchangeable* items: one hundred identical copies of a card are one hundred singletons under NFT1, but one title and one hundred fungible Units under Titled CAT. The boundary is individuation. Because Units merge indiscriminately, a Titled CAT cannot assign a per-copy serial number, the "#7 of 100" that travels with one specific copy, so an edition of one hundred is one hundred *interchangeable* copies, not copies #1 through #100. The moment individual copies must be distinguished, by serial number, distinct artwork, or a per-copy owner, the asset has crossed back into NFT1's domain. 
 
 Titled CAT is NFT1 turned inside out: NFT1 is native when items are distinct, Titled CAT when items are interchangeable within a class, including the editioned middle NFT1 serves awkwardly.
 
@@ -351,9 +363,15 @@ The Title Singleton inner puzzle composes with the existing Singleton, CAT2, CHI
 
 Titled CAT does not make names unique, and it does not decide which issuer is legitimate. An attacker may mint a Titled CAT with a `name` and `ticker` identical to a genuine one. Mitigations are the same as for NFT1 collections: wallets should surface the `creator_did` prominently, and wallets and marketplaces should maintain reputation overlays (verified DIDs, allowlists, denylists).
 
-### Title Singleton key compromise
+### Title Singleton key compromise or loss
 
 An attacker controlling the Title Singleton key (or its DID) can mint additional Units up to `edition_cap` (or without bound if uncapped), prepend URIs, transfer title ownership, and close the mint. They cannot modify any immutable field, change royalty parameters, alter the creator DID, or revoke held Units. Issuers should set an explicit `edition_cap`, close the mint once the intended supply is reached, custody the controlling key in a vault/multisig/hardware wallet, and keep it separate from the revocation hidden-puzzle key for revocable titles.
+
+Key *loss* is the opposite failure. With no controller, the title freezes in its current state (no mint, melt, mint-close, URI prepend, or transfer), while existing Units keep transferring normally because ordinary transfers never touch the singleton. For an already-closed mint this is benign and even makes the supply cap more credible, since not even the issuer can add to it. For an open or actively managed title it is a permanent loss of control, so issuers should custody the key durably and close the mint once issuance is complete.
+
+### Creator DID over time
+
+The curried `creator_did` is immutable, but the DID singleton it names is not frozen by it. That DID can be transferred, abandoned, or compromised over the asset's life. The binding therefore proves which DID issued the title at creation, not who controls that DID today, exactly as for an NFT1 collection's creator DID. Wallets and curators should treat the DID as a provenance anchor whose reputation is tracked over time, not as a permanent endorsement.
 
 ### Royalty integrity and bypass
 
