@@ -16,6 +16,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
 * [58 - Parallel Voting at Scale](https://github.com/Chia-Network/chips/pull/202)
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
+* [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
