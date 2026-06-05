@@ -14,7 +14,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 * [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
-* [58 - Parallel Voting at Scale](https://github.com/Chia-Network/chips/pull/202)
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 
@@ -25,6 +24,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
 * [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 * [57 - Silent Payments](https://github.com/Chia-Network/chips/pull/198)
+* [58 - Parallel Voting at Scale](https://github.com/Chia-Network/chips/pull/202)
 
 ### Review (Fast Track)
 * None
