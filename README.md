@@ -11,18 +11,18 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 * [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
-* [66 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
+* [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
 * [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
+* [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 * [57 - Silent Payments](https://github.com/Chia-Network/chips/pull/198)
 * [58 - Parallel Voting at Scale](https://github.com/Chia-Network/chips/pull/202)
 
@@ -30,7 +30,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -76,6 +76,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [23 - On-chain voting standard](https://github.com/Chia-Network/chips/pull/90)
 * [24 - DAO1 standard](https://github.com/Chia-Network/chips/pull/93)
 * [46 - Detecting Dishonest NFT Offers](https://github.com/Chia-Network/chips/pull/151)
+* [53 - Secure the Bag for distributed payouts](https://github.com/Chia-Network/chips/pull/183)
 
 ### Withdrawn
 * [3 - Minimum Fee](https://github.com/Chia-Network/chips/pull/13)
