@@ -11,7 +11,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
@@ -22,6 +21,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [49 - 3.0 Fork Info](https://github.com/Chia-Network/chips/pull/161)
 * [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
 * [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
+* [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
 * [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 * [57 - Silent Payments](https://github.com/Chia-Network/chips/pull/198)
 * [58 - Parallel Voting at Scale](https://github.com/Chia-Network/chips/pull/202)
