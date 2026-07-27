@@ -11,7 +11,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [1 - CHia Improvement Proposal (CHIP) process](/CHIPs/chip-0001.md)
 
 ### Draft
-* [55 - CATalog](https://github.com/Chia-Network/chips/pull/192)
+* [55 - CATalog](https://github.com/Chia-Network/chips/pull/212)
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 * [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
