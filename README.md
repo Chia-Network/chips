@@ -27,9 +27,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * None
 
 ### Last Call
-* [50 - Action Layer and Slots](https://github.com/Chia-Network/chips/pull/165)
-* [51 - Reward Distributor](https://github.com/Chia-Network/chips/pull/165)
-* [54 - XCHandles](https://github.com/Chia-Network/chips/pull/192)
+* None
 
 ### Final
 * [2 - dApp Protocol](/CHIPs/chip-0002.md)
@@ -65,7 +63,10 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [44 - Clawback Standard v2](/CHIPs/chip-0044.md)
 * [45 - Options contracts](/CHIPs/chip-0045.md)
 * [47 - NFC Offer Data](/CHIPs/chip-0047.md)
+* [50 - Action Layer and Slots](/CHIPs/chip-0050.md)
+* [51 - Reward Distributor](/CHIPs/chip-0051.md)
 * [52 - Partial Offers](/CHIPs/chip-0052.md)
+* [54 - XCHandles](/CHIPs/chip-0054.md)
 
 ### Stagnant
 * [16 - VC1 standard](https://github.com/Chia-Network/chips/pull/65)
