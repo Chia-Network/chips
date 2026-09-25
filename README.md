@@ -15,7 +15,6 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 * [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
-* [62 - The Forge: Weighted N-Asset AMM](https://github.com/Chia-Network/chips/pull/217)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
@@ -23,9 +22,10 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [56 - Fee CATs](https://github.com/Chia-Network/chips/pull/194)
 * [57 - Silent Payments](https://github.com/Chia-Network/chips/pull/198)
 * [58 - Parallel Voting at Scale](https://github.com/Chia-Network/chips/pull/202)
+* [62 - The Forge: Weighted N-Asset AMM](https://github.com/Chia-Network/chips/pull/217)
 
 ### Review (Fast Track)
-* None
+* [63 - Minimum Fee for Block Creation](https://github.com/Chia-Network/chips/pull/219)
 
 ### Last Call
 * None
