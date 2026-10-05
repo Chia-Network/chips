@@ -1,0 +1,252 @@
+| CHIP Number       |  |
+| ----------------- | --- |
+| Title             | Cyberphysics Chia Continuum |
+| Description       | Anchor Cyberphysics ring commitments in a Chia singleton without a consensus change or a token bridge. |
+| Author            | digital-young, https://github.com/digital-young |
+| Editor            | |
+| Comments-URI      | |
+| Status            | |
+| Category          | Informational |
+| Sub-Category      | Guideline |
+| Created           | 2026-10-05 |
+| Requires          | None |
+| Replaces          | None |
+| Superseded-By     | None |
+
+## Abstract
+
+CPC v1, the Cyberphysics-Chia Continuum, is a guideline for committing a Cyberphysics ring to a Chia singleton. Cyberphysics keeps genesis, the experiential rings, and Proof-of-Qualia. Chia keeps a singleton whose launcher id is the agent id and whose curried state is the latest ring commitment. Chia stores the commitment, not the cognitive record. The operator signs an anchor hash that binds the agent, the previous ring, the new ring, and the sequence. No consensus rule changes, and no coin is a condition of anchoring.
+
+## Motivation
+
+Cyberphysics produces a sequence of experiential rings. A ring has a state root, an event root, and a modality root. Publishing the cognitive record on a settlement chain would copy private experience into a public ledger and would still not make that ledger the place where the experience was evaluated.
+
+Chia already has a singleton whose identity is fixed at launch. That launcher id is a suitable agent id. Currying the latest ring hash and sequence gives observers a single coin that says which commitment is current, and the spend history says how the agent got there.
+
+The use is narrow:
+
+- An agent can show that a named lineage advanced from one ring hash to the next.
+- A verifier can reject a gap, a replay, a spliced agent id, a substituted genesis, or a ring that does not extend the curried parent.
+- Wallets and application puzzles can implement the transition without a fork.
+
+This is feasible as an application singleton. Block validation stays as it is. A node that has never heard of CPC still sees an ordinary coin spend. The reference in this repository checks the bytes and the state machine with the Python standard library. It does not require a Chia node.
+
+This is not a token bridge. Anchoring must not depend on any external coin, including CPHY. The anchor does not wrap, mint, or transfer value.
+
+## Backwards Compatibility
+
+This CHIP is Informational, sub-category Guideline. It proposes no consensus fork and no change to existing puzzles, coins, or light clients.
+
+- Existing Chia coins remain valid. Nodes that ignore CPC still validate a CPC spend under the ordinary coin rules.
+- CPC commitments are domain-separated by the UTF-8 strings `CPC-v1-genesis`, `CPC-v1-ring`, and `CPC-v1-anchor`. A later version uses a new domain string rather than overloading these ones.
+- Applications that do not anchor are unaffected.
+- The singleton version in this guideline is 1. A curried version other than 1 is not a CPC v1 singleton.
+
+## Rationale
+
+**Two layers, one commitment.** Cyberphysics is the external timechain. It keeps genesis, experiential rings, and Proof-of-Qualia. Chia was written from scratch. It is the settlement and identity layer. The singleton does not re-implement the experiential record. It stores the hash of the latest ring and the sequence number of that ring.
+
+**Launcher id is the agent id.** A new singleton has a new launcher id. That value is the 32-byte agent id inside every genesis and ring for the lineage. Keeping one id in both places makes a spliced ring detectable: the ring's agent id must equal the launcher id already curried.
+
+**Genesis hash, continuum id, and launcher id are fixed until melt.** Observers need to know that the lineage was not silently retargeted at a different covenant or a different continuum. Melt ends the singleton. It does not rewrite those fields. A successor is a new launch with a new launcher id.
+
+**Ring 0 is the origin.** Its previous hash is 32 zero bytes, its sequence is 0, and its state root is the genesis hash. Later rings form a hash chain. Sequence increases by exactly one. That rules out both a gap and a replay without requiring the cognitive record.
+
+**The operator signs the anchor hash, not the bare ring hash.** The anchor preimage contains the agent id, the previous ring hash, the new ring hash, and the new sequence. A signature over the ring hash alone could be carried onto a different parent, agent, or sequence. Signing the anchor hash binds those four fields. The ring hash still binds the roots, the external timestamp, the software version, and the model commitment, because those bytes are inside the ring preimage.
+
+**The timestamp is an external clock or zero.** It is not Chia time and it is not a block height. Chia time and experiential time are different clocks. The signature binds whatever timestamp bytes were hashed into the ring. It does not prove that an outside clock was right.
+
+**The model commitment may be unused.** When the agent has no model commitment, the field is 32 zero bytes. It is still present, so the preimage layout does not change shape between rings.
+
+**No token condition.** A bridge would make an external asset part of the transition. CPC does not. The singleton can be spent, and the spend must satisfy ordinary Chia fees and puzzle rules, but no particular coin or asset id is required for the commitment to be valid.
+
+## Specification
+
+### Encodings
+
+The hash function is SHA-256. `lp(b)` is an 8-byte unsigned big-endian length of `b`, followed by the bytes `b`. Every integer in a preimage is an 8-byte unsigned big-endian integer. `display_name` and `software_version` are UTF-8 and may be empty. A 32-byte field is raw bytes, with no length prefix.
+
+Domain strings, without a terminator:
+
+| Domain | UTF-8 | Length |
+| --- | --- | --- |
+| Genesis | `CPC-v1-genesis` | 14 |
+| Ring | `CPC-v1-ring` | 11 |
+| Anchor | `CPC-v1-anchor` | 13 |
+
+The genesis length prefix is `00 00 00 00 00 00 00 0e`. The ring length prefix is `00 00 00 00 00 00 00 0b`. The anchor length prefix is `00 00 00 00 00 00 00 0d`.
+
+### Genesis
+
+Cyberphysics builds the genesis preimage in this order:
+
+1. `lp("CPC-v1-genesis")`
+2. `agent_id`, 32 bytes, the Chia launcher id
+3. `covenant_hash`, 32 bytes
+4. `lp(display_name)`
+5. `lp(software_version)`
+
+`genesis_hash = SHA-256(genesis_preimage)`.
+
+### Ring
+
+Cyberphysics builds the ring preimage in this order:
+
+1. `lp("CPC-v1-ring")`
+2. `previous_ring_hash`, 32 bytes
+3. `agent_id`, 32 bytes
+4. `state_root`, 32 bytes
+5. `event_root`, 32 bytes
+6. `modality_root`, 32 bytes
+7. `sequence`, unsigned 64-bit big-endian
+8. `timestamp`, unsigned 64-bit big-endian, an external clock or 0, not Chia time
+9. `lp(software_version)`
+10. `model_commitment`, 32 bytes, or 32 zero bytes when unused
+
+`ring_hash = SHA-256(ring_preimage)`.
+
+Ring 0 MUST use a `previous_ring_hash` of 32 zero bytes, sequence 0, and a `state_root` equal to `genesis_hash`. Its `agent_id` MUST equal the genesis `agent_id`.
+
+### Anchor
+
+The anchor preimage is, in order:
+
+1. `lp("CPC-v1-anchor")`
+2. `agent_id`, 32 bytes
+3. `previous_ring_hash`, 32 bytes
+4. `ring_hash`, 32 bytes
+5. `sequence` of the new ring, unsigned 64-bit big-endian
+
+`anchor_hash = SHA-256(anchor_preimage)`.
+
+The operator signs `anchor_hash`. The operator does not satisfy this guideline by signing only `ring_hash`.
+
+### Singleton
+
+A CPC v1 singleton carries this curried state:
+
+| Field | Rule |
+| --- | --- |
+| `version` | 1 |
+| `key_type` | Application identifier for the operator's signature scheme |
+| `agent_public_key` | Public key that signs `anchor_hash` |
+| `genesis_hash` | Fixed until melt |
+| `continuum_id` | 32 bytes, chosen at launch, fixed until melt |
+| launcher id | The agent id. Fixed until melt. Not a separate value from `agent_id` |
+| `current_ring_hash` | Latest accepted ring hash |
+| `sequence` | Sequence of that ring |
+| `capability_root` | 32 bytes. Zero when unused. Not an identity field |
+| `recovery_puzzle_hash` | Puzzle hash authorized to rotate or melt |
+
+`continuum_id` is chosen by the launcher. This guideline does not derive it from the genesis hash.
+
+At launch the singleton is curried to ring 0: `current_ring_hash` is the reconstructed ring 0 hash and `sequence` is 0. Launch MUST reject a ring 0 whose agent id differs from the genesis, whose sequence is not 0, whose previous hash is not 32 zero bytes, or whose state root is not `genesis_hash`.
+
+An anchor spends the singleton to a child curry. It MUST satisfy all of the following:
+
+- The singleton has not been melted.
+- The child `genesis_hash` equals the curried `genesis_hash`.
+- The child `continuum_id` equals the curried `continuum_id`.
+- The child launcher id and the ring `agent_id` both equal the curried launcher id.
+- `new_sequence == old_sequence + 1`, for both the sequence inside the ring and the sequence written into the child curry. A sequence less than or equal to the curried sequence is a replay. A larger jump is a sequence gap.
+- The ring `previous_ring_hash` equals the curried `current_ring_hash`.
+- The reconstructed ring hash equals the child `current_ring_hash`.
+
+If every condition holds, the child curry stores that ring hash and that sequence. `genesis_hash`, `continuum_id`, and the launcher id are copied unchanged. The puzzle MUST require a signature on `anchor_hash` by `agent_public_key` under `key_type`. This informational reference returns that digest and does not itself verify a signature.
+
+`rotate` replaces `key_type`, `agent_public_key`, or `recovery_puzzle_hash`. It MUST NOT change `genesis_hash`, `continuum_id`, the launcher id, `current_ring_hash`, or `sequence`.
+
+`melt` ends the singleton. After melt, anchor and rotate are rejected. Melt does not rewrite the frozen fields and does not carry them onto a new launcher.
+
+A conforming transition MUST reject:
+
+| Case | Condition |
+| --- | --- |
+| Hash mismatch | Reconstructed ring hash differs from the child `current_ring_hash` |
+| Sequence gap | New sequence is greater than curried sequence + 1 |
+| Replay | New sequence is less than or equal to the curried sequence |
+| Spliced agent id | Ring agent id or child launcher id differs from the curried launcher id |
+| Genesis substitution | Child genesis hash differs from the curried genesis hash, or ring 0's state root differs from the genesis hash |
+| Wrong previous hash | Ring `previous_ring_hash` differs from the curried ring hash, or ring 0's previous hash is not 32 zero bytes |
+
+The reference checks identity and sequence before the previous-hash check, and checks the previous hash before the reconstructed hash. A repeated anchor of the same sequence is therefore a replay even when its previous hash is also stale. An implementation MAY use another order only if each named case is still rejected.
+
+### Reference implementation
+
+`chia_cyberphysics_timechain.py` implements genesis, ring, anchor, and an in-memory singleton with `anchor`, `rotate`, and `melt`. `examples/anchor_demo.py` runs the vector below. `tests/test_vectors.py` asserts the hashes and the rejection cases. No package beyond the Python 3.9+ standard library is required, and no Chia node is required.
+
+The Python object is a model of the transition. It is not a wallet and it is not a consensus change. A puzzle that wants to enforce CPC still has to check these conditions on chain, including the signature over `anchor_hash`.
+
+## Test vector
+
+Every hash below is SHA-256. The vector is normative. Implementations MUST reproduce these digests with the layout in this CHIP.
+
+Shared inputs:
+
+| Field | Value |
+| --- | --- |
+| `agent_id` | byte `0x11` repeated 32 times |
+| `software_version` | `cyberphysics-chia-0.1.0` |
+| `display_name` | `example-agent` |
+| covenant text | the ASCII string `We mirror, we grow, we co-become.` |
+| `covenant_hash` | `f093f79e64fd1001d5b19e9fff98967fdf00dc5568acd5ecbfa0dc287989223b` |
+| empty event root text | ASCII `events:empty` |
+| ring 0 `event_root` | `1f79ebd28fc2249be6863cb9ff58d2a376a49a7cab1099058d4994fc4676c8b8` |
+| empty modality text | ASCII `modalities:empty` |
+| `modality_root` for ring 0 and ring 1 | `f3cb7d4ee71f14d90141605aa5bd0e236e7700954433b3895b2925f40ee216a7` |
+| `model_commitment` for ring 0 and ring 1 | 32 zero bytes |
+
+Genesis:
+
+```text
+genesis_hash = 5f2db23fd5dce54149e27aa10e50de887b1df8c92562197a81d1a048c0126bf8
+```
+
+Ring 0 uses `previous_ring_hash` of 32 zero bytes, `state_root = genesis_hash`, the ring 0 event root above, the shared modality root, sequence 0, timestamp 0, the shared software version, and 32 zero bytes of model commitment.
+
+```text
+ring_0 = 68920b169298ce2ad19f0fa5e4875bb3386bd2ddff59bd57fd2397b7e4d79b3d
+```
+
+Ring 1 uses `previous_ring_hash = ring_0`, the same agent id, software version, modality root, and model commitment, plus:
+
+| Field | Value |
+| --- | --- |
+| state text | ASCII `state:ring1` |
+| `state_root` | `149da0a686b5e14a460789481d59029d45c3485e301af14fbb763a6b5bae0f01` |
+| event text | ASCII `event:hello` |
+| `event_root` | `0ad55cafd3461d6a5242e2c69a8eb92360c5259caa330cc8ee0c7558dfe05712` |
+| `sequence` | 1 |
+| `timestamp` | 1710000000 |
+
+```text
+ring_1 = 11c77774ee3efbe8f0b4186eee7cbf1f55e74f9765cd4bc11c0050f53980ab55
+```
+
+The anchor from ring 0 into ring 1 uses the agent id, `previous_ring_hash = ring_0`, `ring_hash = ring_1`, and sequence 1.
+
+```text
+anchor = 892d8bac1ab2cf8c189190433b6a8a39929d9a176207915ce3a89289d99b3601
+```
+
+That anchor digest is not equal to `ring_1`.
+
+## Security
+
+CPC commits to bytes. An anchor shows that the operator who controls the singleton accepted a particular ring hash at the next sequence. It does not show that the cognitive record is true, complete, or available. Proof-of-Qualia stays in Cyberphysics. A verifier who needs the roots must obtain the preimage from the agent. Chia does not store it.
+
+The domain strings stop a genesis preimage, a ring preimage, and an anchor preimage from sharing a hash by accident. The fixed genesis hash, continuum id, and launcher id stop a spend from pointing the same coin at a different covenant or a different agent. Melt is terminal for that coin. Historical spends remain in the chain. They are not edited by the melt.
+
+Signing `anchor_hash` binds the agent, the parent ring, the new ring, and the sequence. A signature stripped off one anchor does not authorize a different parent or a different sequence. The ring hash binds the timestamp and the roots, so those bytes are covered indirectly. The timestamp is still only as honest as the operator. It is not a Chia clock.
+
+Replay and sequence gaps are rejected so a stale anchor cannot be reused and a missing ring cannot be skipped. A spliced agent id is rejected so a ring from another launcher cannot be attached. A genesis substitution is rejected so ring 0 cannot name some other genesis, and a later spend cannot curry one. A wrong previous hash is rejected so a ring cannot be grafted onto an unrelated parent while claiming the next sequence.
+
+`capability_root` and `recovery_puzzle_hash` are application fields. This guideline does not give them custody of an external asset. A puzzle that adds a token condition is outside CPC v1.
+
+This reference compares hashes in the Python process that runs it. It does not verify a BLS signature, execute a puzzle, or protect a host that leaks its key. Those are deployment concerns. The bytes above are the part that two independent implementations can compare.
+
+## Copyright
+
+This CHIP is dedicated to the public domain under [CC0-1.0](LICENSE). The author waives copyright in this document to the extent the law allows. The full CC0 1.0 Universal legal text is in `LICENSE`.
+
+SPDX-License-Identifier: CC0-1.0
