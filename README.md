@@ -15,6 +15,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [59 - Pooling v2](https://github.com/Chia-Network/chips/pull/203)
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 * [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
+* [64 - Cyberphysics Chia Continuum](https://github.com/Chia-Network/chips/pull/221)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
