@@ -1,0 +1,392 @@
+{
+  "chip": "CHIP-0057",
+  "address_version": 0,
+  "notes": "All integers are 32-byte big-endian hex. Points are 48-byte compressed G1. spend_tweak is (t_k + label_scalar) mod r.",
+  "payments": [
+    {
+      "name": "vector_1_single_output",
+      "description": "One input, one unlabeled output.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175",
+      "input_hash": "38a1c8379cceb0fbebfdf3016707e54a1c7e9d21afb9489b9cc58f6055cc9411",
+      "tweak_point": "b9662882e0596df3c5af1d27b85d62677bb5389a6a1c1f4a1485034804b0ec60749e57a7f1e9712176dfab60298ff292",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6",
+          "t_k": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_pk": "b671487c1d275842f529f7a73a63a32a9a1a49e1dbabcac4058cc48626b6db31f48dc49e769a6f8076a9111ff14e964d",
+          "puzzle_hash": "23adba149dd9000d65e0f8e21b6975364cbe89a63caf56533df4b7664c21fbf5",
+          "spend_tweak": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_sk": "3c399c61ae130724903b3b650e936ff042b7646764289a33519e17100a89db37"
+        }
+      ]
+    },
+    {
+      "name": "vector_2_two_recipients",
+      "description": "One input, two recipients with different scan keys.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "b75c75c4787bade82b417272eff88ed90b3013a14b06c16be66b944856f378a2"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "b75c75c4787bade82b417272eff88ed90b3013a14b06c16be66b944856f378a2",
+      "input_hash": "42b39c642d50849aa93f23c34085d80bb6a236cad4e0edd2841d526838c92b22",
+      "tweak_point": "8bacaf5674c507ac6c1340dee12c01f43a0a32d058981cb30cd8eda1bcfcec1cade35798b58b2fab2df13e9d1d3e893c",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "e9b20a7df882357c76abb4b5f87dcfc9a64cda6413c85f61efa1c4e81e1be50d",
+          "t_k": "13682ff0957fce11761842863c1658c4cfe9dad4b312fb5fcd71f66567d33d9b",
+          "onetime_pk": "97b332699dfd7741b3f0c8bf1e1a0edef3b4ad7a092a8f38d74f17216cfb1d0f5abe7d853f8e3223407be827c9c3aaa8",
+          "puzzle_hash": "596275d286042c639d97e3765fe89d0e5554ac250e0fb4c594a9165017c0a9e5",
+          "spend_tweak": "13682ff0957fce11761842863c1658c4cfe9dad4b312fb5fcd71f66567d33d9b",
+          "onetime_sk": "673970a3a820af748c4984fb2779f1a626f0abd5b19d70a95dc606514104ee22"
+        },
+        {
+          "recipient": {
+            "scan_sk": "56a3762ba1200ab5a796d3a2af85261f745ee9620e927d0232c18b710cbf22d2",
+            "scan_pk": "904b64222fcc0bcf254bcfadcd579cf0530b4fba7ed454f3e6d85799cc9f54913f048f1fb393e4acf1bbe56d09d73108",
+            "spend_sk": "70fbad8c37b92e585f890bcef5730727d4100584fc9df4bbc9f5e533691d20bf",
+            "spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813",
+            "label": null,
+            "address_spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813"
+          },
+          "k": 0,
+          "shared_secret": "1450c748a04e4925bf34d0ef09e21fd1dab0eb0a3675efcb5b2da66d813c06e9",
+          "t_k": "21d2901f3189dc8def5c5a29e84933a5543ceabd131653dd2ea1951523045976",
+          "onetime_pk": "a2557b2b6029fcc6783e8447588311a06b5d3dcad132a318d40bf0d6114595dd3d14fd58fe6f6c88dfa190aaa6bef873",
+          "puzzle_hash": "65249bcb907c9a6fac2e14499f6220cc24ba9359767d680c19405da06b69b263",
+          "spend_tweak": "21d2901f3189dc8def5c5a29e84933a5543ceabd131653dd2ea1951523045976",
+          "onetime_sk": "1ee096583fa58d9e1bab8df0d41a62c7d48f4c3f0fb5ec99f8977a498c217a34"
+        }
+      ]
+    },
+    {
+      "name": "vector_3_labeled",
+      "description": "One input, one output to a labeled address (m = 1).",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "4504f59ea184be18924f95244649287382ec6cdc13f333a8990f648c803a6dac"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "4504f59ea184be18924f95244649287382ec6cdc13f333a8990f648c803a6dac",
+      "input_hash": "58a1875602949aa6bfaf9cb4837957e7175ffb0b14422dbc8d371799f98e66f5",
+      "tweak_point": "a8ce592e979e0eb498f166c426bab46fae69acd1810d24f624db832060c7daca23273082b8f7e5105080485fcbb820d1",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": 1,
+            "address_spend_pk": "965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2"
+          },
+          "k": 0,
+          "shared_secret": "3d1eabb622c40142d4b2557fc222a22cd93d98550255cecb2b6a84985f49215d",
+          "t_k": "301e842ace534f7de854dcc5a48a656d7e9a6d8b8f93db9fb8277f4d1889bdf1",
+          "onetime_pk": "97e7466509081a3ed6e50ba0231a6fa1b48d8c910ac6ec933e26cd5091569c615f299726c91a730dbf51a26cb249f17c",
+          "puzzle_hash": "ba271d218d487e8e5dc994a09a8580e1e8a0559a615bd5805cff11b5a343441c",
+          "spend_tweak": "052b20e2715e5185d0b489736d1bb538e25333d43a26bd9be8295360dd16a255",
+          "onetime_sk": "58fc619583ff32e8e6e5cbe8587f4e1a395a04d538b132e5787d634cb64852dc"
+        }
+      ]
+    },
+    {
+      "name": "vector_4_multi_input",
+      "description": "Two inputs bound by a 2-cycle of ASSERT_CONCURRENT_SPEND conditions.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "2b9857e0307ebfbe51829e3be8c992ae57f6a8debe06a5deab429ddae83a8c1a"
+        },
+        {
+          "synthetic_sk": "05fded8808216b65d439fc41cb07c7270e37ed743e0745652afe055cfe91cf0f",
+          "synthetic_pk": "94c5c19f4343bc2655af729469285a392de9048851363b0b1329a4539a46ab4c6e8bfb39d32da25bffe4d9cdbe3e1061",
+          "coin_id": "209bb03a4cd165785e6149bc6dcb27e35829006f02ec927ab5a20521fd27d21a"
+        }
+      ],
+      "a_sum_pk": "a223ab27f801044cd98c8314014b8073347b0e5aae43c69b78b5ca2a562ee9f799b8efad179b34da1b306ca4d62bad40",
+      "coin_id_l": "209bb03a4cd165785e6149bc6dcb27e35829006f02ec927ab5a20521fd27d21a",
+      "input_hash": "3f1071552b7f2f5e49b68166cb204f0a1b6a23b0c30a28bcba59a9c3f766e166",
+      "tweak_point": "82caa41f9b5e0675cea58072185286e956ec209f1df3a2c23b832c45b8bdd139bab6230e3d5ddc663d269440931bafeb",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "e729dea8c4732747d0e5e930607c52ddfce01ff7c72eaec9ee7c84131e078494",
+          "t_k": "18fafd6001bef3fece078f469731b40a5f362994795f9ff6b9339aa235fee312",
+          "onetime_pk": "b71f484e6d90a657b215ad7bff6f96a8d9bff07e0133d74917cc6c3ef6fa273a706aa56e1fd6da19ed5466f16450ccb1",
+          "puzzle_hash": "5d7fc7d7447c746cfb400e801a169fc7bfd1c13e03bc7866e6b743860a53ac6b",
+          "spend_tweak": "18fafd6001bef3fece078f469731b40a5f362994795f9ff6b9339aa235fee312",
+          "onetime_sk": "6ccc3e13145fd561e438d1bb82954cebb63cfa9577ea15404987aa8e0f309399"
+        }
+      ]
+    },
+    {
+      "name": "vector_6_two_outputs_one_recipient",
+      "description": "The transaction of vector 1 with the same recipient listed twice (k = 0, 1).",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175",
+      "input_hash": "38a1c8379cceb0fbebfdf3016707e54a1c7e9d21afb9489b9cc58f6055cc9411",
+      "tweak_point": "b9662882e0596df3c5af1d27b85d62677bb5389a6a1c1f4a1485034804b0ec60749e57a7f1e9712176dfab60298ff292",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6",
+          "t_k": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_pk": "b671487c1d275842f529f7a73a63a32a9a1a49e1dbabcac4058cc48626b6db31f48dc49e769a6f8076a9111ff14e964d",
+          "puzzle_hash": "23adba149dd9000d65e0f8e21b6975364cbe89a63caf56533df4b7664c21fbf5",
+          "spend_tweak": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_sk": "3c399c61ae130724903b3b650e936ff042b7646764289a33519e17100a89db37"
+        },
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 1,
+          "shared_secret": "d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6",
+          "t_k": "5b41459e4302fc14258a5ab9af5ac6b45946e83f5a2dadc031b3cb49e79fd899",
+          "onetime_pk": "97c5bddfec949ab9d30190a9ba4d64d12b47828ee2226e1556161c4082344fa9dd02849f93aa4cdb613e5522bbd08baf",
+          "puzzle_hash": "0dcde144401307ca3caa58239572e6ab3d0a7f09b4f5d8993d652081c2151f84",
+          "spend_tweak": "5b41459e4302fc14258a5ab9af5ac6b45946e83f5a2dadc031b3cb49e79fd899",
+          "onetime_sk": "3b24defe2c06602f0881c526911c87905c90153d58b9c70ac207db36c0d1891f"
+        }
+      ]
+    },
+    {
+      "name": "vector_7_change_label",
+      "description": "One input, one change output to the recipient's own label m = 0.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "10f36babd97f3da5027238f336ac15a0f12dfb10bc77191711de7eafba964c9f"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "10f36babd97f3da5027238f336ac15a0f12dfb10bc77191711de7eafba964c9f",
+      "input_hash": "620c82f4fd9faf8a41d7ed8025dbda3857797c0bc5f31f4c34e460ddc4a89e79",
+      "tweak_point": "ab1331dbda13bc2ba5f41366416d34ac6a36ca6e7d44a765330861f07b77dee6dfd9ea9bc0298830df50dc20b1e2681b",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": 0,
+            "address_spend_pk": "a2c089434a6abae657b8e3a868f3d1b94299b141f3da6a6788f966b0856d68022bd58459d964b7514111529647ebd7e8"
+          },
+          "k": 0,
+          "shared_secret": "6b13c43195ded3d7e7366decb4c744e371b98a8cf757a9f9cbd784c644d079dc",
+          "t_k": "146540ede99c556f61907c7d0ae1e365aa91f3c116709ef64135a4ccecec0322",
+          "onetime_pk": "b51abe5a989379591b02288a376668ef4124f16b2a5629ba47bebcd4b2359af4c31428efa13f4bf4ac35ed0dd4805da0",
+          "puzzle_hash": "6e0d9f029ea7e8129bf4839d7e805dac5da5b9af5f51fe0374547ac24f8f5257",
+          "spend_tweak": "456bc38722450ca9c6bb16aed1a94d9d8dc15bba3b15ad2c8a5ec235f1de23a4",
+          "onetime_sk": "254f5ce70b4870c4a9b2811bb36b0e79910a88b839a1c6771ab2d222cb0fd42a"
+        }
+      ]
+    }
+  ],
+  "labels": [
+    {
+      "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+      "m": 0,
+      "label_scalar": "3106829938a8b73a652a9a31c6c76a37e32f67f924a50e3649291d6904f22082",
+      "label_pk": "8314ad1fd7b1dc75d97e025a6d9af28af6ed21e11093a1103ea338c7e496d133d4f2bd863b47b9a2839ef1ff2d0e6a9f"
+    },
+    {
+      "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+      "m": 1,
+      "label_scalar": "48fa440acca87f501b9984b5d23327d0b7766a4baa913dfb3001d412c48ce465",
+      "label_pk": "a6dcff3646739745ef7f3ba8e51808dac13765fa9d5e73386d3fbd7841e0773e02a0f8d91baf57d337954322bd06d80c"
+    }
+  ],
+  "addresses": [
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+      "network": "mainnet",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsmqrz7f"
+    },
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+      "network": "testnet",
+      "address": "tspxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws0zz572"
+    },
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2",
+      "network": "mainnet",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfd9jj2rac2q707npyfumq4wzqwkl79ksppyt5t58gecmqyj4396tzwlglqtamuqwwusfd6t8pkaq5cg8n8kqj"
+    },
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2",
+      "network": "testnet",
+      "address": "tspxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfd9jj2rac2q707npyfumq4wzqwkl79ksppyt5t58gecmqyj4396tzwlglqtamuqwwusfd6t8pkaq5cgn3xqq3"
+    }
+  ],
+  "address_cases": [
+    {
+      "description": "version 1 with 4 extra payload bytes: valid, the first 96 bytes are the keys",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqsyqcyuywcrz",
+      "valid": true,
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+    },
+    {
+      "description": "version 31: invalid",
+      "address": "spxch1l5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws6wdf33",
+      "valid": false
+    },
+    {
+      "description": "version 0 with a 95-byte payload: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6u94xyqn",
+      "valid": false
+    },
+    {
+      "description": "version 0 with a 97-byte payload: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqq20d4c6",
+      "valid": false
+    },
+    {
+      "description": "version 1 with a 95-byte payload: invalid",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uctp0cg",
+      "valid": false
+    },
+    {
+      "description": "scan key is the identity element: invalid",
+      "address": "spxch1qcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws49a59y",
+      "valid": false
+    },
+    {
+      "description": "spend key is the identity element: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs27vsl",
+      "valid": false
+    },
+    {
+      "description": "scan key is on the curve but outside the prime-order subgroup: invalid",
+      "address": "spxch1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqfzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws30r2x2",
+      "valid": false
+    },
+    {
+      "description": "scan key is not on the curve: invalid",
+      "address": "spxch1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwstyq70x",
+      "valid": false
+    },
+    {
+      "description": "non-zero padding bits after the payload: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwn4nk5sk",
+      "valid": false
+    },
+    {
+      "description": "all upper case: valid",
+      "address": "SPXCH1Q5P85QJLMLHYNZ9EK3X07XTFZWKASQ7Q52YXR2G6JJJR66ATNVP6H8T0ZP5CUW5G8KSPNRLLHNTYFDZHUTQQE9AZ04D3Y7CFND8ME9MLNYG828J5Z96URN2EVJVY72F7M7ME3UGHQSVD62ZYVJ5NZTF6UWSMQRZ7F",
+      "valid": true,
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+    },
+    {
+      "description": "mixed case: invalid",
+      "address": "spxch1q5p85QJLMLHYNZ9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsmqrz7f",
+      "valid": false
+    },
+    {
+      "description": "wrong checksum: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsmqrz7q",
+      "valid": false
+    },
+    {
+      "description": "longer than 1,023 characters: invalid",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4fg24",
+      "valid": false
+    },
+    {
+      "description": "version 1 at exactly 1,023 characters: valid, the first 96 bytes are the keys",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsuetyt",
+      "valid": true,
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+    },
+    {
+      "description": "not a silent payment prefix: invalid",
+      "address": "xch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsjyenxs",
+      "valid": false
+    }
+  ],
+  "key_derivation": {
+    "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "passphrase": "",
+    "master_sk": "11da8b4a2874a49dc42984b6aa127b68ef73adddc333319c36fd0446705204a9",
+    "master_pk": "82ae65efe846b15a92c51b7ad6c32589fd79d38263d3cbefbeeba08be8e90d8bc335a1e2fcc66a10b8c817c06232285a",
+    "scan_path": "m/12381n/8444n/12n/0n",
+    "scan_sk": "0c474f92e8945069c200bb09302d1e569a9b52f59cc04a27874b1bca2adeca9f",
+    "scan_pk": "8bf2be64f401ccc10d3495503ac9e5b675c2e2b08b073917935beed951b70b8ccd01f60c406c4ee7e79237e2eb5affd9",
+    "spend_path": "m/12381n/8444n/13n/0n",
+    "spend_sk": "4f8acf271744cf7050197623569e1603b0193f84b958b5d5f1ce8fd18c908e7b",
+    "spend_pk": "ad0c7b65a3392b62782b8c0784b10c64b0f4dc8fc2d46d2d3c7c0e1b899bf183f76996226ddf9145789d6b0bf3499219",
+    "mainnet_address": "spxch1q30etue85q8xvzrf5j4gr4j09ke6u9c4s3vrnj9unt0hdj5dhpwxv6q0kp3qxcnh8u7fr0chtttlantgv0dj6xwftvfuzhrq8sjcsce9s7nwglsk5d5knclqwrwyehuvr7a5evgndm7g527yadv9lxjvjryvvu9l2",
+    "testnet_address": "tspxch1q30etue85q8xvzrf5j4gr4j09ke6u9c4s3vrnj9unt0hdj5dhpwxv6q0kp3qxcnh8u7fr0chtttlantgv0dj6xwftvfuzhrq8sjcsce9s7nwglsk5d5knclqwrwyehuvr7a5evgndm7g527yadv9lxjvjrycwanlf"
+  }
+}
