@@ -245,6 +245,63 @@
           "onetime_sk": "254f5ce70b4870c4a9b2811bb36b0e79910a88b839a1c6771ab2d222cb0fd42a"
         }
       ]
+    },
+    {
+      "name": "vector_9_cat_payment",
+      "description": "One CAT coin spent alone pays one unlabeled output in its asset.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "9be7c61fef47d5bbe870c9ddc6ae2f705b4ff6dd22feeeb10dbd40dee856e211",
+          "wrapper": {
+            "asset_id": "a031232e72df4aa270c253a530b9b0d782d46ac7b5dad63c2aa37690bbb37f6d",
+            "hidden_puzzle_hash": null
+          }
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "a_sum_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+      "coin_id_l": "9be7c61fef47d5bbe870c9ddc6ae2f705b4ff6dd22feeeb10dbd40dee856e211",
+      "input_hash": "5efa7d3fd24b12a9b5f759473117aa5f17480326a6abdddb973dd9bf1d8c65f6",
+      "tweak_point": "b7d880c572e93cd7121b06567fdaf09d5becb298682b920290c56f8d7afe43937423c80101f445ade3002e4f34bbe695",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "01841b8460fa34399d8754fe9b8fcaf70b85e01db1805461b82cf13832203672",
+          "t_k": "0a3db4ce82a33d3ab0c62c093854c492a7330ab81651ad4bba8a66ff9197bea1",
+          "onetime_pk": "b4f950e45ee3e209aab77a44002e171b84e07c3679459a43180a6f8593ee5df08d781ac663bc0548f9ed928cc7bb5451",
+          "puzzle_hash": "df83709ebd837a46717cfb59cc3c75de70606ffb5e3499c202339cf9a5a20dd4",
+          "spend_tweak": "0a3db4ce82a33d3ab0c62c093854c492a7330ab81651ad4bba8a66ff9197bea1",
+          "onetime_sk": "5e0ef58195441e9dc6f76e7e23b85d73fe39dbb914dc22954ade76eb6ac96f28",
+          "ecdh_point": "8ebef7f5b6cb5969b75b90cccbc1afbbf293614a9029d627fc4ca9b3b0cba8b3b185052ffafacc0bee8b21fe21745718",
+          "wrapper": {
+            "asset_id": "a031232e72df4aa270c253a530b9b0d782d46ac7b5dad63c2aa37690bbb37f6d",
+            "hidden_puzzle_hash": null
+          },
+          "amount": 1000,
+          "cat_inner_puzzle_hash": "df83709ebd837a46717cfb59cc3c75de70606ffb5e3499c202339cf9a5a20dd4",
+          "wrapped_puzzle_hash": "cf9f1b5dbf2bd67fa0bb69a554e38c0f2d53877fe565f34f16a16df9f6fa18e5",
+          "hint": "df83709ebd837a46717cfb59cc3c75de70606ffb5e3499c202339cf9a5a20dd4"
+        }
+      ],
+      "wrapper_list": [
+        {
+          "asset_id": "a031232e72df4aa270c253a530b9b0d782d46ac7b5dad63c2aa37690bbb37f6d",
+          "hidden_puzzle_hash": null
+        }
+      ],
+      "negative_controls": {
+        "detections_without_wrapper_list": 0
+      }
     }
   ],
   "labels": [
