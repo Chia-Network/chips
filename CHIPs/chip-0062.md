@@ -40,7 +40,7 @@ This proposal introduces no backwards incompatibilities. It describes a puzzle, 
 Two compatibility notes worth recording:
 
 * **It depends on CHIP-0025 message conditions**, which are consensus and therefore require a node past the relevant soft fork. This is a dependency, not an incompatibility.
-* **Revisions of the puzzle are not interchangeable.** A pool's configuration is curried, so a change to the leaf set or the config layout produces a different puzzle hash and, in effect, a different pool. The design carries an explicit protocol version in the LP TAIL's assertions so that an LP token minted under one revision can never be authorized by a pool of another. Two revisions can be live at once: the reference implementation keeps V14 (protocol 15) serving beside V15 (protocol 16), each pool spent by its own revision's leaves, and a trade routed across the two is composed off chain from one pool spend per revision in one bundle; nothing on chain joins them. Migration is by deploying new pools, not by upgrading old ones - which is deliberate, because a pool that can be upgraded is a pool someone can upgrade.
+* **Revisions of the puzzle are not interchangeable.** A pool's configuration is curried, so a change to the leaf set or the config layout produces a different puzzle hash and, in effect, a different pool. The design carries an explicit protocol version in the LP TAIL's assertions so that an LP token minted under one revision can never be authorized by a pool of another. More than one revision can be live at once: the reference implementation keeps V14 (protocol 15) and V15 (protocol 16) serving beside V16 (protocol 17), each pool spent by its own revision's leaves, and a trade routed across them is composed off chain from one pool spend per revision in one bundle; nothing on chain joins them. Migration is by deploying new pools, not by upgrading old ones - which is deliberate, because a pool that can be upgraded is a pool someone can upgrade.
 
 Alternatives considered and rejected are in **Rationale**.
 
@@ -260,11 +260,13 @@ These live alongside the reference implementation, in the public [`forge-puzzles
 * The written CLVM pass, leaf by leaf: every assertion, what it closes, and which suite pins it - [`FORGE_V14_CLVM_PASS.md`](https://github.com/awizardxch/forge-puzzles/blob/main/docs/FORGE_V14_CLVM_PASS.md)
 * Security notes and scope - [`FORGE_SECURITY.md`](https://github.com/awizardxch/forge-puzzles/blob/main/docs/FORGE_SECURITY.md)
 * Comparison against publicly documented AMM failures - [`FORGE_AUDIT_TIBETSWAP.md`](https://github.com/awizardxch/forge-puzzles/blob/main/docs/FORGE_AUDIT_TIBETSWAP.md)
-* Reference implementation and test suites - <https://github.com/awizardxch/forge-puzzles> (`contracts/v15` is the revision this text describes; `contracts/v14` remains live and is kept)
+* Reference implementation and test suites - <https://github.com/awizardxch/forge-puzzles> (`contracts/v16` is the revision this text describes; `contracts/v15` and `contracts/v14` remain live and are kept)
 
 The five figures in **Specification** are carried in this repository, at `assets/chip-0062/`, so the proposal reads without a network fetch. Each ships as the Mermaid source beside the rendered SVG, so a figure diffs like text and can be regenerated rather than redrawn; the SVGs are self-contained, referencing no font or script, and carry their own background. The documents above remain in the reference repository so that the specification and the code it describes cannot drift apart; if the Editor would rather they were carried here too, they can be copied alongside the figures.
 
 ## Revision History
+
+* **Revision 13 (2026-10-18).** Editorial, no design change. Backwards Compatibility still described V14 serving beside V15, and Additional Assets named `contracts/v15` as the revision this text describes, where Revision 12 tracks V16. Both now name V16 (protocol 17), with V15 and V14 kept live beside it.
 
 * **Revision 12 (2026-10-09).** Tracks V16 (protocol 17) of the reference implementation. One change, to where the locked minimum is burned: the genesis settlement pays it to Chia's burn address, the puzzle hash `0x000...dead`, and `register` asserts that payment. Earlier revisions burned it to the all-zero puzzle hash. Both have no preimage, so the rule in Registry is unchanged; the burn address is what wallets and explorers recognize as a burn, and an all-zero hash is also what an unset field looks like. Registry names the address, and Additional Assets gains the document recording the change. V15 and V14 pools remain live beside V16, as Backwards Compatibility describes.
 
