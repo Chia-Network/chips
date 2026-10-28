@@ -1,0 +1,426 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | English Auctions for NFTs
+Description   | A singleton puzzle for trustless English auctions of NFTs, with bids in XCH or CATs.
+Author        | [Rigidity](https://github.com/Rigidity), [yakuhito](https://github.com/yakuhito), [Josh Painter](https://github.com/joshpainter)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Informational
+Sub-Category  | Puzzle
+Created       | 2026-10-27
+Requires      | [CHIP-0005](/CHIPs/chip-0005.md), [CHIP-0025](/CHIPs/chip-0025.md), [CHIP-0043](/CHIPs/chip-0043.md), [CHIP-0050](/CHIPs/chip-0050.md)
+Replaces      | -
+Superseded-By | -
+
+## Abstract
+
+This CHIP standardizes an on-chain English auction for NFTs. An auction is a singleton, built on the [CHIP-0050](/CHIPs/chip-0050.md) action layer and reserve finalizer, which locks up an NFT until the auction ends. When launching the auction, the seller chooses a single asset for bids, which can be XCH, a CAT, or a revocable CAT. Anyone can bid in that asset. Each bid must be strictly higher than the current winning bid and meet the seller's minimum bid and increment rules. The bid is locked in a reserve coin that the auction controls, and the previous bidder is refunded in full in the same spend. Once the end time (and an optional grace period) has passed, anyone can end the auction. Ending it sends the NFT to the highest bidder and pays out the winning bid, the buyer's premium, the commission, and the NFT's royalty. If the auction gets no bids, the NFT goes back to the seller. The seller can also cancel the auction at any time before the first bid. The auction never takes custody of anyone's private keys, and no party has to trust another. The launcher memo format is also standardized, so that auction houses, marketplaces, and other services can find, display, bid on, and end any auction.
+
+## Motivation
+
+Auctions are one of the most common ways to sell unique items, but NFT auctions on Chia have so far needed a trusted third party. Either the auction house holds the NFT and the bids in a custodial wallet, or the bidders make offers that the seller can accept at will, which isn't really an auction. Both approaches have problems:
+
+* **Custody:** A custodial auction house can lose, steal, or freeze the NFT and the bids, and it's a central point of failure.
+* **Commitment:** With offers, the seller isn't committed to selling to the highest bidder, and bidders can cancel their offers whenever they want. Nothing enforces the end time either.
+* **Fragmentation:** Each marketplace has its own way of running auctions, so a bid placed in one wallet or marketplace can't be seen or outbid from another.
+
+An on-chain auction puzzle fixes all three. The NFT and the winning bid are locked by the auction's puzzle, so neither the seller nor the auction house can take them. The rules (minimum bid, increment, end time, fees) are fixed at launch and enforced by the blockchain. Since the format is standardized, any auction house or marketplace can show every auction and let users bid, so the liquidity isn't split between platforms.
+
+Auction houses and wallets can still earn fees, through the optional buyer's premium and commission. NFT creators are paid their royalty on the final sale, in the same way as an offer trade.
+
+The design is based on Josh Painter's earlier [draft CHIP](https://github.com/Chia-Network/chips/pull/24) for auctions. It's now practical to implement because of the action layer ([CHIP-0050](/CHIPs/chip-0050.md)), which gives a singleton multiple actions and a reserve coin, and [MIPS](/CHIPs/chip-0043.md), which can lock coins to a singleton.
+
+## Backwards Compatibility
+
+This is a new puzzle, so it doesn't change any existing puzzles or consensus rules. The NFT that's auctioned is a standard [NFT1](/CHIPs/chip-0005.md), whose p2 puzzle is a standard MIPS puzzle. After the auction, it's a normal NFT again, owned by the winning bidder's puzzle hash.
+
+The seller chooses the reserve's asset at launch. It can be XCH, a standard CAT2, or a revocable CAT ([CHIP-0038](/CHIPs/chip-0038.md)). The NFT's royalty is paid through the standard settlement payments puzzle, so the NFT's existing royalty enforcement works without any changes.
+
+Wallets and services that don't support this CHIP will see the locked NFT as owned by an unknown puzzle hash, and won't know about bids. They can't break an auction.
+
+## Rationale
+
+### English auctions
+
+An English (ascending price) auction is what most people think of as an auction, and suits NFTs well. Other kinds, such as Dutch or sealed-bid auctions, can be built later as separate puzzles with other actions. A Dutch auction is already close to what can be done with offers and [partial offers](/CHIPs/chip-0052.md).
+
+### The action layer
+
+The auction is a singleton that uses the [CHIP-0050](/CHIPs/chip-0050.md) action layer with three actions: bid, end, and cancel. This has a few benefits:
+
+* The reserve finalizer already handles a reserve coin in XCH or a CAT, including recreating it after every spend. So the auction puzzles only need to say how much goes in the reserve, and what the reserve pays out.
+* Multiple bids can be placed in a single spend, which is needed to outbid a bid that's pending in the mempool (see [Competing bids](#competing-bids)).
+* Each action is a small puzzle that can be reviewed on its own. Any action that isn't run in a spend doesn't need to be revealed.
+
+### Locking coins with MIPS
+
+The NFT and the reserve are locked by a MIPS ([CHIP-0043](/CHIPs/chip-0043.md)) puzzle with one member, the singleton member puzzle for the auction's launcher id. A coin locked this way can only be spent when the auction singleton sends it a message with the conditions it must output. This means no new p2 puzzle was needed, and the NFT stays a normal NFT while it's locked. Wallets that already support MIPS can show the lock and its members.
+
+### Refunds in the same spend
+
+Each bid refunds the previous bidder in the same spend that locks up the new bid. A bidder's funds are therefore only ever locked while they're the winning bidder, and nobody has to claim a refund afterward.
+
+### Fees on top of, or out of, the bid
+
+The bid amount is what the seller's side gets. The commission comes out of it, while the buyer's premium and the NFT royalty are paid on top of it by the bidder. This is how traditional auction houses work, and it means the minimum bid and the increment are the same no matter what the fees are. A bidder locks up the whole amount they could owe, so the end action never needs more funds.
+
+Each fee is a single puzzle hash and a number of basis points. Anything more complex, such as splitting the commission between a marketplace and a wallet, should use an external puzzle like a payment split. This keeps the auction puzzles small.
+
+### Paying royalties like an offer
+
+Auction sales pay royalties the same way offer trades do, so creators are paid without the NFT needing to know anything about auctions. When an NFT is transferred with a trade price, it asserts that its royalty was paid from the settlement payments puzzle. So when the auction ends, the NFT is transferred with the winning bid as its trade price, and the end action funds an ephemeral settlement coin that pays the royalty to the NFT's royalty address.
+
+### Grace period
+
+If an auction ends at a fixed time, a bid in the last block can't be answered (this is called sniping). So a seller can set a grace period, which is a "soft close." After the end time, a bid can still be placed as long as it's within the grace period of the auction's previous spend. The auction can't be ended until the grace period has passed since the last spend. So once the auction is past its end time, it ends when nobody has bid for the length of the grace period.
+
+### Cancelling
+
+Sellers sometimes need to pull an item, for example if they listed it with the wrong settings. A seller can cancel only before the first bid. After that, bidders have locked up funds expecting the auction to run to the end, so the seller is committed. The cancel is authorized by a message from the payout puzzle hash, so no extra key or puzzle needs to be stored.
+
+## Specification
+
+### Overview
+
+An auction is made up of three coins:
+
+* The **auction singleton**: a singleton whose inner puzzle is the action layer with the reserve finalizer. Its state tracks the winning bid.
+* The **locked NFT**: a standard NFT1 that the auction is selling. The auction is tied to one exact NFT coin.
+* The **reserve**: a coin which holds the current winning bid. It starts out empty. Its asset (XCH or a specific CAT) is chosen by the seller at launch and can't be changed, so every bid on the auction must be in that asset.
+
+The locked NFT and the reserve both use the auction's **lock puzzle hash** as their p2 puzzle hash, so the auction singleton controls them. It authorizes their spends by sending them messages, so they can only be spent in the same spend bundle as the singleton.
+
+The life cycle is:
+
+1. **Launch:** The seller sends the NFT to the lock puzzle hash, creates an empty reserve coin of the bid asset at the lock puzzle hash, and launches the auction singleton with a memo describing the auction. These can all be done in the same spend bundle.
+2. **Bid:** Before the auction ends, anyone can place a bid that's strictly higher than the current winning bid and accepted by the bid verifier. The bidder funds the reserve with their bid, plus the buyer's premium and royalty, and the previous bidder is refunded in full. More than one bid can be placed in the same spend.
+3. **End:** After the end time (and the grace period, if any), anyone can end the auction. The reserve pays out the winning bid, and the NFT is sent to the winning bidder. With no bids, the NFT is sent back to the seller.
+4. **Cancel:** Before the first bid, the seller can cancel the auction, which sends the NFT back to them. A cancelled auction is in the same state as one that ended with no bids.
+
+An auction that has ended or been cancelled can't be bid on, ended, or cancelled again. The singleton keeps existing afterward with `ended` set to true, but nothing more can be done with it.
+
+### Conventions
+
+* `bps` means basis points, or 1/100th of a percent. A payment of `bps` basis points of `amount` is `floor(amount * bps / 10000)`, which is called `bps_amount(amount, bps)` below.
+* A **reserve condition** is a condition `(-42 . condition)` output by an action, which the reserve finalizer forwards to the reserve coin, as described in [CHIP-0050](/CHIPs/chip-0050.md).
+
+### Data types
+
+These are the structures used in the puzzles and the launcher memo:
+
+```rue
+struct Bid {
+    amount: Int,
+    ...puzzle_hash: Bytes32,
+}
+
+struct Timings {
+    end_time: Int,
+    ...grace_period: Int,
+}
+
+struct BpsPayment {
+    bps: Int,
+    ...puzzle_hash: Bytes32,
+}
+
+struct Payments {
+    buyers_premium: BpsPayment,
+    commission: BpsPayment,
+    ...payout_puzzle_hash: Bytes32,
+}
+
+struct AuctionState {
+    reserve_amount: Int,
+    ended: Bool,
+    ...winning_bid: Bid,
+}
+```
+
+`end_time` is a UNIX timestamp in seconds, and `grace_period` is a number of seconds.
+
+### State
+
+The action layer's state is an `AuctionState`:
+
+* `reserve_amount` is the amount of the reserve coin.
+* `ended` is true once the auction has been ended or cancelled.
+* `winning_bid` is the current winning bid.
+
+A newly launched auction has the state `(0 () 0 . payout_puzzle_hash)`. So until the first bid, the winning bid has an amount of 0 and the payout puzzle hash. Because of this, an auction with no bids sends the NFT to the payout puzzle hash, and the puzzles can check `winning_bid.amount == 0` to see whether there have been any bids.
+
+### Inner puzzle
+
+The auction's inner puzzle is the [CHIP-0050](/CHIPs/chip-0050.md) action layer with the reserve finalizer, where:
+
+* the reserve's inner puzzle hash is the lock puzzle hash, and its full puzzle hash is either the lock puzzle hash (for XCH) or the CAT puzzle hash of the bid asset wrapping it,
+* the reserve amount is read with the default program, since `reserve_amount` is the first item in the state,
+* the hint is the launcher id,
+* the actions are the bid, end, and cancel actions, in that order.
+
+The singleton must be launched with an amount of 1, because the reserve finalizer always recreates it with an amount of 1.
+
+### The lock puzzle hash
+
+The lock puzzle hash is the hash of a top-level MIPS ([CHIP-0043](/CHIPs/chip-0043.md)) puzzle with:
+
+* a nonce of 0,
+* no restrictions,
+* one member, the singleton member puzzle curried with the auction's launcher id.
+
+To spend a locked coin, it's spent with this MIPS puzzle and a delegated puzzle of `(q . conditions)`. The singleton member's solution is the auction's inner puzzle hash *before* the spend, and a singleton amount of 1. The auction coin must send a message to the locked coin in the same spend bundle, with the tree hash of the delegated puzzle as its contents. The reserve finalizer sends this message to the reserve on every spend, and the end and cancel actions send it to the NFT.
+
+### The reserve
+
+The reserve is spent and recreated on every spend of the auction, as described in CHIP-0050.
+
+Since the reserve finalizer takes the reserve's parent coin id from its solution, the spender can use any coin that's locked by the auction, of the bid asset, with the right amount. This means that an auction whose reserve was never created (or was lost) can still be spent: before spending the auction, create a new coin with the reserve's puzzle hash and amount and spend that one. Funds can't be stolen this way, because the spent coin must hold exactly the reserve amount, and its outputs are fixed by the auction.
+
+The reserve's amount is always:
+
+* 0 before the first bid, and after the auction has ended or been cancelled.
+* `bid + bps_amount(bid, buyers_premium_bps) + bps_amount(bid, royalty_bps)` while there's a winning bid of `bid`.
+
+**XCH reserves:** The reserve is a plain coin at the lock puzzle hash. When the reserve needs more value (when a bid is placed), the bidder spends coins in the same spend bundle that leave the difference unspent. The extra value goes to the reserve.
+
+**CAT reserves:** The reserve is a CAT coin whose inner puzzle hash is the lock puzzle hash. The bidder's CAT coins must be spent in the same CAT ring as the reserve, so that the ring balances.
+
+### Bid verifiers
+
+A bid verifier is a puzzle that's run as `BID_VERIFIER(old_bid, new_bid)`. It returns true if `new_bid` is allowed. `old_bid` is `()` if there are no bids yet, and otherwise the current winning bid. This CHIP defines two:
+
+* **Flat**, curried with `MINIMUM` and `INCREMENT`. The first bid must be at least `MINIMUM`, and every bid after that must be at least `old_bid.amount + INCREMENT`.
+* **Percent**, curried with `MINIMUM` and `INCREMENT_BPS`. The first bid must be at least `MINIMUM`, and every bid after that must be at least `old_bid.amount + bps_amount(old_bid.amount, INCREMENT_BPS)`.
+
+The minimum and increment must both be greater than 0.
+
+### NFT unlocker
+
+The NFT unlocker computes the conditions that the locked NFT must output when the auction ends or is cancelled. It's curried with:
+
+* `SETTLEMENT_PUZZLE_HASH`: the full puzzle hash of the settlement payments puzzle in the reserve's asset. For XCH this is `SETTLEMENT_PAYMENT_HASH`. For CATs, it's the CAT puzzle hash of the reserve's asset with `SETTLEMENT_PAYMENT_HASH` as the inner puzzle hash.
+* `ROYALTY_BPS`: the NFT's royalty basis points.
+
+It's run with the winning bid as its truth, and the solution `(nft_amount)`. It outputs:
+
+1. `(ASSERT_MY_AMOUNT nft_amount)`
+2. `(CREATE_COIN winning_bid.puzzle_hash nft_amount (winning_bid.puzzle_hash))`
+3. `(-10 () trade_prices ())`, the NFT1 transfer program condition. This always clears the NFT's DID owner. `trade_prices` is `((winning_bid.amount SETTLEMENT_PUZZLE_HASH))` if `bps_amount(winning_bid.amount, ROYALTY_BPS)` is greater than 0, and `()` otherwise. A royalty of 0 is skipped because the settlement payments puzzle can't make a payment of 0.
+
+### Bid action
+
+The bid action is curried with:
+
+* `BID_VERIFIER`: the curried bid verifier puzzle.
+* `TIMINGS`: the auction's `Timings`.
+* `BUYERS_PREMIUM_BPS`: the basis points of the buyer's premium.
+* `ROYALTY_BPS`: the NFT's royalty basis points.
+
+Its solution is `(bid grace)`, where `bid` is a `Bid` and `grace` is a boolean. It works as follows:
+
+1. Normalizes `bid.amount` to its canonical integer form, so the state can always be reproduced from the parsed values.
+2. Asserts that:
+   * the auction hasn't ended,
+   * `bid.puzzle_hash` is exactly 32 bytes,
+   * `bid.amount` is strictly greater than `winning_bid.amount` (so every bid is positive, regardless of the verifier),
+   * the bid verifier accepts the bid.
+3. Sets the new state to `(new_reserve_amount () . bid)`, where `new_reserve_amount = bid.amount + bps_amount(bid.amount, BUYERS_PREMIUM_BPS) + bps_amount(bid.amount, ROYALTY_BPS)`.
+4. Outputs:
+   * `(ASSERT_BEFORE_SECONDS_RELATIVE grace_period)` if `grace` is true and `grace_period` is greater than 0, and otherwise `(ASSERT_BEFORE_SECONDS_ABSOLUTE end_time)`.
+   * `(CREATE_COIN_ANNOUNCEMENT tree_hash(bid))`, so that the bidder can assert it in the spends that fund the reserve.
+   * If there was a previous bid, the reserve condition `(CREATE_COIN old_bid.puzzle_hash old_reserve_amount (old_bid.puzzle_hash))`, which refunds the previous bidder everything they locked up.
+
+Bidders **must** assert the bid's coin announcement (`sha256(auction_coin_id + tree_hash(bid))`) in every coin spend that funds the bid. Otherwise their funds could be used for another bid in the same spend.
+
+Because relative conditions are relative to the auction coin's creation, a grace bid must be placed within `grace_period` seconds of the auction's previous spend. A grace bid can also be placed before the end time, as long as it's within the grace period.
+
+### End action
+
+The end action is curried with:
+
+* `UNLOCKER`: the curried NFT unlocker.
+* `TIMINGS`: the auction's `Timings`.
+* `PAYMENTS`: the auction's `Payments`.
+* `ROYALTY_BPS`: the NFT's royalty basis points.
+* `SETTLEMENT_PAYMENT_HASH`: the inner puzzle hash of the settlement coin, which is `SETTLEMENT_PAYMENT_HASH` (the CAT layer wraps it for CAT reserves).
+* `NFT_COIN_ID`: the coin id of the locked NFT.
+
+Its solution is the rest of the unlocker's solution, `(nft_amount)`. Anyone can run it. Given `bid = winning_bid.amount` and `payout = bid - bps_amount(bid, commission.bps)`, it:
+
+1. Asserts that the auction hasn't ended.
+2. Sets the new state to `(0 1 . winning_bid)`.
+3. Outputs:
+   * the reserve condition `(CREATE_COIN buyers_premium.puzzle_hash bps_amount(bid, buyers_premium.bps) (buyers_premium.puzzle_hash))`, if the amount is greater than 0,
+   * the reserve condition `(CREATE_COIN commission.puzzle_hash bps_amount(bid, commission.bps) (commission.puzzle_hash))`, if the amount is greater than 0,
+   * the reserve condition `(CREATE_COIN payout_puzzle_hash payout (payout_puzzle_hash))`, if the amount is greater than 0,
+   * the reserve condition `(CREATE_COIN SETTLEMENT_PAYMENT_HASH bps_amount(bid, ROYALTY_BPS))`, if the amount is greater than 0. This is the ephemeral settlement coin that pays the royalty,
+   * `(SEND_MESSAGE 0x17 tree_hash((1, unlock_conditions)) NFT_COIN_ID)`, where `unlock_conditions` is the output of the unlocker, which authorizes the NFT to be sent to the winning bidder,
+   * `(ASSERT_SECONDS_ABSOLUTE end_time)`,
+   * `(CREATE_COIN_ANNOUNCEMENT "$")`,
+   * `(ASSERT_SECONDS_RELATIVE grace_period)`, if `grace_period` is greater than 0.
+
+Payments of 0 are skipped (they're replaced with `REMARK` conditions). The premium and royalty are rounded separately in both the bid and end actions, so the reserve always holds exactly what the end action pays out. This matters for CAT reserves, since the CAT ring must balance exactly.
+
+The ephemeral settlement coin must be spent in the same spend bundle, with a notarized payment whose nonce is the NFT's launcher id, paying the royalty to the NFT's royalty puzzle hash. This is what the NFT's transfer program asserts, so the NFT can't be unlocked without the royalty being paid.
+
+Since the message to the NFT must be received, the locked NFT must be spent in the same spend bundle, with a delegated puzzle of `(q . unlock_conditions)`.
+
+### Cancel action
+
+The cancel action is curried with:
+
+* `UNLOCKER`: the curried NFT unlocker.
+* `PAYOUT_PUZZLE_HASH`: the auction's payout puzzle hash.
+* `NFT_COIN_ID`: the coin id of the locked NFT.
+
+Its solution is the rest of the unlocker's solution, `(nft_amount)`. It:
+
+1. Asserts that the auction hasn't ended and has no bids (`winning_bid.amount == 0`).
+2. Sets the new state to `(0 1 . winning_bid)`, the same state that ending an auction with no bids would leave.
+3. Outputs:
+   * `(RECEIVE_MESSAGE 0x17 "c" PAYOUT_PUZZLE_HASH)`, so a coin with the payout puzzle hash must send the message `c` to this exact auction coin,
+   * `(SEND_MESSAGE 0x17 tree_hash((1, unlock_conditions)) NFT_COIN_ID)`, which authorizes the NFT to be sent back to the payout puzzle hash,
+   * `(CREATE_COIN_ANNOUNCEMENT "$")`.
+
+The cancel action has no timing restrictions. Since the cancel message is sent to one exact auction coin, it can't be replayed after the auction has been spent.
+
+### Launcher memo
+
+The auction's launcher is spent with the standard singleton launcher solution `(singleton_puzzle_hash amount key_value_list)`, where `amount` is 1 and `key_value_list` is the auction memo:
+
+```
+(version settings nft_coin_id . reserve)
+```
+
+* `version` is 0.
+* `settings` is the list `(bid_verifier timings payments)`, where:
+  * `bid_verifier` is `(0 minimum increment)` for the flat bid verifier, or `(1 minimum increment_bps)` for the percent bid verifier,
+  * `timings` is a `Timings`,
+  * `payments` is a `Payments`.
+* `nft_coin_id` is the coin id of the locked NFT.
+* `reserve` is a list describing the reserve coin, which is always empty and locked by the auction at launch:
+  * `(0 parent_coin_info)` for XCH reserves, or
+  * `(1 parent_coin_info asset_id hidden_puzzle_hash)` for CAT reserves. `hidden_puzzle_hash` is `()` for a normal CAT, or the hidden puzzle hash of a revocable CAT.
+
+So an XCH auction's memo looks like `(0 (bid_verifier timings payments) nft_coin_id 0 parent_coin_info)`.
+
+The NFT's royalty basis points are curried into the auction, but they're not in the memo, because they can be read from the NFT itself.
+
+### Discovery
+
+To find and reconstruct an auction from its launcher spend, an implementation:
+
+1. Parses the launcher solution and memo. Launchers whose memos don't match the format above aren't auctions.
+2. Fetches the NFT at `nft_coin_id` from the blockchain, and reads its royalty puzzle hash and basis points.
+3. For CAT reserves, gets the reserve's lineage proof from the spend of its parent. This also checks that the reserve is a real coin of that CAT. The lineage proof is intentionally not in the memo, since it can't be trusted.
+4. Rebuilds the auction's inner puzzle hash from the memo, the royalty, and the initial state. It then checks that the singleton puzzle hash in the launcher solution matches, and that the singleton amount is 1.
+
+After that, the auction can be followed from spend to spend by running the action spends in each solution, the same way the action layer does. The new reserve is always the child of the coin that was actually spent as the reserve, which is the `reserve_parent_id` in the finalizer solution. Implementations should never find the reserve by following the previous reserve's children.
+
+Coins that the auction creates are hinted as follows:
+
+* The auction singleton is hinted with its launcher id.
+* The reserve is hinted with the lock puzzle hash.
+* Refunds and payments are hinted with their puzzle hashes.
+* The NFT is hinted with the winning bidder's puzzle hash (or the payout puzzle hash).
+
+### Validation
+
+The puzzles can't prevent every misconfiguration by themselves, so implementations **must** reject auctions that don't meet these rules, both when launching and when parsing them:
+
+* The minimum bid and the bid increment must be greater than 0.
+* The buyer's premium, commission, and NFT royalty can't be more than 10,000 basis points.
+* Every puzzle hash that receives a payment (the buyer's premium and commission if their basis points are greater than 0, and always the payout puzzle hash) must be unique. None of them can be `SETTLEMENT_PAYMENT_HASH` or the auction's own lock puzzle hash. The end action creates every payment from the reserve, so two identical payments would create the same coin twice, and the auction could never be ended.
+* The singleton amount must be 1.
+
+Before bidding on an auction, implementations **must** also check the following, which can't be checked offline:
+
+* The NFT at `nft_coin_id` is unspent, and its p2 puzzle hash is the auction's lock puzzle hash.
+* The NFT's royalty info matches the royalty basis points curried into the auction.
+* For CAT reserves, the reserve's lineage is valid.
+
+Implementations **should** clearly show the end time and grace period to the user. They aren't limited by the puzzles, so an auction could end far in the future. A grace period could also be so long that, in practice, the auction never ends once it has a bid.
+
+### Competing bids
+
+Every bid spends the current auction coin, so two separate bids on the same auction conflict in the mempool. The mempool only replaces a pending spend bundle with one that spends a superset of its coins and pays a higher fee, so a standalone bid would be rejected until the pending bid confirms.
+
+To outbid a pending bid, an implementation **should** take the pending spend bundle and place its own bid after the pending one in the same auction spend. It then aggregates its signature with the pending bundle and pays a higher fee. The pending bidder is refunded in full in the same spend, so this is safe for them.
+
+Because of this, a bid in the last block before the end time can't be answered unless the auction has a grace period. So implementations **should** default to a nonzero grace period when creating auctions.
+
+## Test Cases
+
+The reference implementation includes test suites that cover the full life cycle of an auction, in both XCH and CATs (including revocable CATs), on a simulated blockchain. Among other things, they test that:
+
+* Bids are rejected if they're below the minimum, below the increment, not strictly increasing, malformed, or placed after the end time or grace period.
+* Outbid bidders are refunded in full, including when multiple bids are placed in a single spend.
+* Ending the auction pays the seller, buyer's premium, commission, and royalty exactly. This holds for every combination of fees, including fees of 0 and 100%, and royalties that round down to 0.
+* The auction can only be ended once, only after the end time and grace period, and never before.
+* An auction with no bids returns the NFT to the seller, and clears the NFT's DID owner.
+* A cancel needs the payout puzzle hash's message, is rejected after a bid or after the auction ends, and can't be combined with other actions.
+* Auctions are parsed correctly from their launcher spends and followed from spend to spend, including when someone else spends a stand-in reserve. Launchers whose memo, royalty, or singleton amount doesn't match are rejected.
+* The driver's fee math matches the puzzles exactly, and doesn't overflow.
+
+The tests are in:
+
+* [`crates/chia-sdk-driver/src/primitives/auction/tests.rs`](https://github.com/xch-dev/chia-wallet-sdk/blob/ad45bf416b2006d9378f8c7eddc2e9065489f091/crates/chia-sdk-driver/src/primitives/auction/tests.rs) in the Chia Wallet SDK.
+* [`tests`](https://github.com/xch-dev/auctions/tree/4c039558dd1e4a1ba35cecb61be493015b7c16cd/tests) in the auctions repository.
+
+## Reference Implementation
+
+The puzzles were developed in the [xch-dev/auctions](https://github.com/xch-dev/auctions/tree/4c039558dd1e4a1ba35cecb61be493015b7c16cd) repository. Their Rue source, compiled CLVM (`.rue.hex`), and tree hashes (`.rue.hash`) are checked in under [`puzzles`](https://github.com/xch-dev/auctions/tree/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles):
+
+* [`actions/bid_action.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/actions/bid_action.rue)
+* [`actions/end_action.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/actions/end_action.rue)
+* [`actions/cancel_action.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/actions/cancel_action.rue)
+* [`unlockers/nft_unlocker.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/unlockers/nft_unlocker.rue)
+* [`bid_verifiers/flat_bid_verifier.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/bid_verifiers/flat_bid_verifier.rue)
+* [`bid_verifiers/percent_bid_verifier.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/bid_verifiers/percent_bid_verifier.rue)
+* [`shared.rue`](https://github.com/xch-dev/auctions/blob/4c039558dd1e4a1ba35cecb61be493015b7c16cd/puzzles/shared.rue)
+
+The drivers are part of the [Chia Wallet SDK](https://github.com/xch-dev/chia-wallet-sdk/tree/ad45bf416b2006d9378f8c7eddc2e9065489f091), behind the `auction` feature, as of [PR #507](https://github.com/xch-dev/chia-wallet-sdk/pull/507). They have bindings for Node.js, WebAssembly, and Python:
+
+* Puzzle types: [`crates/chia-sdk-types/src/puzzles/auction`](https://github.com/xch-dev/chia-wallet-sdk/tree/ad45bf416b2006d9378f8c7eddc2e9065489f091/crates/chia-sdk-types/src/puzzles/auction)
+* Drivers: [`crates/chia-sdk-driver/src/primitives/auction`](https://github.com/xch-dev/chia-wallet-sdk/tree/ad45bf416b2006d9378f8c7eddc2e9065489f091/crates/chia-sdk-driver/src/primitives/auction)
+* Bindings: [`crates/chia-sdk-bindings/src/auction.rs`](https://github.com/xch-dev/chia-wallet-sdk/blob/ad45bf416b2006d9378f8c7eddc2e9065489f091/crates/chia-sdk-bindings/src/auction.rs)
+
+## Security
+
+The action layer and reserve finalizer that the auction is built on are covered by [CHIP-0050](/CHIPs/chip-0050.md). These are the main security considerations:
+
+### Funds and the NFT can't be taken
+
+* The NFT and the reserve can only be spent with conditions that the auction singleton authorizes, through the MIPS lock. The NFT can only be unlocked by the end or cancel action, which only ever send it to the winning bidder or the payout puzzle hash.
+* A bidder's funds are either in the reserve, while they're the winning bidder, or refunded in full, in the same spend that outbids them.
+* Bidders assert the bid's coin announcement, which commits to the bid's amount and puzzle hash. So their funds can't be used for any other bid.
+* Bids can't be malformed. The bid action checks that the bid's puzzle hash is 32 bytes and normalizes its amount. A bad puzzle hash would otherwise make every future refund and the NFT transfer impossible.
+* The auction can only end once, and can't be bid on after it ends. So funds can't be locked by a bid that's placed after the NFT is gone.
+* The spender chooses which coin to spend as the reserve. This can't be used to take funds, because the coin must be locked by the auction, of the reserve's asset, and hold exactly the reserve amount, and its outputs are fixed.
+
+### Trust assumptions
+
+* **Revocable CATs:** The issuer of a revocable CAT can spend any coin of that CAT, including the reserve. If they revoke the reserve during an auction, they take the current winning bid. The auction can then never be ended, so the NFT is locked forever. Implementations should make it clear that the issuer is trusted when an auction is in a revocable CAT.
+* **Payout puzzle hash:** The payout puzzle hash authorizes a cancel before the first bid. If it's a puzzle that others can spend or send messages from, they can cancel the auction too, which only sends the NFT back to the payout puzzle hash. If it's a puzzle that can't send messages, such as a payment split, the auction can't be cancelled at all.
+* **Grace flag:** A bidder's announcement commits to their bid, but not to the `grace` flag. Anyone relaying a pending bid can change the flag. This only changes when the bid is allowed to land, not what the bidder pays or gets.
+
+### Misconfigured auctions
+
+The puzzles don't check every setting, so a seller could launch an auction that can never be ended, for example with duplicate payment puzzle hashes or fees over 100%. A seller could also point the memo at an NFT that isn't locked. Implementations must follow the [Validation](#validation) rules before showing an auction or letting users bid on it. An implementation that skips them could let users lock funds in an auction that can't pay out.
+
+### Mempool behavior
+
+A cancel and a first bid both spend the auction coin, so whichever confirms first wins. The seller can't replace a pending bid with a cancel, since the bidder's coins assert the bid's announcement. As described in [Competing bids](#competing-bids), outbidding a pending bid means extending its spend bundle, which is safe for the pending bidder.
+
+## Additional Assets
+
+None.
+
+## Credits
+
+The high-level design comes from Josh Painter's original [draft CHIP](https://github.com/Chia-Network/chips/pull/24) for auctions. yakuhito created the [action layer](/CHIPs/chip-0050.md) that the auction is built on, and helped design the puzzles. Rigidity wrote the puzzles and the reference implementation.
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
