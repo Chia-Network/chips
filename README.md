@@ -16,6 +16,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 * [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
 * [64 - Cyberphysics Chia Continuum](https://github.com/Chia-Network/chips/pull/221)
+* [64 - English Auctions for NFTs](https://github.com/Chia-Network/chips/pull/224)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
