@@ -1,0 +1,23 @@
+flowchart TB
+    OFFER["Creator signs a creation offer"] --> CREATE["A. Create<br/>launcher, LP eve mint, reserves,<br/>floor burned, fee paid, registered"]
+    CREATE --> LIVE(["Pool is live and listed"])
+    subgraph puzzle["INSIDE THE PUZZLE - the leaves this CHIP specifies"]
+        ADD["B. Add liquidity<br/>LP minted to the depositor"]
+        SWAP["C. Swap<br/>one pool, one action"]
+        ROUTE["D. Route<br/>several pools, one bundle"]
+        REMOVE["E. Remove<br/>LP burned, reserves paid pro-rata"]
+        OPS["F. Operator lanes<br/>collect, observe, dao_fee"]
+    end
+    LIVE --> ADD
+    LIVE --> SWAP
+    LIVE --> ROUTE
+    LIVE --> REMOVE
+    LIVE --> OPS
+    ADD & SWAP & ROUTE & REMOVE & OPS --> SUCC["Successor pool coin<br/>new state, same launcher"]
+    SUCC --> LIVE
+    SUCC -.->|"index persisted ahead of the chain"| IDX(["deployment index"])
+    IDX -.->|"if it falls behind"| RESYNC["H. Resync<br/>replay spends to the tip"]
+    RESYNC -.-> IDX
+    REMOVE -.->|"never below the burned floor"| FLOOR(["LOCKED_BURN, one unit, stays forever"])
+
+    style puzzle stroke:#58b8a2,stroke-width:2px,stroke-dasharray: 7 5,fill:#16302b

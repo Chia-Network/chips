@@ -1,0 +1,14 @@
+flowchart TB
+    LEAF["<b>Leaf</b><br/>swap / add / remove /<br/>observe / collect / dao_fee"]
+    FIN["<b>Multi-reserve finalizer</b><br/>curried: reserve hashes, config hash,<br/>the six leaf module hashes<br/>reads reserve parents from STATE"]
+    RES["<b>Reserve coin i</b><br/>p2_delegated_by_singleton"]
+    SUCC["<b>Successor singleton</b><br/>new state,<br/>reserve parents rewritten"]
+    PAY["<b>Payout coin</b><br/>OFFER_MOD child<br/>of a shrinking reserve"]
+
+    LEAF -->|"tagged condition"| FIN
+    FIN ==>|"SEND_MESSAGE mode 23<br/>receiver id DERIVED from state"| RES
+    FIN -->|"recreates, once"| SUCC
+    RES -->|"CREATE_COIN"| PAY
+    LEAF -.->|"NO PATH: a leaf cannot address a reserve"| RES
+
+    linkStyle 4 stroke:#e0929c,stroke-width:2px,color:#e0929c
