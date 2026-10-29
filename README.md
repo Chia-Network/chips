@@ -16,6 +16,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [60 - Titled CATs](https://github.com/Chia-Network/chips/pull/205)
 * [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
 * [64 - Cyberphysics Chia Continuum](https://github.com/Chia-Network/chips/pull/221)
+* [65 - English Auctions for NFTs](https://github.com/Chia-Network/chips/pull/224)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
@@ -97,9 +98,5 @@ The following standards were finalized before the CHIP process had been created:
 * [Pooling](https://chialisp.com/pooling) -- Chia's decentralized pooling protocol
 * [CAT2](https://chialisp.com/cats) -- The second standard for Chia Asset Tokens
 * [Offers](https://chialisp.com/offers) -- The first standard for peer-to-peer asset exchange on Chia's blockchain
-
-### Under Consideration
-The following Pull Requests have not yet been formalized as a CHIP:
-* [Auction Standard](https://github.com/Chia-Network/chips/pull/24)
 
 -----
