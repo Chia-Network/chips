@@ -17,6 +17,7 @@ The rest of this document is a summary of all notable CHIPs, organized by status
 * [61 - Remote compact VDF proofs](https://github.com/Chia-Network/chips/pull/209)
 * [64 - Cyberphysics Chia Continuum](https://github.com/Chia-Network/chips/pull/221)
 * [65 - English Auctions for NFTs](https://github.com/Chia-Network/chips/pull/224)
+* [66 - DOG token standard](https://github.com/Chia-Network/chips/pull/229)
 
 ### Review
 * [48 - New Proof of Space](https://github.com/Chia-Network/chips/pull/160)
