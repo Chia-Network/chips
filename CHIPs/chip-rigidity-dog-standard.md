@@ -1,0 +1,343 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | DOG - Mojo-free fungible token standard
+Description   | A fungible token standard whose tokens need no mojos to issue or hold, with metadata committed to by the asset id.
+Author        | [Rigidity](https://github.com/Rigidity)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Standards Track
+Sub-Category  | Primitive
+Created       | 2026-11-12
+Requires      | [CHIP-0025: Chialisp Message Conditions](/CHIPs/chip-0025.md)
+
+## Abstract
+DOG is a fungible token standard for Chia. Like a CAT, a DOG asset is defined by a TAIL that decides when tokens can be issued or melted, and its tokens are controlled by an ordinary inner puzzle. Unlike a CAT, a DOG coin is always worth 0 mojos: its token amount is curried into its puzzle. Spending it creates an ephemeral *execution coin* worth the token amount in mojos, which runs the inner puzzle and is spent in the same transaction, so the mojos it holds are created and destroyed together and never need to exist. Execution coins are linked into a ring of messages that conserves supply. The asset id commits to the asset's decimals, name, symbol and content hashes, and can optionally name a singleton that may update the display metadata later and lock it permanently. DOGs work with existing inner puzzles, including the settlement payments puzzle used by offers.
+
+## Motivation
+CAT2 tokens are backed by mojos. By convention one CAT is 1000 mojos, so issuing a token locks up XCH, a coin's token amount is limited by the XCH that backs it, and the number of decimal places is fixed at three. Issuers who want large supplies or more decimals either have to lock up a lot of XCH or use a non-standard convention that wallets can't recognize.
+
+A CAT's asset id is also only the hash of its TAIL. It says nothing about the token's name, symbol, decimals or icon, so wallets rely on off-chain registries for them, and those registries can disagree, go offline, or change the metadata without any on-chain record.
+
+DOG addresses both problems:
+* **Tokens don't need mojos.** Issuing and holding tokens costs no XCH beyond transaction fees, and a single coin can hold up to `u64::MAX` tokens. The token amount doesn't need to be a multiple of mojos, so assets can use any number of decimals.
+* **Metadata is part of the asset.** The asset id commits to the decimals and to the genesis name, symbol and content hashes, so they can be verified without a registry. An issuer can opt into letting a singleton update the name, symbol and icon later, with every update recorded on chain, and lock them permanently.
+* **The TAIL is simpler.** It's given the change in supply, the new amount, the inner puzzle hash and the asset id, and returns the conditions that authorize the change. It doesn't need to understand the outer puzzle or the inner puzzle's conditions.
+
+Use cases include memecoins and community tokens with very large supplies, stablecoins and real world assets that want more than three decimals, and any asset whose issuer wants its name and icon to be verifiable on chain rather than in a registry.
+
+The standard is implemented today using existing consensus rules, with no fork. It costs about 1.05x as much as an equivalent CAT2 spend (see [Cost](#cost)).
+
+## Backwards Compatibility
+This CHIP introduces a new token standard that exists alongside CAT2. It doesn't modify consensus or any existing standard, so it introduces no breaking changes to Chia. It does have some compatibility considerations:
+
+* **DOGs aren't CATs.** Wallets, indexers, exchanges and offer tooling need new support to recognize, display and trade them. A DOG asset id isn't a CAT asset id, and the two can't be converted into each other.
+* **Most inner puzzles work unchanged.** The execution coin presents the inner puzzle with an ordinary coin, whose amount in mojos is the token amount. The standard puzzle, the settlement payments puzzle and the revocation layer from [CHIP-0038](/CHIPs/chip-0038.md) work as they do for CATs, and so do inner puzzles that only use absolute time locks, such as vesting schedules and the clawback puzzle from [CHIP-0044](/CHIPs/chip-0044.md).
+* **Relative time conditions can't be used in inner puzzles.** The execution coin is ephemeral, and consensus rejects relative time conditions (such as `ASSERT_SECONDS_RELATIVE` and `ASSERT_HEIGHT_RELATIVE`) on ephemeral coins. Absolute time conditions work.
+* **`ASSERT_MY_COIN_ID`, `ASSERT_MY_PARENT_ID` and `AGG_SIG_ME` apply to the execution coin**, whose parent is the DOG coin. An inner puzzle that checks its own lineage needs to go back two coins.
+* **One class of message is reserved.** Inner puzzles can't output `SEND_MESSAGE` or `RECEIVE_MESSAGE` with mode `0b000010` whose message starts with the byte `0xd0`, since these could take the place of ring messages. Every other mode and prefix is unrestricted.
+
+## Rationale
+
+### Separating the DOG coin from the execution coin
+The amount of a coin is a consensus value, so a token amount that isn't backed by mojos has to live somewhere else. DOG curries it into the DOG coin's puzzle, and keeps the coin itself at 0 mojos.
+
+Inner puzzles, however, expect to see their token amount as their coin's amount, and offers need the puzzle hash of a settlement coin to be known before any coins are chosen, which means it can't depend on the amount. The execution coin solves both: it's worth the token amount in mojos, and its puzzle hash only depends on the inner puzzle hash and the asset. The mojos are created by the DOG coin's spend and destroyed by the execution coin's spend in the same transaction, so they cancel out.
+
+The alternative, a single puzzle that curries the amount and runs the inner puzzle directly, would make the inner puzzle see a coin worth 0 mojos, and would make the settlement puzzle hash depend on the amount. Neither works with existing inner puzzles or offers.
+
+### Messages instead of announcements
+The supply ring uses message conditions from [CHIP-0025](/CHIPs/chip-0025.md) rather than coin announcements, as CAT2 does. Consensus requires every message to be received exactly as many times as it's sent, so ring messages can't be reused, shared between rings, or asserted by an unrelated coin. This lets the ring be simpler than the CAT2 ring: each execution coin sends one message to the puzzle hash of the next execution coin, and receives one message from anyone.
+
+### TAIL interface
+A DOG TAIL is given the supply change, the new amount of the execution coin, the DOG coin's inner puzzle hash and the asset id. It doesn't see the inner puzzle's conditions, which keeps it independent of the inner puzzle. The extra arguments cover what CAT TAILs typically inspect those conditions for:
+* The **new amount** lets an authorization commit to the result, not just the change (see [Security](#tail-authorizations-must-commit-to-the-new-amount)).
+* The **inner puzzle hash** lets a TAIL require that tokens are issued into a particular puzzle, such as a layer that restricts who can hold them.
+* The **asset id** lets an authorization, such as a signature by a key used for several assets, be tied to one asset.
+
+### Committing to metadata
+Committing the name and symbol to the asset id doesn't stop impersonation, since anyone can issue another asset with the same name, so wallets still need to show the asset id or use a trusted list. It does mean the issuer can't change them silently, and that anyone can verify them without a registry. Issuers usually expect to be able to fix an icon or rename a project, so an asset can opt into updates through a singleton. Wallets can see whether it did, every update it made, and whether it's locked. Decimals can never change, since every balance would change with them.
+
+Images and other content are committed to by their SHA-256 hash rather than by URL, so the links are only hints for where to download them. Anyone can publish or mirror them, and links that break don't affect the asset.
+
+### Revocability and extensions as inner puzzles
+Revocation, transfer fees, credential restrictions and similar features are built as inner puzzle layers, as they would be for a CAT, rather than as part of the outer puzzle. This keeps the core puzzles small and lets the same layers (such as the [CHIP-0038](/CHIPs/chip-0038.md) revocation layer) be used for both standards.
+
+## Specification
+
+The puzzles are written in [Rue](https://github.com/xch-dev/rue). The compiled puzzles and their tree hashes are in the [reference implementation](#reference-implementation). All links in this section are to commit [`b407d9b`](https://github.com/xch-dev/dog-standard/tree/b407d9b3a262f3e1fc24b92fb35062e299b343ff).
+
+### Overview
+Tokens are held in a **DOG coin**, which is always worth 0 mojos, and whose token amount is curried into its puzzle. Spending a DOG coin creates an **execution coin**, worth the token amount in mojos, which is spent in the same transaction. The execution coin runs the inner puzzle and wraps every coin it creates in a new DOG coin worth 0 mojos.
+
+```
+           creates (amount in mojos)            creates (0 mojos each)
+DOG coin ─────────────────────────▶ execution coin ──────────────────▶ DOG coins
+0 mojos     sends a message that      runs the inner puzzle,          0 mojos, with
+AMOUNT      proves the parent         and joins a ring with the       their amounts
+curried     is a DOG coin             other execution coins           curried
+```
+
+### Puzzles
+
+| Puzzle | Tree hash | Curried arguments | Solution |
+| --- | --- | --- | --- |
+| [`dog.rue`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/dog.rue) | `0x359fe09b29e4bda802b6d0ce0c7b8e2037c1e98ea867d9788b92d4194f8f1233` | `INNER_PUZZLE_HASH AMOUNT ASSET` | `my_coin_id lineage_proof tail_spend` |
+| [`dog_exec.rue`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/dog_exec.rue) | `0xa84f041dfea9b11901a7d8dbb4c49ee05cc224dcd99d57b52e95145dae9b6bb5` | `INNER_PUZZLE ASSET` | `inner_solution my_amount parent_amount prev_subtotal next_inner_puzzle_hash` |
+
+* `ASSET` is the pair `(EXEC_MOD_HASH . ASSET_ID)`, where `EXEC_MOD_HASH` is the tree hash of `dog_exec.rue`. The arguments that differ between coins come first, so the tree hash of the curried `ASSET` argument is calculated once per spend.
+* The DOG coin puzzle doesn't curry its own mod hash. The execution coin puzzle includes it as a constant (`DOG_MOD_HASH`), since each puzzle needs the other's hash.
+* `lineage_proof` is `(parent_parent_coin_info parent_inner_puzzle_hash parent_amount)`, or nil.
+* `tail_spend` is `(tail metadata_hash delta . tail_solution)`, or nil.
+* `next_inner_puzzle_hash` is the inner puzzle hash of the next execution coin in the ring.
+
+The DOG coin's puzzle hash depends on its inner puzzle hash and amount. The execution coin's puzzle hash depends only on its inner puzzle hash, so for a given asset and inner puzzle it's the same for every amount.
+
+### Message modes
+| Name | Mode | Sender commits to | Receiver commits to | Used for |
+| --- | --- | --- | --- | --- |
+| `DOG_TO_EXEC_MODE` | `0b010111` | puzzle hash | coin id | DOG coin to its execution coin |
+| `RING_MODE` | `0b000010` | nothing | puzzle hash | Ring of execution coins |
+
+Ring messages are `0xd0` (`RING_PREFIX`) followed by the subtotal, encoded as a CLVM integer.
+
+### DOG coin spend
+When a DOG coin is spent:
+1. If `tail_spend` is nil, `lineage_proof` must not be nil, and the new amount is `AMOUNT`.
+2. Otherwise, `sha256tree((tail . metadata_hash))` must equal `ASSET_ID`, the new amount is `AMOUNT + delta`, and the TAIL is run (see [TAIL](#tail)) with a supply change of the new amount minus the proven amount. The proven amount is `AMOUNT` if there's a lineage proof, and 0 otherwise.
+3. The execution coin's id is calculated from `my_coin_id`, the execution coin's puzzle hash, and the new amount. This raises if the new amount is negative or larger than `u64::MAX`.
+4. It outputs:
+   * `ASSERT_MY_COIN_ID my_coin_id`
+   * `CREATE_COIN` with the execution coin's puzzle hash and the new amount
+   * `SEND_MESSAGE` with `DOG_TO_EXEC_MODE`, the new amount as the message, and the execution coin's id as the receiver
+   * The TAIL's conditions, if it was run
+   * `ASSERT_MY_PARENT_ID` if there's a lineage proof, with the id of the execution coin of the same asset with `parent_parent_coin_info`, `parent_inner_puzzle_hash` and `parent_amount`
+
+This gives the following supply changes:
+
+| Lineage proof | TAIL reveal | Execution coin amount | Supply change |
+| --- | --- | --- | --- |
+| valid | none | `AMOUNT` | none |
+| valid | `delta` | `AMOUNT + delta` | `delta` |
+| none | `delta` | `AMOUNT + delta` | `AMOUNT + delta` |
+| none | none | rejected | |
+
+A coin without a lineage proof, such as the eve coin of an issuance, is only valid if the TAIL authorizes all of its tokens.
+
+### Execution coin spend
+When an execution coin is spent:
+1. The inner puzzle is run with `inner_solution`, and its conditions are transformed:
+   * Each `CREATE_COIN` is replaced by a `CREATE_COIN` of the DOG coin puzzle with the condition's puzzle hash as `INNER_PUZZLE_HASH`, its amount (in canonical form) as `AMOUNT`, the same `ASSET`, and an amount of 0 mojos. Memos are kept. The amount must be between 0 and `u64::MAX`.
+   * Any `SEND_MESSAGE` or `RECEIVE_MESSAGE` with `RING_MODE` whose message starts with `RING_PREFIX` causes the spend to fail.
+   * All other conditions are passed through.
+2. The subtotal is `prev_subtotal + my_amount - sum`, where `sum` is the total amount of the created coins.
+3. It outputs:
+   * `RECEIVE_MESSAGE` with `DOG_TO_EXEC_MODE`, `my_amount` as the message, and the puzzle hash of the DOG coin with this inner puzzle hash, `parent_amount` and `ASSET` as the sender. This proves that the parent is a DOG coin of the same asset and inner puzzle, and that `my_amount` is this coin's amount.
+   * `SEND_MESSAGE` with `RING_MODE`, `RING_PREFIX + subtotal`, and the puzzle hash of the execution coin of this asset with `next_inner_puzzle_hash` as the receiver
+   * `RECEIVE_MESSAGE` with `RING_MODE`, `RING_PREFIX + prev_subtotal`, and no sender
+   * The transformed conditions
+
+### Supply conservation
+The execution coins spent together form a ring, in which each sends the next the running total of the coin amounts minus the amounts of the coins they create. The ring can only close if the total created equals the total spent.
+
+Ring messages are sent to the puzzle hash of an execution coin, and received from anyone. This is sufficient because:
+* Any coin with the puzzle hash of an execution coin can only be spent by receiving a message from its parent DOG coin, so it's a real execution coin.
+* Each execution coin sends exactly one ring message, to an execution coin of the same asset, and receives exactly one. Inner puzzles can't send or receive ring messages.
+* Consensus requires every message to be received exactly as many times as it's sent.
+
+So the ring messages sent to execution coins of an asset are exactly the ones they receive. A ring message from any other coin would have to be received by an execution coin, which would leave one of the execution coins' own messages unreceived. Adding up the subtotals, the total amount of the execution coins of an asset in a transaction equals the total amount of the coins they create. The only way to change the supply is the TAIL, which changes the amount of an execution coin.
+
+### TAIL
+A TAIL is a puzzle that's called with the following arguments, followed by its solution, and returns conditions:
+
+```rs
+type Tail = fn(
+    supply_change: Int,       // positive to issue, negative to melt
+    new_amount: Int,          // the amount of the execution coin
+    inner_puzzle_hash: Bytes32,
+    asset_id: Bytes32,
+    ...solution: Any,
+) -> List<Condition>;
+```
+
+The TAIL runs in the DOG coin's spend, so `AGG_SIG_ME` and `ASSERT_MY_*` conditions it outputs apply to the DOG coin.
+
+The standard authorization message for a supply change is `sha256(new_amount) + supply_change`, where both values are CLVM integers. The supply change is at the end, so that a puzzle that tracks supply can read it with `substr(message, 32)`.
+
+This CHIP defines two standard TAILs:
+
+| TAIL | Tree hash | Curried arguments | Rule |
+| --- | --- | --- | --- |
+| [`genesis_by_coin_id`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/genesis_by_coin_id.rue) | `0x3dc9653820cda3ff611f31f3d97a437291f68f8ebe37a7adfe6aa7e4fbc61915` | `GENESIS_COIN_ID` | Asserts that the DOG coin's parent is the genesis coin, and receives the authorization message from it with mode `0b111111`. Tokens can only be issued once, and never melted. |
+| [`everything_with_signature`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/everything_with_signature.rue) | `0xe98c4c1fa93755150ccda4642e3a248d6a01a091f6e834c53f8601ded7bd0025` | `PUBLIC_KEY` | Outputs `AGG_SIG_ME` of the authorization message by the public key, so its owner can issue or melt at any time. |
+
+The reference implementation also includes TAILs for other policies. These aren't required by this CHIP, but are documented in their source:
+
+| TAIL | Tree hash | Rule |
+| --- | --- | --- |
+| [`everything_with_singleton`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/everything_with_singleton.rue) | `0xa6ed0525ff9ef9c26b2fd0e56dd484447458c177c51ff0f4515bc9a4844120a5` | A singleton sends the authorization message to the DOG coin with mode `0b010111`. |
+| [`capped_supply`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/capped_supply.rue) | `0xde7585e4dc1e6b1fb8a4213388e40c01c46e46fd7c99229bcd4c790a44ce121b` | Like `everything_with_singleton`, but the singleton's inner puzzle must be the [supply counter](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/supply_counter.rue), which can never authorize more than a cap in total. |
+| [`burnable`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/burnable.rue) | `0x00ee7a614f00975debb47ded1d7b1e529821993da10ca37185046fcbef1686ee` | Allows any negative supply change, and delegates the rest to another TAIL. |
+| [`issuance_deadline`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/issuance_deadline.rue) | `0x93ff2772f40ddc4d2e7f2a567407aeb8abf8bf45a63e84fd912835c5dd4f9fc0` | Delegates to another TAIL, and adds `ASSERT_BEFORE_SECONDS_ABSOLUTE` to issuances. |
+| [`delegated_tail`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/delegated_tail.rue) | `0x99c3ac4f86ff6d12d26c00d2746418d9c16536608b5297e52fd86252e42bc3df` | Runs any TAIL whose tree hash is signed by a public key with `AGG_SIG_UNSAFE`, along with the asset id. |
+| [`multisig`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/tails/multisig.rue) | `0xc330bda2576f0758f02fc4cbbc028eae728b4ee603808372d0d13370685cb3e4` | Requires `AGG_SIG_ME` of the authorization message by at least `m` of `n` public keys. |
+
+### Asset id and metadata
+The asset id is the tree hash of the pair `(TAIL . METADATA)`, where `METADATA` is:
+
+```
+(decimals (name symbol image_hash data_hash) updater)
+```
+
+* `decimals` is the number of decimal places that token amounts are displayed with. It's permanent.
+* `(name symbol image_hash data_hash)` is the **genesis info**. `name` and `symbol` are UTF-8 strings. `image_hash` and `data_hash` are each nil, or the SHA-256 hash of the icon and of a document with extra information (such as a description and links).
+* `updater` is nil, or the launcher id of a [metadata updater](#metadata-updater) singleton.
+
+Two assets with the same TAIL but different metadata, including a different updater or none, are different assets.
+
+With no updater, the genesis info is the asset's display metadata, and it can never change.
+
+### Metadata updater
+The updater is a singleton (singleton top layer v1.1) whose inner puzzle is [`metadata_updater.rue`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/metadata/metadata_updater.rue), with the tree hash `0xe2cf1b8f614194c47e492e6beef926103e9127a047e78008bb3ffed838c514d7`. Its curried arguments are `MOD_HASH STATE OWNER`, and its solution is passed to the owner puzzle.
+
+* `STATE` is `(INFO IMAGE_URIS DATA_URIS)`, where `INFO` has the same form as the genesis info, and `IMAGE_URIS` and `DATA_URIS` are lists of strings.
+* `OWNER` is any puzzle, such as the standard puzzle or a multisig.
+
+The owner can:
+* **Update:** output `(REMARK "dog_metadata_update" INFO IMAGE_URIS DATA_URIS)`, and the singleton is recreated with the new state. There can be at most one update per spend.
+* **Transfer:** the owner's odd `CREATE_COIN` is wrapped in the updater with the condition's puzzle hash as the new owner.
+* **Lock:** melt the singleton with `CREATE_COIN` with an amount of -113. The state after that spend is final.
+
+The updater doesn't inspect the state, and the decimals aren't part of it, so they can't change. Wallets must only accept a state that is exactly `(INFO IMAGE_URIS DATA_URIS)` in the form above.
+
+The launcher id is the id of a 1 mojo coin with the singleton launcher puzzle hash, so it's known before issuance. Issuers should launch the updater from the same parent coin as the eve DOG coin, and that parent must assert the launcher's announcement, which commits to the singleton's puzzle hash.
+
+### Resolving metadata
+A wallet resolves an asset's current display metadata as follows:
+* **Immutable:** there's no updater. The genesis info is the display metadata.
+* **Unlaunched:** there's an updater, but its launcher hasn't been spent. Wallets should show the genesis info as mutable, since the launcher can still be created.
+* **Updatable:** the latest singleton coin is unspent. The display metadata is its state, and the owner can update it. Wallets should say so, and can show the history.
+* **Locked:** the latest spend melted the singleton. The display metadata is the state after that spend, and it's final.
+
+The current state can be read from a single coin spend: the spend of the parent of the unspent singleton coin, or the spend that melted it. Wallets can find the latest coin by following the launcher's children, or by looking up coins hinted with the launcher id. Anyone can create coins hinted with the launcher id, so wallets must check that each spend belongs to the committed launcher id and that consecutive spends are linked.
+
+### Content and links
+Content is identified by its hash, and links are only hints for where to download it. Wallets must check content against its hash before showing it.
+
+Issuers should add a `REMARK` to the issuance spend, so that indexers can find the metadata of an asset:
+
+```
+(1 "dog_metadata" TAIL_HASH METADATA IMAGE_URIS DATA_URIS)
+```
+
+Indexers can verify the metadata against the asset id, but the links in it are untrusted. For an updatable asset, the links in the updater's state are signed by the owner, but content must still match its hash.
+
+An image added to IPFS with raw leaves (`ipfs add --cid-version 1`) that fits in one block (256 KiB by default) has a CID that's the base32 encoding of `0x01551220` followed by its SHA-256 hash, so wallets can derive it from `image_hash` and fetch it from any gateway.
+
+### Issuance
+To issue an asset, a parent coin creates an eve DOG coin with 0 mojos and the issued amount curried. The eve coin is spent in the same transaction with a TAIL reveal and no lineage proof, so the TAIL must authorize all of its tokens.
+
+The eve coin's inner puzzle should assert its own amount with `ASSERT_MY_AMOUNT`, as a second line of defense against [front-running](#tail-authorizations-must-commit-to-the-new-amount).
+
+### Hints and wallet discovery
+DOG coins are hinted the same way as CAT coins: the hint is in the memos of the inner puzzle's `CREATE_COIN`, which the execution coin keeps. The hint is usually the p2 puzzle hash. A wallet reads the amount and inner puzzle hash of a DOG coin from the spend of its parent execution coin.
+
+### Offers
+A requested DOG payment is asserted with a puzzle announcement from the execution coin whose inner puzzle is the settlement payments puzzle. Its puzzle hash doesn't depend on the amount, so the maker can calculate it before any coins are chosen.
+
+### Revocation
+A DOG can be made revocable by using the [CHIP-0038](/CHIPs/chip-0038.md) [revocation layer](https://github.com/Chia-Network/chia_puzzles/blob/main/puzzles/vc_puzzles/revocation_layer.clsp) as its inner puzzle, with no changes to the DOG puzzles. When the owner's p2 puzzle runs, every coin it creates is wrapped in the revocation layer again. When the hidden puzzle runs, its outputs aren't wrapped unless it wraps them itself.
+
+Revocability isn't part of the asset id, so the same asset can have revocable and unrevocable coins. As with revocable CATs, wallets should treat the asset id and the hidden puzzle hash together as the asset. To make sure that every coin of an asset is revocable, issue it with a TAIL that only the issuer can run, and only into the revocation layer.
+
+A requested payment of a revocable DOG is asserted from the execution coin with the inner puzzle `revocation_layer(HIDDEN_PUZZLE_HASH, SETTLEMENT_PAYMENT_HASH)`.
+
+### Extensions
+Features such as transfer fees and credential restrictions should be built as inner puzzle layers, which wrap the holder's inner puzzle and every coin it creates. A layer sees an ordinary coin, so it can use `ASSERT_MY_AMOUNT` to learn the token amount. The reference implementation includes example [`transfer_fee`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/layers/transfer_fee.rue) and [`credential_restriction`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/layers/credential_restriction.rue) layers. They're proofs of concept, and aren't part of this standard.
+
+### Cost
+Spending a DOG takes two coin spends instead of one, and creates two coins per output. Measured against CAT2 with the reference implementation:
+
+| Spend | CAT | DOG | Ratio |
+| --- | --- | --- | --- |
+| 1 coin to 1 coin | 32,969,564 | 34,773,504 | 1.05x |
+| 1 coin to 2 coins | 35,760,177 | 37,552,945 | 1.05x |
+| 3 coins to 1 coin | 93,231,549 | 98,641,742 | 1.06x |
+| 5 coins to 5 coins | 164,727,971 | 173,723,788 | 1.05x |
+| Revocable, owner spend (1 coin to 1 coin) | 43,274,669 | 45,041,341 | 1.04x |
+| Revocable, revocation spend (1 coin to 1 coin) | 43,251,953 | 45,018,625 | 1.04x |
+
+| Metadata updater spend | Cost |
+| --- | --- |
+| Issuance without an updater | 40,027,979 |
+| Issuance with an updater | 50,307,571 |
+| First update (of the eve singleton) | 35,527,189 |
+| Update | 34,363,879 |
+| Transfer | 32,994,098 |
+| Lock | 30,352,601 |
+
+The execution coins are ephemeral, but they still add coin records to the blockchain.
+
+## Test Cases
+The reference implementation includes the following test suites, run with `cargo test`:
+
+| Tests | What they cover |
+| --- | --- |
+| [`transfers`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/transfers.rs) | Sending, splitting, merging, zero amounts, fees, several assets, wallet syncing |
+| [`supply`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/supply.rs) | Issuing, melting, both standard TAILs, what the TAIL sees, `u64::MAX`, metadata |
+| [`tails`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/tails.rs) | Issuing and melting with the other TAILs, and the supply changes they reject |
+| [`offers`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/offers.rs) | XCH for DOG, DOG for XCH, DOG for DOG, underpaying, paying with the wrong asset |
+| [`revocation`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/revocation.rs) | Revocable issuance, owner transfers, revoking one or several coins, revoking coins held by the settlement puzzle, offers, non-issuers can't revoke, revocation can't change supply, parsing children |
+| [`issuance_front_running`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/issuance_front_running.rs) | Rebuilding an issuance in the mempool with a larger delta is rejected |
+| [`attacks`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/attacks.rs) | Fake TAILs, negative and oversized outputs, forged DOG and execution coins, joining the ring, misdirected ring messages, ring messages from inner puzzles, tampered solutions, replayed signatures |
+| [`metadata`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/metadata.rs) | Issuing with an updater, updating, transferring and locking it, non-owners and fake updaters, replacing the launcher's solution, decimals can't change, resolving metadata and history |
+| [`properties`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/properties.rs) | Property tests: random balanced rings conserve supply, and unbalanced rings are rejected |
+| [`costs`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/costs.rs) | Cost compared to CATs, including revocable ones |
+| [`puzzles`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/puzzles.rs) | The compiled puzzles match the Rue sources, and `DOG_MOD_HASH` is up to date |
+| [`extensions`](https://github.com/xch-dev/dog-standard/blob/b407d9b3a262f3e1fc24b92fb35062e299b343ff/tests/extensions.rs) | The example layers can't be bypassed, and which time conditions work in inner puzzles |
+
+## Reference Implementation
+The reference implementation is at [xch-dev/dog-standard](https://github.com/xch-dev/dog-standard/tree/b407d9b3a262f3e1fc24b92fb35062e299b343ff). It contains:
+* The puzzles, written in Rue, in [`puzzles`](https://github.com/xch-dev/dog-standard/tree/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles), and their compiled forms and tree hashes in [`puzzles/dist`](https://github.com/xch-dev/dog-standard/tree/b407d9b3a262f3e1fc24b92fb35062e299b343ff/puzzles/dist)
+* A Rust driver built on the [Chia Wallet SDK](https://github.com/xch-dev/chia-wallet-sdk), in [`src`](https://github.com/xch-dev/dog-standard/tree/b407d9b3a262f3e1fc24b92fb35062e299b343ff/src), for issuing, spending, revoking, parsing children, and managing and resolving metadata
+* The test suites listed above
+
+## Security
+The reference implementation hasn't been audited yet, and shouldn't be used on mainnet until it has.
+
+### TAIL authorizations must commit to the new amount
+A DOG coin with a lineage proof can also be spent without one, which gives the same supply change a different new amount (`delta` instead of `AMOUNT + delta`). An authorization that only commits to the supply change could therefore be used for a different result. The standard TAILs sign or receive `sha256(new_amount) + supply_change`, so an authorization can only be used for the result it was made for.
+
+More importantly, the eve coin's spend isn't authenticated. Anyone who sees an issuance in the mempool could rebuild the eve spend with a larger delta and take the difference with another coin of the same asset in the same ring, since the ring only checks the total. **Every TAIL must commit to the new amount, unless no other coin of the asset can ever be in the same transaction.** The reference driver's eve coins also assert their own amount as a second line of defense.
+
+### The TAIL can't change a coin's amount without its owner's consent, in most cases
+The owner's inner puzzle usually signs with `AGG_SIG_ME`, which commits to the execution coin's id, which includes the amount after any supply change. Inner puzzles that don't sign anything, such as the settlement payments puzzle, can be issued into or melted by anyone the TAIL allows while they're in the mempool. With `burnable`, for example, anyone could melt unclaimed tokens left in a settlement coin. That destroys the tokens, but nobody gains from it.
+
+### Reserved ring messages
+If an inner puzzle could send or receive ring messages, it could take the place of an execution coin in the ring and create or destroy tokens. The execution coin rejects any `SEND_MESSAGE` or `RECEIVE_MESSAGE` with `RING_MODE` whose message starts with `RING_PREFIX`. A layer that sends or receives a hash with that mode should add a prefix byte, or it will fail about 1 time in 256.
+
+### Created amounts are checked
+Consensus checks the amount of a `CREATE_COIN`, but the token amount is curried, so the execution coin checks that each created amount is between 0 and `u64::MAX`. A negative amount would otherwise let the other coins be worth more than the input. Amounts are converted to canonical form, so that the curried amount matches the amount that's calculated when the created DOG coin is spent.
+
+### Identifying an asset
+Wallets must identify a DOG by its `ASSET` pair, and check that `EXEC_MOD_HASH` is the tree hash of the standard execution coin puzzle, since a DOG coin curried with another execution puzzle would follow different rules. The asset id commits to the name and symbol, but that doesn't prevent impersonation: anyone can issue another asset with the same name, symbol and icon. Wallets should still show the asset id, or rely on a trusted list.
+
+### Metadata updater
+* The launcher can be spent by anyone, so without an assertion of its announcement, someone could replace the launcher's solution in the mempool and take ownership of the updater. The parent that creates the launcher must assert its announcement.
+* Anyone can launch another singleton with the same state, or create coins hinted with the launcher id. Only the launcher id committed to by the asset counts, and wallets must check that every spend they resolve belongs to it and is linked to the previous one.
+* A metadata resolver checks that spends are linked, not that they're on chain, so the spends must come from a trusted full node.
+* Until the launcher is spent, whoever controls its parent coin can still create it, so wallets should treat unlaunched updaters as mutable.
+* Updatable metadata can be changed by its owner at any time. Wallets should make it clear whether an asset's metadata is updatable or locked.
+
+### Revocation
+Revocable DOGs share the considerations of [CHIP-0038](/CHIPs/chip-0038.md#security). A holder who sees a revocation in the mempool can try to spend their coin first, so a revocation is only final once it's confirmed. Revocation can't change the supply, since the hidden puzzle's outputs go through the execution coin and the ring like any other inner puzzle's.
+
+### Inner puzzle layers
+The ring only checks the total amount of an asset, so a coin of the same asset outside a restricting layer (even one worth 0 tokens) could join a spend and take the tokens out of the layer. The TAIL, or the eve coin's inner puzzle, must make sure that tokens are only issued into the layer. The TAIL is given the inner puzzle hash, so it can check this directly.
+
+## Additional Assets
+* [Reference implementation](https://github.com/xch-dev/dog-standard/tree/b407d9b3a262f3e1fc24b92fb35062e299b343ff)
+* [Rue](https://github.com/xch-dev/rue)
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
