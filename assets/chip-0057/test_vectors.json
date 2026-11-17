@@ -1,0 +1,845 @@
+{
+  "chip": "CHIP-0057",
+  "address_version": 0,
+  "notes": "All integers are 32-byte big-endian hex. Points are 48-byte compressed G1. spend_tweak is (t_k + label_scalar) mod r.",
+  "payments": [
+    {
+      "name": "vector_1_single_output",
+      "description": "One input, one unlabeled output.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175",
+      "input_hash": "38a1c8379cceb0fbebfdf3016707e54a1c7e9d21afb9489b9cc58f6055cc9411",
+      "tweak_point": "b9662882e0596df3c5af1d27b85d62677bb5389a6a1c1f4a1485034804b0ec60749e57a7f1e9712176dfab60298ff292",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6",
+          "t_k": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_pk": "b671487c1d275842f529f7a73a63a32a9a1a49e1dbabcac4058cc48626b6db31f48dc49e769a6f8076a9111ff14e964d",
+          "puzzle_hash": "23adba149dd9000d65e0f8e21b6975364cbe89a63caf56533df4b7664c21fbf5",
+          "spend_tweak": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_sk": "3c399c61ae130724903b3b650e936ff042b7646764289a33519e17100a89db37"
+        }
+      ]
+    },
+    {
+      "name": "vector_2_two_recipients",
+      "description": "One input, two recipients with different scan keys.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "b75c75c4787bade82b417272eff88ed90b3013a14b06c16be66b944856f378a2"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "b75c75c4787bade82b417272eff88ed90b3013a14b06c16be66b944856f378a2",
+      "input_hash": "42b39c642d50849aa93f23c34085d80bb6a236cad4e0edd2841d526838c92b22",
+      "tweak_point": "8bacaf5674c507ac6c1340dee12c01f43a0a32d058981cb30cd8eda1bcfcec1cade35798b58b2fab2df13e9d1d3e893c",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "e9b20a7df882357c76abb4b5f87dcfc9a64cda6413c85f61efa1c4e81e1be50d",
+          "t_k": "13682ff0957fce11761842863c1658c4cfe9dad4b312fb5fcd71f66567d33d9b",
+          "onetime_pk": "97b332699dfd7741b3f0c8bf1e1a0edef3b4ad7a092a8f38d74f17216cfb1d0f5abe7d853f8e3223407be827c9c3aaa8",
+          "puzzle_hash": "596275d286042c639d97e3765fe89d0e5554ac250e0fb4c594a9165017c0a9e5",
+          "spend_tweak": "13682ff0957fce11761842863c1658c4cfe9dad4b312fb5fcd71f66567d33d9b",
+          "onetime_sk": "673970a3a820af748c4984fb2779f1a626f0abd5b19d70a95dc606514104ee22"
+        },
+        {
+          "recipient": {
+            "scan_sk": "56a3762ba1200ab5a796d3a2af85261f745ee9620e927d0232c18b710cbf22d2",
+            "scan_pk": "904b64222fcc0bcf254bcfadcd579cf0530b4fba7ed454f3e6d85799cc9f54913f048f1fb393e4acf1bbe56d09d73108",
+            "spend_sk": "70fbad8c37b92e585f890bcef5730727d4100584fc9df4bbc9f5e533691d20bf",
+            "spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813",
+            "label": null,
+            "address_spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813"
+          },
+          "k": 0,
+          "shared_secret": "1450c748a04e4925bf34d0ef09e21fd1dab0eb0a3675efcb5b2da66d813c06e9",
+          "t_k": "21d2901f3189dc8def5c5a29e84933a5543ceabd131653dd2ea1951523045976",
+          "onetime_pk": "a2557b2b6029fcc6783e8447588311a06b5d3dcad132a318d40bf0d6114595dd3d14fd58fe6f6c88dfa190aaa6bef873",
+          "puzzle_hash": "65249bcb907c9a6fac2e14499f6220cc24ba9359767d680c19405da06b69b263",
+          "spend_tweak": "21d2901f3189dc8def5c5a29e84933a5543ceabd131653dd2ea1951523045976",
+          "onetime_sk": "1ee096583fa58d9e1bab8df0d41a62c7d48f4c3f0fb5ec99f8977a498c217a34"
+        }
+      ]
+    },
+    {
+      "name": "vector_3_labeled",
+      "description": "One input, one output to a labeled address (m = 1).",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "4504f59ea184be18924f95244649287382ec6cdc13f333a8990f648c803a6dac"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "4504f59ea184be18924f95244649287382ec6cdc13f333a8990f648c803a6dac",
+      "input_hash": "58a1875602949aa6bfaf9cb4837957e7175ffb0b14422dbc8d371799f98e66f5",
+      "tweak_point": "a8ce592e979e0eb498f166c426bab46fae69acd1810d24f624db832060c7daca23273082b8f7e5105080485fcbb820d1",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": 1,
+            "address_spend_pk": "965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2"
+          },
+          "k": 0,
+          "shared_secret": "3d1eabb622c40142d4b2557fc222a22cd93d98550255cecb2b6a84985f49215d",
+          "t_k": "301e842ace534f7de854dcc5a48a656d7e9a6d8b8f93db9fb8277f4d1889bdf1",
+          "onetime_pk": "97e7466509081a3ed6e50ba0231a6fa1b48d8c910ac6ec933e26cd5091569c615f299726c91a730dbf51a26cb249f17c",
+          "puzzle_hash": "ba271d218d487e8e5dc994a09a8580e1e8a0559a615bd5805cff11b5a343441c",
+          "spend_tweak": "052b20e2715e5185d0b489736d1bb538e25333d43a26bd9be8295360dd16a255",
+          "onetime_sk": "58fc619583ff32e8e6e5cbe8587f4e1a395a04d538b132e5787d634cb64852dc"
+        }
+      ]
+    },
+    {
+      "name": "vector_4_multi_input",
+      "description": "Two inputs bound by a 2-cycle of ASSERT_CONCURRENT_SPEND conditions.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "2b9857e0307ebfbe51829e3be8c992ae57f6a8debe06a5deab429ddae83a8c1a"
+        },
+        {
+          "synthetic_sk": "05fded8808216b65d439fc41cb07c7270e37ed743e0745652afe055cfe91cf0f",
+          "synthetic_pk": "94c5c19f4343bc2655af729469285a392de9048851363b0b1329a4539a46ab4c6e8bfb39d32da25bffe4d9cdbe3e1061",
+          "coin_id": "209bb03a4cd165785e6149bc6dcb27e35829006f02ec927ab5a20521fd27d21a"
+        }
+      ],
+      "a_sum_pk": "a223ab27f801044cd98c8314014b8073347b0e5aae43c69b78b5ca2a562ee9f799b8efad179b34da1b306ca4d62bad40",
+      "coin_id_l": "209bb03a4cd165785e6149bc6dcb27e35829006f02ec927ab5a20521fd27d21a",
+      "input_hash": "3f1071552b7f2f5e49b68166cb204f0a1b6a23b0c30a28bcba59a9c3f766e166",
+      "tweak_point": "82caa41f9b5e0675cea58072185286e956ec209f1df3a2c23b832c45b8bdd139bab6230e3d5ddc663d269440931bafeb",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "e729dea8c4732747d0e5e930607c52ddfce01ff7c72eaec9ee7c84131e078494",
+          "t_k": "18fafd6001bef3fece078f469731b40a5f362994795f9ff6b9339aa235fee312",
+          "onetime_pk": "b71f484e6d90a657b215ad7bff6f96a8d9bff07e0133d74917cc6c3ef6fa273a706aa56e1fd6da19ed5466f16450ccb1",
+          "puzzle_hash": "5d7fc7d7447c746cfb400e801a169fc7bfd1c13e03bc7866e6b743860a53ac6b",
+          "spend_tweak": "18fafd6001bef3fece078f469731b40a5f362994795f9ff6b9339aa235fee312",
+          "onetime_sk": "6ccc3e13145fd561e438d1bb82954cebb63cfa9577ea15404987aa8e0f309399"
+        }
+      ]
+    },
+    {
+      "name": "vector_6_two_outputs_one_recipient",
+      "description": "The transaction of vector 1 with the same recipient listed twice (k = 0, 1).",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "5d759d2d97c03b1f6fe0657e91d25f6b7dd1311d6023271a1bcd35978a94a175",
+      "input_hash": "38a1c8379cceb0fbebfdf3016707e54a1c7e9d21afb9489b9cc58f6055cc9411",
+      "tweak_point": "b9662882e0596df3c5af1d27b85d62677bb5389a6a1c1f4a1485034804b0ec60749e57a7f1e9712176dfab60298ff292",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6",
+          "t_k": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_pk": "b671487c1d275842f529f7a73a63a32a9a1a49e1dbabcac4058cc48626b6db31f48dc49e769a6f8076a9111ff14e964d",
+          "puzzle_hash": "23adba149dd9000d65e0f8e21b6975364cbe89a63caf56533df4b7664c21fbf5",
+          "spend_tweak": "5c560301c50fa309ad43d0f82cd1af143f6e3769659c80e8c14a072331582ab1",
+          "onetime_sk": "3c399c61ae130724903b3b650e936ff042b7646764289a33519e17100a89db37"
+        },
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 1,
+          "shared_secret": "d3ac1e8f651a73d2e20b43cb73fd6997de5504afbc04a2d4546a92d0020ba2c6",
+          "t_k": "5b41459e4302fc14258a5ab9af5ac6b45946e83f5a2dadc031b3cb49e79fd899",
+          "onetime_pk": "97c5bddfec949ab9d30190a9ba4d64d12b47828ee2226e1556161c4082344fa9dd02849f93aa4cdb613e5522bbd08baf",
+          "puzzle_hash": "0dcde144401307ca3caa58239572e6ab3d0a7f09b4f5d8993d652081c2151f84",
+          "spend_tweak": "5b41459e4302fc14258a5ab9af5ac6b45946e83f5a2dadc031b3cb49e79fd899",
+          "onetime_sk": "3b24defe2c06602f0881c526911c87905c90153d58b9c70ac207db36c0d1891f"
+        }
+      ]
+    },
+    {
+      "name": "vector_7_change_label",
+      "description": "One input, one change output to the recipient's own label m = 0.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "10f36babd97f3da5027238f336ac15a0f12dfb10bc77191711de7eafba964c9f"
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "coin_id_l": "10f36babd97f3da5027238f336ac15a0f12dfb10bc77191711de7eafba964c9f",
+      "input_hash": "620c82f4fd9faf8a41d7ed8025dbda3857797c0bc5f31f4c34e460ddc4a89e79",
+      "tweak_point": "ab1331dbda13bc2ba5f41366416d34ac6a36ca6e7d44a765330861f07b77dee6dfd9ea9bc0298830df50dc20b1e2681b",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": 0,
+            "address_spend_pk": "a2c089434a6abae657b8e3a868f3d1b94299b141f3da6a6788f966b0856d68022bd58459d964b7514111529647ebd7e8"
+          },
+          "k": 0,
+          "shared_secret": "6b13c43195ded3d7e7366decb4c744e371b98a8cf757a9f9cbd784c644d079dc",
+          "t_k": "146540ede99c556f61907c7d0ae1e365aa91f3c116709ef64135a4ccecec0322",
+          "onetime_pk": "b51abe5a989379591b02288a376668ef4124f16b2a5629ba47bebcd4b2359af4c31428efa13f4bf4ac35ed0dd4805da0",
+          "puzzle_hash": "6e0d9f029ea7e8129bf4839d7e805dac5da5b9af5f51fe0374547ac24f8f5257",
+          "spend_tweak": "456bc38722450ca9c6bb16aed1a94d9d8dc15bba3b15ad2c8a5ec235f1de23a4",
+          "onetime_sk": "254f5ce70b4870c4a9b2811bb36b0e79910a88b839a1c6771ab2d222cb0fd42a"
+        }
+      ]
+    },
+    {
+      "name": "vector_9_cat_payment",
+      "description": "One CAT coin spent alone pays one unlabeled output in its asset.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "9be7c61fef47d5bbe870c9ddc6ae2f705b4ff6dd22feeeb10dbd40dee856e211",
+          "wrapper": {
+            "asset_id": "a031232e72df4aa270c253a530b9b0d782d46ac7b5dad63c2aa37690bbb37f6d",
+            "hidden_puzzle_hash": null
+          }
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "a_sum_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+      "coin_id_l": "9be7c61fef47d5bbe870c9ddc6ae2f705b4ff6dd22feeeb10dbd40dee856e211",
+      "input_hash": "5efa7d3fd24b12a9b5f759473117aa5f17480326a6abdddb973dd9bf1d8c65f6",
+      "tweak_point": "b7d880c572e93cd7121b06567fdaf09d5becb298682b920290c56f8d7afe43937423c80101f445ade3002e4f34bbe695",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "01841b8460fa34399d8754fe9b8fcaf70b85e01db1805461b82cf13832203672",
+          "t_k": "0a3db4ce82a33d3ab0c62c093854c492a7330ab81651ad4bba8a66ff9197bea1",
+          "onetime_pk": "b4f950e45ee3e209aab77a44002e171b84e07c3679459a43180a6f8593ee5df08d781ac663bc0548f9ed928cc7bb5451",
+          "puzzle_hash": "df83709ebd837a46717cfb59cc3c75de70606ffb5e3499c202339cf9a5a20dd4",
+          "spend_tweak": "0a3db4ce82a33d3ab0c62c093854c492a7330ab81651ad4bba8a66ff9197bea1",
+          "onetime_sk": "5e0ef58195441e9dc6f76e7e23b85d73fe39dbb914dc22954ade76eb6ac96f28",
+          "ecdh_point": "8ebef7f5b6cb5969b75b90cccbc1afbbf293614a9029d627fc4ca9b3b0cba8b3b185052ffafacc0bee8b21fe21745718",
+          "wrapper": {
+            "asset_id": "a031232e72df4aa270c253a530b9b0d782d46ac7b5dad63c2aa37690bbb37f6d",
+            "hidden_puzzle_hash": null
+          },
+          "amount": 1000,
+          "cat_inner_puzzle_hash": "df83709ebd837a46717cfb59cc3c75de70606ffb5e3499c202339cf9a5a20dd4",
+          "wrapped_puzzle_hash": "cf9f1b5dbf2bd67fa0bb69a554e38c0f2d53877fe565f34f16a16df9f6fa18e5",
+          "hint": "df83709ebd837a46717cfb59cc3c75de70606ffb5e3499c202339cf9a5a20dd4"
+        }
+      ],
+      "wrapper_list": [
+        {
+          "asset_id": "a031232e72df4aa270c253a530b9b0d782d46ac7b5dad63c2aa37690bbb37f6d",
+          "hidden_puzzle_hash": null
+        }
+      ],
+      "negative_controls": {
+        "detections_without_wrapper_list": 0
+      }
+    },
+    {
+      "name": "vector_10_mixed_xch_cat_group",
+      "description": "An XCH coin and a CAT coin bound by a 2-cycle of ASSERT_CONCURRENT_SPEND conditions form one spend group; one output in the CAT (k = 0) and one in XCH (k = 1) to one recipient.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "9ef1c1e7686469e9f5bd8376cd7bf44d26001bb6609b0b50e855c6831300851a",
+          "wrapper": null
+        },
+        {
+          "synthetic_sk": "05fded8808216b65d439fc41cb07c7270e37ed743e0745652afe055cfe91cf0f",
+          "synthetic_pk": "94c5c19f4343bc2655af729469285a392de9048851363b0b1329a4539a46ab4c6e8bfb39d32da25bffe4d9cdbe3e1061",
+          "coin_id": "e96308fc5cb1edabe7d51adcf56b068a1d3834df6ef7464a349279d3110c3715",
+          "wrapper": {
+            "asset_id": "3feecf0ec93ab7762eba27d1643c3921535562e313e9c6b088ca3342860fd34a",
+            "hidden_puzzle_hash": null
+          }
+        }
+      ],
+      "a_sum_pk": "a223ab27f801044cd98c8314014b8073347b0e5aae43c69b78b5ca2a562ee9f799b8efad179b34da1b306ca4d62bad40",
+      "a_sum_sk": "5600d8781de32f0f3d86bc96b46a3a4ea56ae26da168b55dc66b503acbf95b89",
+      "coin_id_l": "9ef1c1e7686469e9f5bd8376cd7bf44d26001bb6609b0b50e855c6831300851a",
+      "input_hash": "16b15af20c72363564c1018d4ad302c243038e77f12b7b142a9f0cd2511bab4b",
+      "tweak_point": "86dc450f2853e6e9151fb982c62de8f27c207e973c11c4934a37ce4b4071255efa0cbdb5cc5e3e86e3352047ea87105c",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "2207bddb590ce67493fb17e9449db1076d1d25b95311078f49b25e9f5beefdc9",
+          "t_k": "36ab5511fcbca153ade0390d6519d6439d4b4eb87f7c06be558f077ce94694a5",
+          "onetime_pk": "8d543a60335bd03dafe2242ccc76be98b00d4b7e4097716dcfd04670e113ba9c18ed0a4bcc82478b7a57f3f237cc3542",
+          "puzzle_hash": "ef3c368004e398581f116b3003884d2ae06571e1960aa37fa417c9bf9c52e376",
+          "spend_tweak": "36ab5511fcbca153ade0390d6519d6439d4b4eb87f7c06be558f077ce94694a5",
+          "onetime_sk": "168eee71e5c0056e90d7a37a46db971fa0947bb67e082008e5e31769c278452b",
+          "ecdh_point": "8e2f60ee1bf98b2cb73bf306325b037dbaa7ea60d864b0636ee0d1b50681aebe5e5f47535171c2a740088e55203983da",
+          "wrapper": {
+            "asset_id": "3feecf0ec93ab7762eba27d1643c3921535562e313e9c6b088ca3342860fd34a",
+            "hidden_puzzle_hash": null
+          },
+          "amount": 1000,
+          "cat_inner_puzzle_hash": "ef3c368004e398581f116b3003884d2ae06571e1960aa37fa417c9bf9c52e376",
+          "wrapped_puzzle_hash": "ff51cf065acca7f5d35b43076d619ac9c8c3acb224423b6d7cf8c04392790278",
+          "hint": "ef3c368004e398581f116b3003884d2ae06571e1960aa37fa417c9bf9c52e376"
+        },
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 1,
+          "shared_secret": "2207bddb590ce67493fb17e9449db1076d1d25b95311078f49b25e9f5beefdc9",
+          "t_k": "29f69dd82238d0cbb5c1419c0fd87c71421b3dd5d03041705f7d1baaca8d6f50",
+          "onetime_pk": "ab6e0b74ce24c54b895d708af3e8711a7060ad3e4f171b0bb43d9ba6bf52359fe4423c492bd5851e155f633ca5ddf137",
+          "puzzle_hash": "eeaa744b2b7edc1bc626f95f16673c0960840f0d7bbcd89771543bf289b1c01c",
+          "spend_tweak": "29f69dd82238d0cbb5c1419c0fd87c71421b3dd5d03041705f7d1baaca8d6f50",
+          "onetime_sk": "09da37380b3c34e698b8ac08f19a3d4d45646ad3cebc5abaefd12b97a3bf1fd6",
+          "ecdh_point": "8e2f60ee1bf98b2cb73bf306325b037dbaa7ea60d864b0636ee0d1b50681aebe5e5f47535171c2a740088e55203983da",
+          "wrapper": null,
+          "amount": 2000,
+          "cat_inner_puzzle_hash": null,
+          "wrapped_puzzle_hash": "eeaa744b2b7edc1bc626f95f16673c0960840f0d7bbcd89771543bf289b1c01c",
+          "hint": null
+        }
+      ],
+      "wrapper_list": [
+        {
+          "asset_id": "3feecf0ec93ab7762eba27d1643c3921535562e313e9c6b088ca3342860fd34a",
+          "hidden_puzzle_hash": null
+        }
+      ],
+      "negative_controls": {
+        "detections_without_wrapper_list": 0,
+        "core_only_tweak_point": "b0fe62fde53d99a0c0d2448bf2936725e0eb39f4672d9ab1e84507bb603345083b78ca4e26e8db545c10a98a34555bd9",
+        "core_only_puzzle_hash": "bd58a3a2e448d0df53d2709d26e43600efc2f43d322fd8f22b01c7411e42f544",
+        "detections_by_core_only_scanner": 0
+      }
+    },
+    {
+      "name": "vector_11_revocable_cat",
+      "description": "One revocable CAT coin (CHIP-0038) spent on the holder's path pays one output that keeps the revocation layer.",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "a7c94fecfea716db5c35a24a3694a3971db349e7d24a543409d94250b7e25d75",
+          "wrapper": {
+            "asset_id": "c8bd63be5a809f7da4af2ff4c33be96ece3373aa596bec55c60c548c115ed011",
+            "hidden_puzzle_hash": "e5380d52cb3751ed5b07ceb5dc8eaf48335196e6e2847159c77354fad8372c3e"
+          }
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "a_sum_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+      "coin_id_l": "a7c94fecfea716db5c35a24a3694a3971db349e7d24a543409d94250b7e25d75",
+      "input_hash": "10ab3170750051ffd9dca8bcbd8786bfc520455e7935a38f1344dabf798e4416",
+      "tweak_point": "a64bfa143baf484827341875404f9eb5504727c96af98d5fd569e6f3c9d0456b70022170dae5366442e8b630483714ea",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "da1a23ecf1059cfdc45c2d51f73b32804fcf5ba65eda6ca3b1b26765926a3253",
+          "t_k": "2c9a2d9f05fce869f6ec6022770f68394900334cf87e2d07962b81af58ab1a40",
+          "onetime_pk": "98f96f9c114611e129eac791ce04b7af4ace2389dc9e4a15d309773462670243e9a6245f74ddf704b924758a5a21aa72",
+          "puzzle_hash": "4d3fbd4e5db29059a9f9e94474510a2e96f9d4017845ab5cea58bed984aa04a1",
+          "spend_tweak": "2c9a2d9f05fce869f6ec6022770f68394900334cf87e2d07962b81af58ab1a40",
+          "onetime_sk": "0c7dc6feef004c84d9e3ca8f58d129154c49604af70a4652267f919c31dccac6",
+          "ecdh_point": "b7bb2fc72fb649602bd584502bd7340eac552aac1d346555a0807667ab3bc45f5a9f5d7cc337d84f561fcdea81dc2b95",
+          "wrapper": {
+            "asset_id": "c8bd63be5a809f7da4af2ff4c33be96ece3373aa596bec55c60c548c115ed011",
+            "hidden_puzzle_hash": "e5380d52cb3751ed5b07ceb5dc8eaf48335196e6e2847159c77354fad8372c3e"
+          },
+          "amount": 1000,
+          "cat_inner_puzzle_hash": "05a3f42711fed22fe7e2000571e6ad35a958a74a16bfb7c68e7829a5f9ef00ef",
+          "wrapped_puzzle_hash": "87b7f0ce1f5ed425c958cad384eb45754a7d02c7cbaa42b5f2d929f2a7d6eb4c",
+          "hint": "4d3fbd4e5db29059a9f9e94474510a2e96f9d4017845ab5cea58bed984aa04a1"
+        }
+      ],
+      "wrapper_list": [
+        {
+          "asset_id": "c8bd63be5a809f7da4af2ff4c33be96ece3373aa596bec55c60c548c115ed011",
+          "hidden_puzzle_hash": "e5380d52cb3751ed5b07ceb5dc8eaf48335196e6e2847159c77354fad8372c3e"
+        }
+      ],
+      "negative_controls": {
+        "detections_without_wrapper_list": 0,
+        "plain_cat_wrapped_puzzle_hash": "5bc561afde1054b263ecb5934acad1c93ed684eaac55b978bf343732619be916",
+        "detections_with_plain_cat_wrapper": 0,
+        "hidden_path_is_eligible": false
+      }
+    }
+  ],
+  "settlement_payments": [
+    {
+      "name": "vector_12_maker_silent_offer",
+      "description": "The maker offers XCH from two coins bound in a cycle and requests a CAT; the CAT payment is derived at k = 0 and paid through the CAT settlement coin, the XCH change at k = 1 with label 0.",
+      "party": "maker",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "5ac4a1e9f0d523b4b0b54cf9e57d3dd44a91b37d4f9cd51c4942821aa720dcf5",
+          "wrapper": null
+        },
+        {
+          "synthetic_sk": "05fded8808216b65d439fc41cb07c7270e37ed743e0745652afe055cfe91cf0f",
+          "synthetic_pk": "94c5c19f4343bc2655af729469285a392de9048851363b0b1329a4539a46ab4c6e8bfb39d32da25bffe4d9cdbe3e1061",
+          "coin_id": "7666be3d2ebfc2fef9b3a738413580c19a461f03968049f9fc9b509d2f8709e1",
+          "wrapper": null
+        }
+      ],
+      "a_sum_pk": "a223ab27f801044cd98c8314014b8073347b0e5aae43c69b78b5ca2a562ee9f799b8efad179b34da1b306ca4d62bad40",
+      "a_sum_sk": "5600d8781de32f0f3d86bc96b46a3a4ea56ae26da168b55dc66b503acbf95b89",
+      "coin_id_l": "5ac4a1e9f0d523b4b0b54cf9e57d3dd44a91b37d4f9cd51c4942821aa720dcf5",
+      "input_hash": "4ef81d7fe36147910945897c304f7608e1ebc5477f32a21ae93f7203d3e8ad00",
+      "tweak_point": "807515271d95e0d378668b7a60ac6c73e10635e9c84e9af29e9a594705e9c45e71cd4fb99a28fce714c18f19b57b0a70",
+      "nonce": "b9a9abea3520fae21a44ab4b93fda17c63b920928d89a45368c9ab82144a71df",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": null,
+            "address_spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+          },
+          "k": 0,
+          "shared_secret": "d0e25749037ad31627684ec1e4269937143e7b22ced0e30f12b70e787cd5ec82",
+          "t_k": "31634d0fc60f61a19b98b1f466fa7db9d00aa7cde3ce4e753d8e39292a0ad05f",
+          "onetime_pk": "b5614d7ac4c8cb55dd3c1918e0036b70cb2fcb925e4ce1be8637f41175f1b908a98e74744f87fb5af60731134228e986",
+          "puzzle_hash": "6d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961",
+          "spend_tweak": "31634d0fc60f61a19b98b1f466fa7db9d00aa7cde3ce4e753d8e39292a0ad05f",
+          "onetime_sk": "1146e66faf12c5bc7e901c6148bc3e95d353d4cbe25a67bfcde24916033c80e5",
+          "ecdh_point": "85ced98c47f8916671e26a883cc6c9a2625055316004a3c9a4fafda7e1a5c8192db78afbcc550662204d441d5be2c327",
+          "wrapper": {
+            "asset_id": "3a4bb549cd71af49426e287cc910aaca72b2653bfae20540f24d666f4eb40d82",
+            "hidden_puzzle_hash": null
+          },
+          "amount": 1000,
+          "cat_inner_puzzle_hash": "6d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961",
+          "wrapped_puzzle_hash": "41a03ba9794804ad355a23e9385eb3eba2c3e090a8eff0b714a58b371133a8f5",
+          "hint": "6d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961",
+          "settled": true,
+          "payment": "ffa06d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961ff8203e8ffffa06d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e9009618080"
+        },
+        {
+          "recipient": {
+            "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+            "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+            "spend_sk": "53d140b312a0e16316314274eb6398e15706d100fe8a754990540febd931b087",
+            "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+            "label": 0,
+            "address_spend_pk": "a2c089434a6abae657b8e3a868f3d1b94299b141f3da6a6788f966b0856d68022bd58459d964b7514111529647ebd7e8"
+          },
+          "k": 1,
+          "shared_secret": "d0e25749037ad31627684ec1e4269937143e7b22ced0e30f12b70e787cd5ec82",
+          "t_k": "3e6315fadacd48463427cdc85f28c69bfd2ff952ce5d58b0edc3469b2afeaa83",
+          "onetime_pk": "a91f67c9abfb21c54423db52de4340d839d129e87f841776dbff9034e6e527f4a8bcdeb8ed25bdeb637e7d6365fc29d8",
+          "puzzle_hash": "d9ba60e1d59601e7c5fead8e866848a6626552e0a7713d27c0373956dbf2e1cd",
+          "spend_tweak": "6f6998941375ff80995267fa25f030d3e05f614bf30266e736ec64042ff0cb05",
+          "onetime_sk": "4f4d31f3fc79639b7c49d26707b1f1afe3a88e49f18e8031c74073f109227b8b",
+          "ecdh_point": "85ced98c47f8916671e26a883cc6c9a2625055316004a3c9a4fafda7e1a5c8192db78afbcc550662204d441d5be2c327",
+          "wrapper": null,
+          "amount": 500,
+          "cat_inner_puzzle_hash": null,
+          "wrapped_puzzle_hash": "d9ba60e1d59601e7c5fead8e866848a6626552e0a7713d27c0373956dbf2e1cd",
+          "hint": null,
+          "settled": false,
+          "payment": null
+        }
+      ],
+      "other_payments": [],
+      "notarized_payments": [
+        {
+          "wrapper": {
+            "asset_id": "3a4bb549cd71af49426e287cc910aaca72b2653bfae20540f24d666f4eb40d82",
+            "hidden_puzzle_hash": null
+          },
+          "settlement_puzzle_hash": "36f8ca158558fd2049b08295ee4dff2b6b624ea1b6228e912c2dd608f5c5e9b4",
+          "payments": [
+            "ffa06d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961ff8203e8ffffa06d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e9009618080"
+          ],
+          "notarized_payment": "ffa0b9a9abea3520fae21a44ab4b93fda17c63b920928d89a45368c9ab82144a71dfffffa06d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961ff8203e8ffffa06d218522df54868d7e913a8d4b3475289713b3fbbc01763e807e4ab57e900961808080",
+          "notarized_tree_hash": "6c38654f4f85d23cfc4af64f3f0f56f9e6b4bb329a976fdbb9a65ad181fc05bf",
+          "announcement": "60640242d3fbc7a0c9be0dbdacc4dd3d2df7f2af58ec04a819dcb6e8ca2effa1"
+        }
+      ],
+      "settlement_outputs": [
+        "41a03ba9794804ad355a23e9385eb3eba2c3e090a8eff0b714a58b371133a8f5"
+      ],
+      "assertions": [
+        "60640242d3fbc7a0c9be0dbdacc4dd3d2df7f2af58ec04a819dcb6e8ca2effa1"
+      ],
+      "group_outputs": [
+        "d9ba60e1d59601e7c5fead8e866848a6626552e0a7713d27c0373956dbf2e1cd"
+      ],
+      "wrapper_list": [
+        {
+          "asset_id": "3a4bb549cd71af49426e287cc910aaca72b2653bfae20540f24d666f4eb40d82",
+          "hidden_puzzle_hash": null
+        }
+      ],
+      "negative_controls": {
+        "detections_without_wrapper_list": 0,
+        "no_memo_announcement": "ba71432cbd350fbe8adce828ba6ce55023e361975b80ba07642a9a8b06304ef1"
+      }
+    },
+    {
+      "name": "vector_13_taker_silent_offer",
+      "description": "The taker gives a CAT from one coin and is paid XCH at k = 0 through the XCH settlement coin; its CAT change is at k = 1 with label 0.",
+      "party": "taker",
+      "inputs": [
+        {
+          "synthetic_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+          "synthetic_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+          "coin_id": "4283a2ad60b4fcbbee9a53a4d800e32d455771a01a8f5d60bbff5d381cefadc6",
+          "wrapper": {
+            "asset_id": "8f5f6b8e358469d35f2784fe43f976e3a6f676e498472983138d2ed819142241",
+            "hidden_puzzle_hash": null
+          }
+        }
+      ],
+      "a_sum_pk": "8d9a5ed9c9b1a58476b07262007c636d775f2a33f0533737f3b3b0eaf99a8c0c51b3f2d87dc03a657e07f1828ab760fa",
+      "a_sum_sk": "5002eaf015c1c3a9694cc054e96273279732f4f963616ff89b6d4addcd678c7a",
+      "coin_id_l": "4283a2ad60b4fcbbee9a53a4d800e32d455771a01a8f5d60bbff5d381cefadc6",
+      "input_hash": "553044168247b876272215cb5a5ef742fa4489105fed03a4ddb679da2758ec63",
+      "tweak_point": "864e195e9b286d6600f1eee7730f3dcb2b82326c56e3745dfd92855b56119c3111be67381c08fa820e15937221305634",
+      "nonce": "47c972587fd915b786e9bcc6af089725c874e5d7111e81c65dc2d0b2130e7fa8",
+      "outputs": [
+        {
+          "recipient": {
+            "scan_sk": "56a3762ba1200ab5a796d3a2af85261f745ee9620e927d0232c18b710cbf22d2",
+            "scan_pk": "904b64222fcc0bcf254bcfadcd579cf0530b4fba7ed454f3e6d85799cc9f54913f048f1fb393e4acf1bbe56d09d73108",
+            "spend_sk": "70fbad8c37b92e585f890bcef5730727d4100584fc9df4bbc9f5e533691d20bf",
+            "spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813",
+            "label": null,
+            "address_spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813"
+          },
+          "k": 0,
+          "shared_secret": "7a3a1f65834e43d95f2ad90005f6990e05072406ee466b13bf6fe9185015f7b4",
+          "t_k": "34d1f8b2dc3732a529e99970eb4515073a71bbf985138d1e3a85f8c8ce41437a",
+          "onetime_pk": "8cee5160077cfe025cf2b14a49f03a709bccb0eae33dfd1f2e396c57adf9a0565bd485f4f9133a3ad2352a3e0a9ffe2b",
+          "puzzle_hash": "2754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43",
+          "spend_tweak": "34d1f8b2dc3732a529e99970eb4515073a71bbf985138d1e3a85f8c8ce41437a",
+          "onetime_sk": "31dffeebea52e3b55638cd37d7164429bac41d7b81b325db047bddfd375e6438",
+          "ecdh_point": "819aeaa4cbcacad7bb432c82daa00dd7649ae2cee3732c40831cc1fcb5e9b339f836228cae2a49e863305687a6da0945",
+          "wrapper": null,
+          "amount": 1000,
+          "cat_inner_puzzle_hash": null,
+          "wrapped_puzzle_hash": "2754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43",
+          "hint": null,
+          "settled": true,
+          "payment": "ffa02754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43ff8203e8ff8080"
+        },
+        {
+          "recipient": {
+            "scan_sk": "56a3762ba1200ab5a796d3a2af85261f745ee9620e927d0232c18b710cbf22d2",
+            "scan_pk": "904b64222fcc0bcf254bcfadcd579cf0530b4fba7ed454f3e6d85799cc9f54913f048f1fb393e4acf1bbe56d09d73108",
+            "spend_sk": "70fbad8c37b92e585f890bcef5730727d4100584fc9df4bbc9f5e533691d20bf",
+            "spend_pk": "99c454a391281b0c0c25ca8175d93ba9d6c4ce9dabe5a25e28b38c2e9ce66aabe50a73f64a477b212ce110dac1e79813",
+            "label": 0,
+            "address_spend_pk": "a2e42c656cc578a76eb3d6ac2a7d9f3676008c0188545d5d0cfa0607a326d37255be8b40488a2562383486efc4bd490c"
+          },
+          "k": 1,
+          "shared_secret": "7a3a1f65834e43d95f2ad90005f6990e05072406ee466b13bf6fe9185015f7b4",
+          "t_k": "1cd245bfe3120acc3a9c482a6b331a816c2e01e3704da9166ca9102a55cdbd2c",
+          "onetime_pk": "97b0ee6340d8f53ce8e3cae5a7fb40a747b779042ed1b63b0a80ded1ea97fa179092ae2989740efe131c0f40f2001e86",
+          "puzzle_hash": "ed055dfd8382d34f7c91d1fd4410465d6b00df6f2f756a29d206ddf001b6c1ce",
+          "spend_tweak": "647e99aa38732a9adffd4f618d7f6eb7da7d72f737805ca6e841050e324a0d83",
+          "onetime_sk": "618c9fe3468edbab0c4c832879509dda5acfd479341ff563b236ea429b672e41",
+          "ecdh_point": "819aeaa4cbcacad7bb432c82daa00dd7649ae2cee3732c40831cc1fcb5e9b339f836228cae2a49e863305687a6da0945",
+          "wrapper": {
+            "asset_id": "8f5f6b8e358469d35f2784fe43f976e3a6f676e498472983138d2ed819142241",
+            "hidden_puzzle_hash": null
+          },
+          "amount": 500,
+          "cat_inner_puzzle_hash": "ed055dfd8382d34f7c91d1fd4410465d6b00df6f2f756a29d206ddf001b6c1ce",
+          "wrapped_puzzle_hash": "759de663f5f22693463d00d76aab01b4983770eb1a8af8ad9ee4737a89ffb2e4",
+          "hint": "ed055dfd8382d34f7c91d1fd4410465d6b00df6f2f756a29d206ddf001b6c1ce",
+          "settled": false,
+          "payment": null
+        }
+      ],
+      "other_payments": [],
+      "notarized_payments": [
+        {
+          "wrapper": null,
+          "settlement_puzzle_hash": "cfbfdeed5c4ca2de3d0bf520b9cb4bb7743a359bd2e6a188d19ce7dffc21d3e7",
+          "payments": [
+            "ffa02754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43ff8203e8ff8080"
+          ],
+          "notarized_payment": "ffa047c972587fd915b786e9bcc6af089725c874e5d7111e81c65dc2d0b2130e7fa8ffffa02754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43ff8203e8ff808080",
+          "notarized_tree_hash": "11f6b59afc65725990f1c6a7a74b5578ade1bbeb308aba9f2972550b792c22fb",
+          "announcement": "9f6cba930d64f453224cd46719948e03fac4f210838e0fcff954ec558641c4ef"
+        }
+      ],
+      "settlement_outputs": [
+        "2754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43"
+      ],
+      "assertions": [
+        "9f6cba930d64f453224cd46719948e03fac4f210838e0fcff954ec558641c4ef"
+      ],
+      "group_outputs": [
+        "759de663f5f22693463d00d76aab01b4983770eb1a8af8ad9ee4737a89ffb2e4"
+      ],
+      "wrapper_list": [
+        {
+          "asset_id": "8f5f6b8e358469d35f2784fe43f976e3a6f676e498472983138d2ed819142241",
+          "hidden_puzzle_hash": null
+        }
+      ],
+      "negative_controls": {
+        "detections_without_wrapper_list": 1,
+        "no_memo_announcement": "0fe41e1d15a42fafe10f400748878de6aeb5df1a77f7d5aa60adb524f44a6e5c"
+      },
+      "two_payments_in_one_asset": {
+        "other_payments": [
+          {
+            "wrapper": null,
+            "puzzle_hash": "75e9dd79323c3a82d5a4570b3b1364d91ef9c9582062792a44eb6032d86e1cb6",
+            "amount": 250,
+            "payment": "ffa075e9dd79323c3a82d5a4570b3b1364d91ef9c9582062792a44eb6032d86e1cb6ff8200faff8080"
+          }
+        ],
+        "payments": [
+          "ffa02754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43ff8203e8ff8080",
+          "ffa075e9dd79323c3a82d5a4570b3b1364d91ef9c9582062792a44eb6032d86e1cb6ff8200faff8080"
+        ],
+        "notarized_payment": "ffa047c972587fd915b786e9bcc6af089725c874e5d7111e81c65dc2d0b2130e7fa8ffffa02754c0209a74cd3480c536733205df4a668f1848ef12979ef0a548c79f931e43ff8203e8ff8080ffffa075e9dd79323c3a82d5a4570b3b1364d91ef9c9582062792a44eb6032d86e1cb6ff8200faff808080",
+        "notarized_tree_hash": "9ac31436afe6849d41ff8e7f15c804495f87247e7377067b481ad612e0444edd",
+        "announcement": "8e239888d9fb7ee6c0d1229f74b169294f46581e59cdfc8aac65cd8468b66049",
+        "per_payment_announcements": [
+          "9f6cba930d64f453224cd46719948e03fac4f210838e0fcff954ec558641c4ef",
+          "4279bc89495bbc1c0e98d6a74b67d277f5765976ac37af4a98ef4f0d396b2586"
+        ]
+      }
+    }
+  ],
+  "labels": [
+    {
+      "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+      "m": 0,
+      "label_scalar": "3106829938a8b73a652a9a31c6c76a37e32f67f924a50e3649291d6904f22082",
+      "label_pk": "8314ad1fd7b1dc75d97e025a6d9af28af6ed21e11093a1103ea338c7e496d133d4f2bd863b47b9a2839ef1ff2d0e6a9f"
+    },
+    {
+      "scan_sk": "132567e4dec19a4f50d9e9a549f16283dfb5aa4ad1ffdb6a505fcfcc56a690f6",
+      "m": 1,
+      "label_scalar": "48fa440acca87f501b9984b5d23327d0b7766a4baa913dfb3001d412c48ce465",
+      "label_pk": "a6dcff3646739745ef7f3ba8e51808dac13765fa9d5e73386d3fbd7841e0773e02a0f8d91baf57d337954322bd06d80c"
+    }
+  ],
+  "addresses": [
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+      "network": "mainnet",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsmqrz7f"
+    },
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74",
+      "network": "testnet",
+      "address": "tspxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws0zz572"
+    },
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2",
+      "network": "mainnet",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfd9jj2rac2q707npyfumq4wzqwkl79ksppyt5t58gecmqyj4396tzwlglqtamuqwwusfd6t8pkaq5cg8n8kqj"
+    },
+    {
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "965250fb8503cff4c244f360ab84075bfe2da01091745d0e8ce36024ab12e96277d1f02fbbe01cee412dd2ce1b7414c2",
+      "network": "testnet",
+      "address": "tspxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfd9jj2rac2q707npyfumq4wzqwkl79ksppyt5t58gecmqyj4396tzwlglqtamuqwwusfd6t8pkaq5cgn3xqq3"
+    }
+  ],
+  "address_cases": [
+    {
+      "description": "version 1 with 4 extra payload bytes: valid, the first 96 bytes are the keys",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqsyqcyuywcrz",
+      "valid": true,
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+    },
+    {
+      "description": "version 31: invalid",
+      "address": "spxch1l5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws6wdf33",
+      "valid": false
+    },
+    {
+      "description": "version 0 with a 95-byte payload: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6u94xyqn",
+      "valid": false
+    },
+    {
+      "description": "version 0 with a 97-byte payload: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqq20d4c6",
+      "valid": false
+    },
+    {
+      "description": "version 1 with a 95-byte payload: invalid",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uctp0cg",
+      "valid": false
+    },
+    {
+      "description": "scan key is the identity element: invalid",
+      "address": "spxch1qcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws49a59y",
+      "valid": false
+    },
+    {
+      "description": "spend key is the identity element: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs27vsl",
+      "valid": false
+    },
+    {
+      "description": "scan key is on the curve but outside the prime-order subgroup: invalid",
+      "address": "spxch1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqfzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uws30r2x2",
+      "valid": false
+    },
+    {
+      "description": "scan key is not on the curve: invalid",
+      "address": "spxch1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwstyq70x",
+      "valid": false
+    },
+    {
+      "description": "non-zero padding bits after the payload: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwn4nk5sk",
+      "valid": false
+    },
+    {
+      "description": "all upper case: valid",
+      "address": "SPXCH1Q5P85QJLMLHYNZ9EK3X07XTFZWKASQ7Q52YXR2G6JJJR66ATNVP6H8T0ZP5CUW5G8KSPNRLLHNTYFDZHUTQQE9AZ04D3Y7CFND8ME9MLNYG828J5Z96URN2EVJVY72F7M7ME3UGHQSVD62ZYVJ5NZTF6UWSMQRZ7F",
+      "valid": true,
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+    },
+    {
+      "description": "mixed case: invalid",
+      "address": "spxch1q5p85QJLMLHYNZ9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsmqrz7f",
+      "valid": false
+    },
+    {
+      "description": "wrong checksum: invalid",
+      "address": "spxch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsmqrz7q",
+      "valid": false
+    },
+    {
+      "description": "longer than 1,023 characters: invalid",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4fg24",
+      "valid": false
+    },
+    {
+      "description": "version 1 at exactly 1,023 characters: valid, the first 96 bytes are the keys",
+      "address": "spxch1p5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsuetyt",
+      "valid": true,
+      "scan_pk": "a04f404bfbfdc9311736899fe32d2275bb007814510c3523529487ad7573607573ade20d31c75107b40331fff79ac896",
+      "spend_pk": "8afc580192f44fab624f613369f792eff3220ea3ca822eb839ab2c9309e527dbf6f31e22e0831ba5088c952625a75c74"
+    },
+    {
+      "description": "not a silent payment prefix: invalid",
+      "address": "xch1q5p85qjlmlhynz9ek3x07xtfzwkasq7q52yxr2g6jjjr66atnvp6h8t0zp5cuw5g8kspnrllhntyfdzhutqqe9az04d3y7cfnd8me9mlnyg828j5z96urn2evjvy72f7m7me3ughqsvd62zyvj5nztf6uwsjyenxs",
+      "valid": false
+    }
+  ],
+  "key_derivation": {
+    "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "passphrase": "",
+    "master_sk": "11da8b4a2874a49dc42984b6aa127b68ef73adddc333319c36fd0446705204a9",
+    "master_pk": "82ae65efe846b15a92c51b7ad6c32589fd79d38263d3cbefbeeba08be8e90d8bc335a1e2fcc66a10b8c817c06232285a",
+    "scan_path": "m/12381n/8444n/12n/0n",
+    "scan_sk": "0c474f92e8945069c200bb09302d1e569a9b52f59cc04a27874b1bca2adeca9f",
+    "scan_pk": "8bf2be64f401ccc10d3495503ac9e5b675c2e2b08b073917935beed951b70b8ccd01f60c406c4ee7e79237e2eb5affd9",
+    "spend_path": "m/12381n/8444n/13n/0n",
+    "spend_sk": "4f8acf271744cf7050197623569e1603b0193f84b958b5d5f1ce8fd18c908e7b",
+    "spend_pk": "ad0c7b65a3392b62782b8c0784b10c64b0f4dc8fc2d46d2d3c7c0e1b899bf183f76996226ddf9145789d6b0bf3499219",
+    "mainnet_address": "spxch1q30etue85q8xvzrf5j4gr4j09ke6u9c4s3vrnj9unt0hdj5dhpwxv6q0kp3qxcnh8u7fr0chtttlantgv0dj6xwftvfuzhrq8sjcsce9s7nwglsk5d5knclqwrwyehuvr7a5evgndm7g527yadv9lxjvjryvvu9l2",
+    "testnet_address": "tspxch1q30etue85q8xvzrf5j4gr4j09ke6u9c4s3vrnj9unt0hdj5dhpwxv6q0kp3qxcnh8u7fr0chtttlantgv0dj6xwftvfuzhrq8sjcsce9s7nwglsk5d5knclqwrwyehuvr7a5evgndm7g527yadv9lxjvjrycwanlf"
+  }
+}
