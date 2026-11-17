@@ -1,0 +1,193 @@
+CHIP Number   | < Creator must leave this blank. Editor will assign a number.>
+:-------------|:----
+Title         | Alternate Farming Terminology Modes
+Description   | Add an advanced setting in the GUI and CLI in the PoS2.0 plotting/farming software to toggle between Tilth and Rigidity based nomenclature.
+Author        | jake15x0 (github), Jake/ZTOR (discord)
+Editor        | < Creator must leave this blank. Editor will be assigned.>
+Comments-URI  | < Creator must leave this blank. Editor will assign a URI.>
+Status        | < Creator must leave this blank. Editor will assign a status.>
+Category      | Informational
+Sub-Category  | Design
+Created       | 2026-03-02
+Requires      | CHIP-0048, CHIP-0049
+Replaces      | None
+Superseded-By | None
+
+## Abstract
+This proposal introduces optional, user-selectable terminology modes for the Chia Proof of Space 2.0 plotting and farming software. In addition to the canonical terminology (e.g., “Plot Strength”), 
+users may optionally enable either Tilth Mode (agricultural framing) or Rigidity Mode (developer-centric framing). These modes modify display-layer text in the CLI and GUI only. They do not alter 
+consensus rules, plot formats, log outputs, RPC schemas, configuration keys, or network behavior. The goal is to provide optional linguistic flexibility while preserving canonical protocol semantics.
+
+## Motivation
+Problem Statement
+  A recent community poll in the 'Plot format discussion' thread of 'chia-discussion' in discord split the community on determining the name of what is now known as Plot Strength. Community discussion 
+  demonstrated strong interest in multiple terminology perspectives, with three finalists receiving substantial support. All three finalist terms and their voters can be represented.
+Proposed Solution
+  Introduce an advanced configuration setting allowing users to select a terminology profile:
+    * default (canonical)
+    * tilth
+    * rigidity
+  The selected profile modifies user-facing text in:
+    * CLI output
+    * GUI labels
+    * Help texts
+    * Status summaries
+  It does not modify:
+    * Plot file structure
+    * Plot metadata
+    * Log files
+    * RPC output field names
+    * Network messages
+    * Consensus rules
+  Ecosystem Benefits
+    * Acknowledges community diversity without fragmenting protocol standards
+    * Preserves canonical terminology for interoperability
+    * Encourages ecosystem creativity and engagement
+    * Low implementation complexity
+    * Zero consensus risk
+Use Cases
+  Plotting and farming in style.
+Technical Feasibility
+  This proposal requires only a presentation-layer mapping abstraction. The implementation complexity is low, and no protocol-level changes are required.
+
+## Backwards Compatibility
+There are no consensus or protocol incompatibilities introduced by this proposal. All canonical internal identifiers remain unchanged. Terminology mapping occurs only after RPC data is received 
+and before it is displayed.
+
+## Rationale
+Design Philosophy
+  The design intentionally separates:
+    * Protocol semantics (fixed and canonical)
+    * Presentation semantics (optional and configurable)
+  Plot Strength remains the canonical measurement term in the protocol.
+  Tilth and Rigidity modes provide alternate interpretive frames.
+Design Decision - 2nd and 3rd place contenders
+  Tilth Mode
+    * Aligns with Chia’s agricultural roots.
+    * Emphasizes field preparation and soil quality metaphors.
+    * Appeals to long-term farmers and original branding.
+  Rigidity Mode
+    * Uses coding and open-source terminology reflecting the builder side of the Chia ecosystem.
+    * Frames farming activity through concepts such as commits, validation, and deterministic execution.
+    * Appeals to contributors working in Chialisp, Rust, and wallet or tooling development.
+Community Input
+  Over the course of several weeks the community proposed over 150 different names.  10 were chosen to vote on allowing multiple votes.  The top 3 (Strength, Rigidity and Tilth) were determined.
+  This proposal aligns with input gathered over the course of several weeks and votes over 2 weeks. 
+
+## Specification
+CLI
+  * parameter 'farming_terminology_mode' added with options 'default, tilth, rigidity'.
+GUI
+  * Settings -> Advanced -> Terminology Mode
+Mapping Scope
+  Mapping applies only to display strings in:
+    * CLI formatted output
+    * GUI labels
+    * Help descriptions
+  It must not apply to:
+    * Log files
+    * RPC JSON responses
+    * Serialized data
+    * Network messages
+Terminology Map (to be refined with community input)
+Default (canonical)        Tilth                 Rigidity
+Plot Strength              Field Tilth           Commit Rigidity
+Farming                    Cultivating           Building
+Farmed                     Cultivated            Built
+Plots                      Fields                Commits
+Plot                       Field                 Commit
+Plotting                   Tilling               Committing
+Farming Summary            Field Report          Build Summary
+Harvester                  Marmot                Builder
+
+Default CLI Example
+  Farming status: Farming
+  Total chia farmed: 9001.175844129866
+  User transaction fees: 1.050844129866
+  Block rewards: 9001.125
+  Last height farmed: 8391721
+  Local Harvester
+     0 plots of size: 0.000 MiB on-disk, 0.000 MiBe (effective)
+  Remote Harvester for IP: XXX.XXX.XXX.XXX
+     85679 plots of size: 4.874 PiB on-disk, 8.285 PiBe (effective)
+  Remote Harvester for IP: XXX.XXX.XXX.XXX
+     37637 plots of size: 2.141 PiB on-disk, 3.640 PiBe (effective)
+  Plot count for all harvesters: 123316
+  Total size of plots: 7.015 PiB, 11.925 PiBe (effective)
+  Estimated network space: 6.545 EiB
+  Expected time to win: 2 hours and 52 minutes
+
+Tilth CLI Example
+  Cultivating status: Cultivating
+  Total chia cultivated: 9001.175844129866
+  User transaction fees: 1.050844129866
+  Block rewards: 9001.125
+  Last height cultivated: 8391721
+  Local Marmot
+     0 fields of size: 0.000 MiB on-disk, 0.000 MiBe (effective)
+  Remote Marmot for IP: XXX.XXX.XXX.XXX
+     85679 fields of size: 4.874 PiB on-disk, 8.285 PiBe (effective)
+  Remote Marmot for IP: XXX.XXX.XXX.XXX
+     37637 fields of size: 2.141 PiB on-disk, 3.640 PiBe (effective)
+  Field count for all marmots: 123316
+  Total size of fields: 7.015 PiB, 11.925 PiBe (effective)
+  Estimated network space: 6.545 EiB
+  Expected time to win: 2 hours and 52 minutes
+
+Rigidity CLI Example
+  Building status: Building
+  Total chia built: 9001.175844129866
+  User transaction fees: 1.050844129866
+  Block rewards: 9001.125
+  Last height developed: 8391721
+  Local Builder
+     0 commits of size: 0.000 MiB on-disk, 0.000 MiBe (effective)
+  Remote Builder for IP: XXX.XXX.XXX.XXX
+     85679 commits of size: 4.874 PiB on-disk, 8.285 PiBe (effective)
+  Remote Builder for IP: XXX.XXX.XXX.XXX
+     37637 commits of size: 2.141 PiB on-disk, 3.640 PiBe (effective)
+  Commit count for all builders: 123316
+  Total size of commits: 7.015 PiB, 11.925 PiBe (effective)
+  Estimated network space: 6.545 EiB
+  Expected time to win: 2 hours and 52 minutes
+
+## Test Cases
+Test as part of the ongoing testing associated with CHIP-0048 and CHIP-0049.
+  * CLI renders canonical when profile/mode = default.
+  * CLI renders Tilth terms when profile/mode = tilth.
+  * CLI renders Rigidity terms when profile/mode = rigidity.
+  * RPC responses remain unchanged regardless of profile/mode.
+  * Logs remain canonical.
+  * GUI profile persists after restart.
+  * Invalid profile value falls back to canonical.
+
+## Reference Implementation
+Reference implementation should include:
+  * Config key addition
+  * Mapping dictionary
+  * CLI wrapper for formatted output
+  * GUI dropdown integration
+  * Unit tests verifying non-mutation of RPC data
+
+## Security
+Security Design Considerations
+  * No consensus impact.
+  * No cryptographic changes.
+  * No change to proof validation logic.
+Risks
+  * User confusion if logs and UI diverge.
+  * Third-party tools misinterpreting display strings.
+Mitigation
+  * Restrict mapping to display layer only.
+  * Maintain canonical logs and RPC.
+  * Clearly document that terminology profiles are cosmetic.
+Attack surface increase: none.
+
+## Additional Assets
+Give a listing of files associated with this CHIP. This list will be added upon as the CHIP moves along the process of approval. All new files should be added to the `assets/chip-<CHIP>` folder. You should link to each individual file here, using relative links.
+
+## Copyright
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
