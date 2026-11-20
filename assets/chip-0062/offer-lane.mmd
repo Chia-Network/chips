@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant U as Browser
+    participant W as Wallet (WalletConnect)
+    participant R as Responder
+    participant N as Node
+
+    U->>U: quote from the live snapshot
+    U->>W: make_offer(offered, requested, network fee)
+    W-->>U: signed offer
+    U->>R: POST the offer
+    R->>N: is the recorded tip still unspent?
+    R->>N: does its puzzle hash match what we think the pool is?
+    R->>N: peak height
+    R->>R: correct birth from the confirmed height
+    R->>R: build the bundle around the offer
+    R->>R: validate locally (no coin store: this cannot see UNKNOWN_UNSPENT)
+    rect rgb(22, 48, 43)
+        Note over R,N: INSIDE THE PUZZLE - everything above is off chain and holds no key
+        R->>N: push_tx
+        N->>N: the leaves run: prologue, exact brackets, the settlement<br/>binding, the finalizer recreating every reserve
+        N-->>R: SUCCESS or PENDING
+    end
+    R->>R: persist the successor snapshot AHEAD of confirmation
+    U->>N: poll the tip, not the index
